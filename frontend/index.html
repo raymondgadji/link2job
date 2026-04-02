@@ -573,6 +573,112 @@
   .guide-result-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
   .guide-result-text strong { color: #22C55E; }
 
+
+  /* ── MODAL AUTH ─────────────────────────────────────────────────── */
+  .modal-overlay {
+    position:fixed; inset:0; z-index:1000;
+    background:rgba(0,0,0,0.75); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    padding:1rem;
+    opacity:0; pointer-events:none; transition:opacity 0.3s;
+  }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+
+  .modal-box {
+    background:var(--bg2); border:1px solid rgba(255,107,0,0.2);
+    border-radius:var(--r-xl); padding:2.5rem 2rem;
+    width:100%; max-width:420px; position:relative;
+    transform:translateY(20px); transition:transform 0.3s;
+  }
+  .modal-overlay.open .modal-box { transform:none; }
+
+  .modal-close {
+    position:absolute; top:1rem; right:1rem;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+    color:var(--text-muted); width:32px; height:32px; border-radius:50%;
+    cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;
+    transition:background 0.2s;
+  }
+  .modal-close:hover { background:rgba(255,255,255,0.12); }
+
+  .modal-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; margin-bottom:0.25rem; }
+  .modal-logo span { color:var(--orange); }
+  .modal-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; margin-bottom:0.4rem; }
+  .modal-sub { font-size:0.85rem; color:var(--text-muted); margin-bottom:1.75rem; }
+
+  .modal-tabs { display:flex; gap:0.5rem; margin-bottom:1.75rem; }
+  .modal-tab {
+    flex:1; padding:0.6rem; border-radius:var(--r-sm);
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:0.9rem;
+    font-weight:500; cursor:pointer; transition:all 0.2s;
+  }
+  .modal-tab.active {
+    background:rgba(255,107,0,0.12); border-color:rgba(255,107,0,0.3);
+    color:var(--orange);
+  }
+
+  .modal-field { margin-bottom:1rem; }
+  .modal-label { font-size:0.8rem; color:var(--text-muted); margin-bottom:6px; display:block; font-weight:500; }
+  .modal-input {
+    width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);
+    border-radius:var(--r-sm); padding:12px 14px;
+    color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.95rem;
+    outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .modal-input::placeholder { color:var(--text-dim); }
+  .modal-input:focus { border-color:rgba(255,107,0,0.4); box-shadow:0 0 0 3px rgba(255,107,0,0.08); }
+
+  .modal-error {
+    background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2);
+    border-radius:var(--r-sm); padding:10px 14px;
+    font-size:0.82rem; color:#EF4444; margin-bottom:1rem; display:none;
+  }
+  .modal-error.show { display:block; }
+
+  .modal-submit {
+    width:100%; background:var(--orange); color:#fff; border:none;
+    border-radius:var(--r-md); padding:13px; font-size:1rem; font-weight:600;
+    font-family:'DM Sans',sans-serif; cursor:pointer;
+    box-shadow:0 0 24px rgba(255,107,0,0.3);
+    transition:background 0.2s, transform 0.15s, box-shadow 0.2s;
+    margin-top:0.5rem;
+  }
+  .modal-submit:hover { background:var(--orange-dark); transform:translateY(-1px); box-shadow:0 0 40px rgba(255,107,0,0.45); }
+  .modal-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+
+  .modal-switch { text-align:center; margin-top:1.25rem; font-size:0.83rem; color:var(--text-dim); }
+  .modal-switch a { color:var(--orange); cursor:pointer; text-decoration:none; }
+  .modal-switch a:hover { text-decoration:underline; }
+
+  /* Nav user zone */
+  .nav-user {
+    display:flex; align-items:center; gap:10px;
+  }
+  .nav-user-badge {
+    background:rgba(255,107,0,0.1); border:1px solid rgba(255,107,0,0.2);
+    border-radius:100px; padding:5px 12px;
+    font-size:0.78rem; color:var(--orange); font-weight:500;
+  }
+  .nav-user-btn {
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+    color:var(--text-muted); border-radius:var(--r-sm); padding:6px 14px;
+    font-size:0.82rem; cursor:pointer; font-family:'DM Sans',sans-serif;
+    transition:background 0.2s;
+  }
+  .nav-user-btn:hover { background:rgba(255,255,255,0.1); color:var(--text); }
+
+  /* Quota bar in results */
+  .quota-bar {
+    display:flex; align-items:center; gap:10px;
+    background:rgba(255,107,0,0.06); border:1px solid rgba(255,107,0,0.15);
+    border-radius:var(--r-md); padding:10px 16px; margin-bottom:1.5rem;
+    font-size:0.83rem; color:var(--text-muted);
+  }
+  .quota-bar strong { color:var(--orange); }
+  .quota-bar.warning { background:rgba(239,68,68,0.06); border-color:rgba(239,68,68,0.2); }
+  .quota-bar.warning strong { color:#EF4444; }
+
 </style>
 </head>
 <body>
@@ -589,7 +695,9 @@
     <li><a href="#features">Fonctionnalités</a></li>
     <li><a href="#pricing">Tarifs</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="#" class="nav-cta">Optimiser mon profil →</a></li>
+    <li id="navAuthZone">
+      <a href="#" class="nav-cta" onclick="openAuthModal(event)">Commencer gratuitement</a>
+    </li>
   </ul>
 </nav>
 
@@ -627,7 +735,7 @@
         </button>
       </div>
       <div class="form-note">
-        🔒 URL publique uniquement · Aucun mot de passe · 3 analyses gratuites
+        🔒 URL publique · <span id="formNoteAuth">Connecte-toi pour sauvegarder tes résultats</span>
       </div>
     </div>
   </div>
@@ -959,15 +1067,26 @@
     const url = document.getElementById('linkedinUrl').value.trim();
     if (!url) { flashInput(); return; }
 
+    // Si pas connecté → ouvre le modal et mémorise l'analyse en attente
+    if (!currentUser) {
+      pendingAnalysis = true;
+      openAuthModal(null, 'register');
+      return;
+    }
+
     // UI → loading
     document.getElementById('analyzeFormWrap').style.display = 'none';
     document.getElementById('loadingWrap').style.display = 'flex';
     animateLoadingSteps();
 
     try {
+      const token = getToken();
       const res = await fetch(`${API_URL}/api/analyze-profile`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ linkedin_url: url }),
       });
 
@@ -993,6 +1112,28 @@
     const details = data.score_details;
     const recos = data.recommendations;
     const texts = data.optimized_texts;
+
+    // Mise à jour quota utilisateur
+    if (data.analyses_remaining !== null && data.analyses_remaining !== undefined) {
+      if (currentUser) {
+        currentUser.analyses_remaining = data.analyses_remaining;
+        currentUser.analyses_used = data.analyses_used;
+        localStorage.setItem('l2j_user', JSON.stringify(currentUser));
+        updateNavUser();
+      }
+      // Affiche le quota dans les résultats
+      const remaining = data.analyses_remaining;
+      const warn = remaining <= 1;
+      const existingQuota = document.getElementById('quotaBar');
+      if (existingQuota) existingQuota.remove();
+      const quotaEl = document.createElement('div');
+      quotaEl.id = 'quotaBar';
+      quotaEl.className = 'quota-bar' + (warn ? ' warning' : '');
+      quotaEl.innerHTML = warn
+        ? `⚠️ Il te reste <strong>${remaining} analyse${remaining > 1 ? 's' : ''}</strong> gratuite${remaining > 1 ? 's' : ''}. <a href="#pricing" style="color:var(--orange)">Passer au plan Candidat →</a>`
+        : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 3.`;
+      document.querySelector('.results-inner').prepend(quotaEl);
+    }
 
     // Scroll vers résultats
     const section = document.getElementById('resultsSection');
@@ -1275,13 +1416,220 @@
     setTimeout(() => t.remove(), 4000);
   }
 
+
+  // ══ AUTH ══════════════════════════════════════════════════════════
+  let currentUser = null;
+  let authMode = 'register'; // 'register' | 'login'
+  let pendingAnalysis = false; // analyse en attente après login
+
+  // Charge le user depuis localStorage au démarrage
+  function initAuth() {
+    const saved = localStorage.getItem('l2j_user');
+    const token = localStorage.getItem('l2j_token');
+    if (saved && token) {
+      currentUser = JSON.parse(saved);
+      updateNavUser();
+    }
+  }
+
+  function updateNavUser() {
+    const zone = document.getElementById('navAuthZone');
+    if (!zone) return;
+    if (currentUser) {
+      const remaining = currentUser.analyses_remaining ?? 3;
+      const warn = remaining <= 1;
+      zone.innerHTML = `
+        <div class="nav-user">
+          <span class="nav-user-badge ${warn ? 'style=\"color:#EF4444;border-color:rgba(239,68,68,0.3)\"' : ''}">
+            ${remaining} analyse${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''}
+          </span>
+          <button class="nav-user-btn" onclick="logout()">Déconnexion</button>
+        </div>`;
+      // Met à jour la form note
+      const note = document.getElementById('formNoteAuth');
+      if (note) note.textContent = currentUser.full_name || currentUser.email;
+    } else {
+      zone.innerHTML = `<a href="#" class="nav-cta" onclick="openAuthModal(event)">Commencer gratuitement</a>`;
+      const note = document.getElementById('formNoteAuth');
+      if (note) note.textContent = 'Connecte-toi pour sauvegarder tes résultats';
+    }
+  }
+
+  function openAuthModal(e, mode) {
+    if (e) e.preventDefault();
+    if (currentUser) return; // déjà connecté
+    switchTab(mode || 'register');
+    document.getElementById('authModal').classList.add('open');
+  }
+
+  function closeAuthModal() {
+    document.getElementById('authModal').classList.remove('open');
+    clearModalError();
+    pendingAnalysis = false;
+  }
+
+  function switchTab(mode) {
+    authMode = mode;
+    const isRegister = mode === 'register';
+    document.getElementById('tabRegister').classList.toggle('active', isRegister);
+    document.getElementById('tabLogin').classList.toggle('active', !isRegister);
+    document.getElementById('fieldName').style.display = isRegister ? 'block' : 'none';
+    document.getElementById('modalTitle').textContent = isRegister ? 'Créer un compte' : 'Se connecter';
+    document.getElementById('modalSub').textContent = isRegister
+      ? '3 analyses gratuites · Sans carte bancaire'
+      : 'Bon retour sur Link2Job 👋';
+    document.getElementById('modalSubmit').textContent = isRegister
+      ? 'Créer mon compte gratuit →'
+      : 'Se connecter →';
+    document.getElementById('modalSwitch').innerHTML = isRegister
+      ? 'Déjà un compte ? <a onclick="switchTab(\'login\')">Se connecter</a>'
+      : 'Pas encore de compte ? <a onclick="switchTab(\'register\')">Créer un compte</a>';
+    clearModalError();
+  }
+
+  function showModalError(msg) {
+    const el = document.getElementById('modalError');
+    el.textContent = msg; el.classList.add('show');
+  }
+  function clearModalError() {
+    const el = document.getElementById('modalError');
+    el.textContent = ''; el.classList.remove('show');
+  }
+
+  async function submitAuth() {
+    const email = document.getElementById('inputEmail').value.trim();
+    const password = document.getElementById('inputPassword').value;
+    const name = document.getElementById('inputName').value.trim();
+    const btn = document.getElementById('modalSubmit');
+
+    if (!email || !password) { showModalError('Email et mot de passe requis.'); return; }
+    if (authMode === 'register' && password.length < 8) {
+      showModalError('Le mot de passe doit faire au moins 8 caractères.'); return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Chargement…';
+    clearModalError();
+
+    try {
+      let res, data;
+
+      if (authMode === 'register') {
+        res = await fetch(`${API_URL}/api/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, full_name: name || null }),
+        });
+      } else {
+        // Login utilise form-data (OAuth2PasswordRequestForm)
+        const form = new FormData();
+        form.append('username', email);
+        form.append('password', password);
+        res = await fetch(`${API_URL}/api/auth/login`, { method: 'POST', body: form });
+      }
+
+      data = await res.json();
+
+      if (!res.ok) {
+        showModalError(data.detail || 'Une erreur est survenue.');
+        btn.disabled = false;
+        btn.textContent = authMode === 'register' ? 'Créer mon compte gratuit →' : 'Se connecter →';
+        return;
+      }
+
+      // Succès
+      localStorage.setItem('l2j_token', data.access_token);
+      localStorage.setItem('l2j_user', JSON.stringify(data.user));
+      currentUser = data.user;
+      updateNavUser();
+      closeAuthModal();
+      showToast(`Bienvenue ${data.user.full_name || data.user.email} ! 🎉`);
+
+      // Lance l'analyse si elle était en attente
+      if (pendingAnalysis) {
+        pendingAnalysis = false;
+        analyzeProfile();
+      }
+
+    } catch(err) {
+      showModalError('Erreur réseau — vérifie que le backend tourne.');
+      btn.disabled = false;
+      btn.textContent = authMode === 'register' ? 'Créer mon compte gratuit →' : 'Se connecter →';
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('l2j_token');
+    localStorage.removeItem('l2j_user');
+    currentUser = null;
+    updateNavUser();
+    showToast('Déconnecté. À bientôt ! 👋');
+  }
+
+  function getToken() {
+    return localStorage.getItem('l2j_token');
+  }
+
+  // Ferme le modal en cliquant sur l'overlay
+  document.getElementById('authModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeAuthModal();
+  });
+
+  // Touche Escape ferme le modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAuthModal();
+  });
+
   // Enter key support
   document.addEventListener('DOMContentLoaded', () => {
+    initAuth();
     document.getElementById('linkedinUrl')?.addEventListener('keydown', e => {
       if (e.key === 'Enter') analyzeProfile();
     });
   });
 
 </script>
+
+<!-- ══ MODAL AUTH ══════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    <div class="modal-logo">Link<span>2</span>Job</div>
+    <div class="modal-title" id="modalTitle">Créer un compte</div>
+    <div class="modal-sub" id="modalSub">3 analyses gratuites · Sans carte bancaire</div>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabRegister" onclick="switchTab('register')">Inscription</button>
+      <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Connexion</button>
+    </div>
+
+    <div id="modalError" class="modal-error"></div>
+
+    <!-- Champ nom (inscription seulement) -->
+    <div class="modal-field" id="fieldName">
+      <label class="modal-label">Prénom et nom</label>
+      <input type="text" class="modal-input" id="inputName" placeholder="Raymond Gadji"/>
+    </div>
+
+    <div class="modal-field">
+      <label class="modal-label">Email</label>
+      <input type="email" class="modal-input" id="inputEmail" placeholder="toi@email.com"/>
+    </div>
+
+    <div class="modal-field">
+      <label class="modal-label">Mot de passe</label>
+      <input type="password" class="modal-input" id="inputPassword" placeholder="8 caractères minimum"/>
+    </div>
+
+    <button class="modal-submit" id="modalSubmit" onclick="submitAuth()">
+      Créer mon compte gratuit →
+    </button>
+
+    <div class="modal-switch" id="modalSwitch">
+      Déjà un compte ? <a onclick="switchTab('login')">Se connecter</a>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
