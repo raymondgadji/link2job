@@ -1,51 +1,110 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
+from typing import Optional
+from sqlalchemy.orm import Session
+import json
+
+from database import get_db, init_db, Analysis, User
+from auth import router as auth_router, get_current_user, require_user, _analyses_remaining, FREE_ANALYSES_LIMIT
 from utils.linkedin_parser import parse_linkedin_profile
 from utils.ai_agent import analyze_profile
 from utils.scorer import compute_score
 
-app = FastAPI(title="Link2Job API", version="0.1.0")
+app = FastAPI(title="Link2Job API", version="0.2.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En prod : remplace par ton domaine
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ── MODELS ──────────────────────────────────────────────
+@app.on_event("startup")
+def startup():
+    init_db()
+
+app.include_router(auth_router)
+
 class AnalyzeRequest(BaseModel):
-    linkedin_url: str  # ex: https://www.linkedin.com/in/raymond-gadji
+    linkedin_url: str
 
 class AnalyzeResponse(BaseModel):
     score_before: int
     score_details: dict
     recommendations: dict
     optimized_texts: dict
+    analyses_remaining: Optional[int] = None
+    analyses_used: Optional[int] = None
 
-# ── ROUTES ──────────────────────────────────────────────
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "version": "0.1.0"}
-
+    return {"status": "ok", "version": "0.2.0"}
 
 @app.post("/api/analyze-profile", response_model=AnalyzeResponse)
-async def analyze_profile_route(body: AnalyzeRequest):
-    # 1. Parse le profil LinkedIn public
+async def analyze_profile_route(
+    body: AnalyzeRequest,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_current_user),
+):
+    is_demo = current_user is None
+
+    if not is_demo:
+        remaining = _analyses_remaining(current_user)
+        if remaining <= 0:
+            raise HTTPException(
+                status_code=403,
+                detail="Tu as utilisé tes 3 analyses gratuites. Passe au plan Candidat pour continuer. 🚀"
+            )
+
     profile_data = await parse_linkedin_profile(body.linkedin_url)
     if not profile_data:
         raise HTTPException(status_code=422, detail="Profil LinkedIn introuvable ou non public.")
 
-    # 2. Calcule le score brut par section
     score_details = compute_score(profile_data)
-
-    # 3. Analyse IA + génération de textes optimisés
     ai_result = await analyze_profile(profile_data, score_details)
+
+    if not is_demo:
+        current_user.analyses_used += 1
+        analysis = Analysis(
+            user_id=current_user.id,
+            linkedin_url=body.linkedin_url,
+            score_before=score_details["total"],
+            score_details=json.dumps(score_details),
+        )
+        db.add(analysis)
+        db.commit()
+        db.refresh(current_user)
 
     return AnalyzeResponse(
         score_before=score_details["total"],
         score_details=score_details,
         recommendations=ai_result["recommendations"],
         optimized_texts=ai_result["optimized_texts"],
+        analyses_remaining=_analyses_remaining(current_user) if not is_demo else None,
+        analyses_used=current_user.analyses_used if not is_demo else None,
     )
+
+@app.get("/api/my-analyses")
+def my_analyses(
+    current_user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    analyses = (
+        db.query(Analysis)
+        .filter(Analysis.user_id == current_user.id)
+        .order_by(Analysis.created_at.desc())
+        .all()
+    )
+    return {
+        "analyses": [
+            {
+                "id": a.id,
+                "linkedin_url": a.linkedin_url,
+                "score_before": a.score_before,
+                "created_at": a.created_at.isoformat(),
+            }
+            for a in analyses
+        ],
+        "total": len(analyses),
+    }
