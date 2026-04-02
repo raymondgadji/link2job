@@ -446,6 +446,133 @@
     .analyze-btn { justify-content:center; }
     .score-header { flex-direction:column; align-items:center; text-align:center; }
   }
+
+  /* ── GUIDE LINKEDIN PAS-À-PAS ───────────────────────────────────── */
+  .visibility-card {
+    grid-column: 1 / -1;
+    background: rgba(10,102,194,0.06);
+    border: 1px solid rgba(10,102,194,0.25);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .visibility-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem; cursor: pointer; gap: 1rem;
+    transition: background 0.2s;
+  }
+  .visibility-header:hover { background: rgba(10,102,194,0.05); }
+  .visibility-header-left { display: flex; align-items: center; gap: 12px; }
+  .visibility-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
+  .visibility-header-sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+  .visibility-toggle {
+    background: rgba(10,102,194,0.15); border: 1px solid rgba(10,102,194,0.3);
+    color: #5BA4E0; border-radius: var(--r-sm); padding: 6px 14px;
+    font-size: 0.78rem; font-weight: 600; white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .visibility-header:hover .visibility-toggle { background: rgba(10,102,194,0.25); }
+
+  .visibility-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s;
+    padding: 0 1.5rem;
+  }
+  .visibility-card.open .visibility-body {
+    max-height: 1200px;
+    padding: 0 1.5rem 1.5rem;
+  }
+  .visibility-toggle-arrow { transition: transform 0.3s; display: inline-block; }
+  .visibility-card.open .visibility-toggle-arrow { transform: rotate(180deg); }
+
+  /* Warning badge */
+  .otw-warning {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: var(--r-md); padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .otw-warning-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .otw-warning-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+  .otw-warning-text strong { color: #EF4444; }
+
+  /* Steps */
+  .guide-steps { display: flex; flex-direction: column; gap: 0; }
+  .guide-step {
+    display: flex; gap: 16px; position: relative;
+    padding-bottom: 1.5rem;
+  }
+  .guide-step:last-child { padding-bottom: 0; }
+  .guide-step-left { display: flex; flex-direction: column; align-items: center; }
+  .guide-step-num {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(10,102,194,0.2); border: 1px solid rgba(10,102,194,0.4);
+    color: #5BA4E0; font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+  }
+  .guide-step-line {
+    width: 1px; flex: 1; margin-top: 6px;
+    background: linear-gradient(to bottom, rgba(10,102,194,0.3), transparent);
+    min-height: 20px;
+  }
+  .guide-step:last-child .guide-step-line { display: none; }
+  .guide-step-content { flex: 1; padding-top: 4px; }
+  .guide-step-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
+  .guide-step-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* Simulated UI elements */
+  .sim-ui {
+    margin-top: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--r-sm); padding: 8px 12px;
+    font-size: 0.8rem; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sim-ui .sim-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    flex-shrink: 0;
+  }
+  .sim-ui .sim-arrow { color: var(--text-dim); }
+  .sim-ui .sim-highlight {
+    background: rgba(10,102,194,0.15); color: #5BA4E0;
+    padding: 2px 8px; border-radius: 4px; font-weight: 500;
+  }
+  .sim-radio-group { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .sim-radio {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--r-sm); padding: 8px 12px; font-size: 0.8rem;
+  }
+  .sim-radio.selected {
+    border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06);
+    color: var(--text);
+  }
+  .sim-radio-dot {
+    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.2);
+  }
+  .sim-radio.selected .sim-radio-dot {
+    border-color: #22C55E; background: #22C55E;
+  }
+  .sim-radio-bad .sim-radio-dot { border-color: #EF4444; }
+  .sim-radio-bad { opacity: 0.5; }
+  .sim-radio-label { flex: 1; }
+  .sim-radio-badge {
+    font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;
+  }
+  .sim-radio.selected .sim-radio-badge { background: rgba(34,197,94,0.15); color: #22C55E; }
+  .sim-radio-bad .sim-radio-badge { background: rgba(239,68,68,0.1); color: #EF4444; }
+
+  /* Result badge */
+  .guide-result {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25);
+    border-radius: var(--r-md); padding: 1rem 1.25rem; margin-top: 1.25rem;
+  }
+  .guide-result-icon { font-size: 1.3rem; }
+  .guide-result-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+  .guide-result-text strong { color: #22C55E; }
+
 </style>
 </head>
 <body>
@@ -933,18 +1060,133 @@
         </div>`;
     });
 
-    // Visibilité recruteurs (conseil spécial)
-    if (recos.visibility) {
-      grid.innerHTML += `
-        <div class="reco-card" style="border-color:rgba(10,102,194,0.25);">
-          <div class="reco-card-top">
-            <span class="reco-icon">👁️</span>
-            <span class="reco-title">Visibilité recruteurs</span>
-            <span class="reco-score-badge" style="background:rgba(10,102,194,0.1);color:#5BA4E0;border-color:rgba(10,102,194,0.2);">Conseil</span>
+    // Visibilité recruteurs — guide interactif complet
+    grid.innerHTML += `
+      <div class="visibility-card" id="visibilityCard">
+        <div class="visibility-header" onclick="toggleVisibilityGuide()">
+          <div class="visibility-header-left">
+            <span style="font-size:1.4rem;">👁️</span>
+            <div>
+              <div class="visibility-header-title">Visibilité recruteurs — Guide pas-à-pas</div>
+              <div class="visibility-header-sub">Comment être visible des recruteurs sans afficher le badge "Open to Work" public</div>
+            </div>
           </div>
-          <div class="reco-conseil">${recos.visibility.conseil}</div>
-        </div>`;
-    }
+          <div class="visibility-toggle">
+            Voir le guide <span class="visibility-toggle-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="visibility-body">
+
+          <!-- Warning -->
+          <div class="otw-warning">
+            <span class="otw-warning-icon">⚠️</span>
+            <div class="otw-warning-text">
+              <strong>Évite le badge "Open to Work" visible de tous.</strong>
+              Il peut donner une image de désespoir, surtout pour les profils expérimentés.
+              Les recruteurs sérieux utilisent LinkedIn Recruiter — ils voient les profils disponibles
+              <em>sans que tu aies besoin d'afficher ce badge public.</em>
+            </div>
+          </div>
+
+          <!-- Steps -->
+          <div class="guide-steps">
+
+            <div class="guide-step">
+              <div class="guide-step-left">
+                <div class="guide-step-num">1</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-title">Clique sur ta photo de profil en haut à droite</div>
+                <div class="guide-step-desc">Sur LinkedIn, en haut à droite de n'importe quelle page. Un menu déroulant apparaît.</div>
+                <div class="sim-ui">
+                  <div class="sim-avatar"></div>
+                  <span class="sim-arrow">→</span>
+                  <span>Menu déroulant</span>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">Voir le profil</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="guide-step">
+              <div class="guide-step-left">
+                <div class="guide-step-num">2</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-title">Clique sur le bouton "Disponible pour"</div>
+                <div class="guide-step-desc">Ce bouton se trouve juste sous ton nom et ton titre, sur ta page profil. Il est parfois affiché comme "Ouvrir à" selon la langue.</div>
+                <div class="sim-ui">
+                  <span>Ta page profil</span>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">Disponible pour</span>
+                  <span class="sim-arrow">→</span>
+                  <span>Trouver un emploi</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="guide-step">
+              <div class="guide-step-left">
+                <div class="guide-step-num">3</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-title">Remplis tes préférences d'emploi</div>
+                <div class="guide-step-desc">Un formulaire s'ouvre. Indique le type de poste recherché, le secteur, la localisation, le type de contrat (CDI, stage, alternance…). Plus c'est précis, plus les recruteurs pertinents te trouveront.</div>
+              </div>
+            </div>
+
+            <div class="guide-step">
+              <div class="guide-step-left">
+                <div class="guide-step-num">4</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-title">⭐ L'étape clé — "Qui peut voir que tu cherches un emploi ?"</div>
+                <div class="guide-step-desc">Tout en bas du formulaire, tu trouveras cette question. C'est ici que tout se joue :</div>
+                <div class="sim-radio-group">
+                  <div class="sim-radio sim-radio-bad">
+                    <div class="sim-radio-dot"></div>
+                    <div class="sim-radio-label">Tous les membres LinkedIn</div>
+                    <span class="sim-radio-badge" style="background:rgba(239,68,68,0.1);color:#EF4444;">❌ Éviter</span>
+                  </div>
+                  <div class="sim-radio selected">
+                    <div class="sim-radio-dot"></div>
+                    <div class="sim-radio-label">Recruteurs uniquement</div>
+                    <span class="sim-radio-badge">✅ Recommandé</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="guide-step">
+              <div class="guide-step-left">
+                <div class="guide-step-num">5</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-title">Clique sur "Enregistrer" ✅</div>
+                <div class="guide-step-desc">C'est tout ! Tu es maintenant visible des recruteurs qui utilisent LinkedIn Recruiter, sans que ton employeur actuel ou tes collègues le sachent.</div>
+              </div>
+            </div>
+
+          </div><!-- /steps -->
+
+          <!-- Résultat final -->
+          <div class="guide-result">
+            <span class="guide-result-icon">🎯</span>
+            <div class="guide-result-text">
+              <strong>Résultat :</strong> tu apparais dans les recherches des recruteurs professionnels,
+              sans le badge vert "Open to Work" qui s'affiche sur ta photo.
+              Discret, efficace, et stratégique.
+            </div>
+          </div>
+
+        </div><!-- /visibility-body -->
+      </div>`;
 
     // Titres optimisés
     const headlineEl = document.getElementById('headlineOptions');
@@ -960,6 +1202,11 @@
     // About optimisé
     const aboutRaw = texts.about_optimized || '';
     document.getElementById('aboutText').textContent = aboutRaw;
+  }
+
+  function toggleVisibilityGuide() {
+    const card = document.getElementById('visibilityCard');
+    if (card) card.classList.toggle('open');
   }
 
   function resetAnalysis() {
