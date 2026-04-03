@@ -61,6 +61,19 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - stripe_router.py créé avec create-checkout + webhook + subscription-status
 - Bouton "Commencer — 9,99€/mois" connecté à upgradeToCandidat()
 
+### Session 3 — 3 Avril 2026
+- ✅ Bug Stripe UnicodeEncodeError corrigé (caractère ← dans les données)
+- ✅ Flow paiement Stripe end-to-end fonctionnel en test
+- ✅ Stripe CLI installé sur Windows (stripe version 1.40.0)
+- ✅ Webhook Stripe forwarding via `stripe listen --forward-to localhost:8000/api/stripe/webhook`
+- ✅ Bug stripe_router.py corrigé : session_data.get() → notation attribut Stripe
+- ✅ Plan mis à jour en DB après paiement (plan: "candidat")
+- ✅ Nav affiche "∞ Illimité" en vert pour les abonnés Candidat
+- ✅ Dashboard affiche "Plan Candidat — illimité ✅" après upgrade
+- ✅ initAuth(forceRefresh) dans index.html : un seul fetch /api/auth/me au démarrage
+- ✅ dashboard.html : fetch /api/auth/me au retour Stripe + update localStorage
+- ✅ Plus de race condition entre les fetch concurrents
+
 ### Commits GitHub
 - e9398b2 — initial project structure
 - 58637c1 — MVP V1 fonctionnel
@@ -68,43 +81,7 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - 50b67cc — guide visibilité recruteurs + CLAUDE.md session 1
 - ddaceab — auth modal complet
 - 8d787da — dashboard progression (dernier commit pushé)
-
----
-
-## 🚨 BUG À CORRIGER EN PRIORITÉ (session 3)
-
-### Bug Stripe — UnicodeEncodeError
-**Symptôme :** `POST /api/stripe/create-checkout` retourne 400
-**Erreur exacte :**
-```
-UnicodeEncodeError: 'latin-1' codec can't encode character '\u2190'
-in position 121: ordinal not in range(256)
-```
-**Cause probable :** Le caractère `←` (\u2190) se trouve quelque part dans
-les données envoyées à Stripe. Position 121 dans la requête HTTP.
-**Pistes à investiguer :**
-1. Le `full_name` de l'utilisateur en DB contient peut-être "Ray Gadji ←" ou similaire
-2. Le `customer_email` contient un caractère spécial
-3. Les metadata `user_id` ou autre champ
-4. La clé `STRIPE_SECRET_KEY` dans .env (vérifier caractère par caractère)
-
-**Fix à essayer en session 3 :**
-```python
-# Dans stripe_router.py, sanitiser les données avant envoi à Stripe
-import unicodedata
-
-def sanitize(s: str) -> str:
-    """Supprime les caractères non-latin1 pour Stripe."""
-    return unicodedata.normalize('NFKD', s).encode('latin-1', 'ignore').decode('latin-1')
-
-# Puis dans create_checkout :
-session = stripe.checkout.Session.create(
-    ...
-    customer_email=sanitize(current_user.email),
-    metadata={"user_id": str(current_user.id)},
-    ...
-)
-```
+- ⚠️ Session 3 non encore commitée — à pusher !
 
 ---
 
@@ -112,10 +89,10 @@ session = stripe.checkout.Session.create(
 
 ```
 backend/
-├── main.py              ← FastAPI v0.2.0
+├── main.py              ← FastAPI
 ├── auth.py              ← Register/login/me + JWT + argon2
 ├── database.py          ← SQLAlchemy — User + Analysis models
-├── stripe_router.py     ← Stripe checkout + webhook + status
+├── stripe_router.py     ← Stripe checkout + webhook + status (CORRIGÉ session 3)
 ├── .env                 ← Toutes les clés (jamais commiter)
 ├── .env.example
 ├── requirements.txt
@@ -138,8 +115,8 @@ POST /api/auth/login
 GET  /api/auth/me
 POST /api/analyze-profile
 GET  /api/my-analyses
-POST /api/stripe/create-checkout   ← BUG Unicode à corriger
-POST /api/stripe/webhook
+POST /api/stripe/create-checkout   ← CORRIGÉ session 3
+POST /api/stripe/webhook           ← CORRIGÉ session 3 (notation attribut Stripe)
 GET  /api/stripe/subscription-status
 ```
 
@@ -149,8 +126,29 @@ ANTHROPIC_API_KEY=sk-ant-...
 SECRET_KEY=L2J#xK9mP2qL8nR4vT6wY1uI3oE5aS7d
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PRICE_ID=price_1...
-STRIPE_WEBHOOK_SECRET=whsec_...    (optionnel en dev)
+STRIPE_WEBHOOK_SECRET=whsec_...    ← OBLIGATOIRE (Stripe CLI en dev, dashboard Stripe en prod)
 ```
+
+### ⚠️ Setup dev obligatoire (3 terminaux)
+```powershell
+# Terminal 1 — Backend
+cd C:\Projects\link_to_job\backend
+python -m uvicorn main:app --reload
+
+# Terminal 2 — Frontend
+cd C:\Projects\link_to_job\frontend
+python -m http.server 5500
+
+# Terminal 3 — Stripe CLI (NOUVEAU — obligatoire pour les webhooks)
+stripe listen --forward-to localhost:8000/api/stripe/webhook
+```
+
+→ Backend Swagger : http://127.0.0.1:8000/docs
+→ Frontend : http://localhost:5500/index.html
+→ Dashboard : http://localhost:5500/dashboard.html
+
+**⚠️ Toujours utiliser localhost:5500 et jamais file:// pour le frontend**
+**⚠️ Le terminal Stripe CLI doit tourner pour que les webhooks fonctionnent en dev**
 
 ---
 
@@ -178,10 +176,11 @@ Border radius :  sm=8px md=14px lg=22px xl=32px
 - [x] Guide interactif "Visibilité recruteurs"
 - [x] Auth register/login JWT + compteur 3 analyses gratuites
 - [x] Dashboard progression SVG + historique
-- [x] stripe_router.py créé
-- [ ] **🚨 Fix bug Stripe Unicode** ← PRIORITÉ SESSION 3
+- [x] Stripe checkout + webhook fonctionnel end-to-end ✅
+- [x] Nav "∞ Illimité" pour les abonnés ✅
 - [ ] Formulaire saisie guidée (remplace mock LinkedIn)
 - [ ] Export rapport PDF
+- [ ] Déploiement Railway (prod)
 
 ### V2 — "La Candidature Intelligente"
 - [ ] Extension Chrome Manifest V3
@@ -241,25 +240,5 @@ Psychologie prix :
 - **Dashboard = produit payant** — progression dans le temps justifie l'abo
 - **Churn mitigation** = dashboard progression (mécanisme Duolingo)
 - **CV + LM** = feature V2, moteur cv-ats-ready réutilisé
-
----
-
-## 🛠️ Pour démarrer une session
-
-### Terminal 1 — Backend
-```powershell
-cd C:\Projects\link_to_job\backend
-python -m uvicorn main:app --reload
-```
-
-### Terminal 2 — Frontend
-```powershell
-cd C:\Projects\link_to_job\frontend
-python -m http.server 5500
-```
-
-→ Backend Swagger : http://127.0.0.1:8000/docs
-→ Frontend : http://localhost:5500/index.html
-→ Dashboard : http://localhost:5500/dashboard.html
-
-**⚠️ Toujours utiliser localhost:5500 et jamais file:// pour le frontend**
+- **Stripe CLI** = obligatoire en dev pour les webhooks (whsec_ de dev ≠ prod)
+- **En prod** : remplacer whsec_ dev par le vrai secret du dashboard Stripe live
