@@ -7,8 +7,8 @@
 ## 🎯 Vision produit
 
 **LINK TO JOB** — L'app qui trouve ton emploi pendant que tu dors.
-**Tagline** : "Tu te connectes une fois. On s'occupe de ta carrière."
-**URL cible** : linktojob.fr (à acheter)
+**Tagline** : "Le recruteur t'a vu hier, il t'a zappé. Tu veux qu'on règle ça ?"
+**URL cible** : link2job.fr ✅ (acheté chez Ionos)
 **Rôles** : Founder (Raymond) + CTO (Claude)
 **Repo GitHub** : https://github.com/raymondgadji/link2job
 
@@ -16,6 +16,7 @@
 - **Logo / UI compacte** : Link2Job (tout collé, le 2 en orange)
 - **Nom complet / communication** : LINK TO JOB
 - Les deux coexistent selon le contexte
+- **"zappé"** s'affiche en orange dans le hero h1
 
 ### Mission
 Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherche son premier stage jusqu'au cadre en reconversion — grâce à l'automatisation intelligente et éthique de la recherche d'emploi sur LinkedIn, puis sur tous les réseaux.
@@ -62,17 +63,25 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - Bouton "Commencer — 9,99€/mois" connecté à upgradeToCandidat()
 
 ### Session 3 — 3 Avril 2026
-- ✅ Bug Stripe UnicodeEncodeError corrigé (caractère ← dans les données)
+- ✅ Bug Stripe UnicodeEncodeError corrigé
 - ✅ Flow paiement Stripe end-to-end fonctionnel en test
 - ✅ Stripe CLI installé sur Windows (stripe version 1.40.0)
-- ✅ Webhook Stripe forwarding via `stripe listen --forward-to localhost:8000/api/stripe/webhook`
-- ✅ Bug stripe_router.py corrigé : session_data.get() → notation attribut Stripe
+- ✅ Webhook Stripe via `stripe listen --forward-to localhost:8000/api/stripe/webhook`
+- ✅ Bug stripe_router.py corrigé : notation attribut Stripe
 - ✅ Plan mis à jour en DB après paiement (plan: "candidat")
-- ✅ Nav affiche "∞ Illimité" en vert pour les abonnés Candidat
-- ✅ Dashboard affiche "Plan Candidat — illimité ✅" après upgrade
-- ✅ initAuth(forceRefresh) dans index.html : un seul fetch /api/auth/me au démarrage
-- ✅ dashboard.html : fetch /api/auth/me au retour Stripe + update localStorage
-- ✅ Plus de race condition entre les fetch concurrents
+- ✅ Nav affiche "∞ Illimité" en vert pour les abonnés
+- ✅ Dashboard affiche "Plan Candidat — illimité ✅"
+- ✅ initAuth(forceRefresh) — un seul fetch /api/auth/me, plus de race condition
+- ✅ Nouvelle tagline : "Le recruteur t'a vu hier, il t'a zappé. Tu veux qu'on règle ça ?"
+- ✅ Nom de domaine link2job.fr acheté chez Ionos
+- ✅ Page `create-profile.html` — formulaire guidé 5 étapes style Duolingo/Gen Z
+  - Étape 1 : Prénom + Nom, secteur (14 options), niveau, ville
+  - Étape 2 : Expériences avec mini-formulaire ajout/suppression
+  - Étape 3 : Hard skills + soft skills en chips + suggestions auto par secteur
+  - Étape 4 : Objectif en cards cliquables (CDI, Stage, Alternance…) + poste visé
+  - Étape 5 : Mock IA — 3 titres + résumé LinkedIn + compétences + boutons Copier
+- ✅ Lien "On te le crée de zéro. ✨" dans index.html → create-profile.html
+- ✅ Animations step-in/step-out, progress bar, dots de progression
 
 ### Commits GitHub
 - e9398b2 — initial project structure
@@ -80,8 +89,36 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - 381fb4c — frontend connecté au backend
 - 50b67cc — guide visibilité recruteurs + CLAUDE.md session 1
 - ddaceab — auth modal complet
-- 8d787da — dashboard progression (dernier commit pushé)
-- ⚠️ Session 3 non encore commitée — à pusher !
+- 8d787da — dashboard progression
+- feat: nouvelle tagline hero + page create-profile.html ✅ (dernier commit pushé)
+
+---
+
+## 🚨 À FAIRE EN SESSION 4 (priorités)
+
+### 1. Backend POST /api/create-profile ← PRIORITÉ
+Brancher le vrai Claude Sonnet pour générer titre + résumé depuis les données du formulaire.
+
+```python
+POST /api/create-profile
+Body: {
+  prenom, nom, secteur, niveau, ville,
+  experiences: [{poste, entreprise, duree, desc}],
+  hard_skills: [...], soft_skills: [...], langues,
+  contrat, poste_vise, infos_sup
+}
+Response: {
+  headline_suggestions: [str, str, str],
+  about_optimized: str,
+  skills_suggested: [str, ...]
+}
+```
+
+### 2. Genre dans le résumé
+Actuellement "passionné(e)" — détecter masculin/féminin selon prénom ou ajouter champ.
+
+### 3. Déploiement Railway
+Prod sur Railway avec PostgreSQL + variables d'env.
 
 ---
 
@@ -92,7 +129,7 @@ backend/
 ├── main.py              ← FastAPI
 ├── auth.py              ← Register/login/me + JWT + argon2
 ├── database.py          ← SQLAlchemy — User + Analysis models
-├── stripe_router.py     ← Stripe checkout + webhook + status (CORRIGÉ session 3)
+├── stripe_router.py     ← Stripe checkout + webhook + status
 ├── .env                 ← Toutes les clés (jamais commiter)
 ├── .env.example
 ├── requirements.txt
@@ -103,8 +140,9 @@ backend/
     └── ai_agent.py
 
 frontend/
-├── index.html        ← Landing + formulaire + résultats + modal auth + Stripe
-└── dashboard.html    ← Dashboard progression SVG + historique
+├── index.html           ← Landing + formulaire + résultats + modal auth + Stripe
+├── dashboard.html       ← Dashboard progression SVG + historique
+└── create-profile.html  ← Formulaire guidé 5 étapes ← NOUVEAU session 3
 ```
 
 ### Endpoints backend actifs
@@ -115,9 +153,10 @@ POST /api/auth/login
 GET  /api/auth/me
 POST /api/analyze-profile
 GET  /api/my-analyses
-POST /api/stripe/create-checkout   ← CORRIGÉ session 3
-POST /api/stripe/webhook           ← CORRIGÉ session 3 (notation attribut Stripe)
+POST /api/stripe/create-checkout
+POST /api/stripe/webhook
 GET  /api/stripe/subscription-status
+POST /api/create-profile    ← À CRÉER session 4 (mock frontend actif)
 ```
 
 ### Variables .env nécessaires
@@ -139,13 +178,14 @@ python -m uvicorn main:app --reload
 cd C:\Projects\link_to_job\frontend
 python -m http.server 5500
 
-# Terminal 3 — Stripe CLI (NOUVEAU — obligatoire pour les webhooks)
+# Terminal 3 — Stripe CLI (obligatoire pour les webhooks)
 stripe listen --forward-to localhost:8000/api/stripe/webhook
 ```
 
 → Backend Swagger : http://127.0.0.1:8000/docs
 → Frontend : http://localhost:5500/index.html
 → Dashboard : http://localhost:5500/dashboard.html
+→ Créer profil : http://localhost:5500/create-profile.html
 
 **⚠️ Toujours utiliser localhost:5500 et jamais file:// pour le frontend**
 **⚠️ Le terminal Stripe CLI doit tourner pour que les webhooks fonctionnent en dev**
@@ -172,13 +212,15 @@ Border radius :  sm=8px md=14px lg=22px xl=32px
 
 ### V1 — "Le Profil Parfait" ← ON EST ICI
 - [x] Landing page complète
+- [x] Nouvelle tagline Gen Z — "Le recruteur t'a vu hier, il t'a zappé."
 - [x] Analyse IA Claude Sonnet — score + recommandations + textes
 - [x] Guide interactif "Visibilité recruteurs"
 - [x] Auth register/login JWT + compteur 3 analyses gratuites
 - [x] Dashboard progression SVG + historique
 - [x] Stripe checkout + webhook fonctionnel end-to-end ✅
 - [x] Nav "∞ Illimité" pour les abonnés ✅
-- [ ] Formulaire saisie guidée (remplace mock LinkedIn)
+- [x] Page create-profile.html — formulaire guidé 5 étapes ✅
+- [ ] **Backend POST /api/create-profile avec Claude Sonnet** ← SESSION 4
 - [ ] Export rapport PDF
 - [ ] Déploiement Railway (prod)
 
@@ -240,5 +282,8 @@ Psychologie prix :
 - **Dashboard = produit payant** — progression dans le temps justifie l'abo
 - **Churn mitigation** = dashboard progression (mécanisme Duolingo)
 - **CV + LM** = feature V2, moteur cv-ats-ready réutilisé
-- **Stripe CLI** = obligatoire en dev pour les webhooks (whsec_ de dev ≠ prod)
+- **Stripe CLI** = obligatoire en dev pour les webhooks
 - **En prod** : remplacer whsec_ dev par le vrai secret du dashboard Stripe live
+- **create-profile.html** = mock IA frontend actif — backend à brancher session 4
+- **Tagline Gen Z** = douleur vécue + ton familier + "zappé" en orange
+- **link2job.fr** acheté chez Ionos — .com non dispo, .fr stratégique SEO France
