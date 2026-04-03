@@ -1,1676 +1,3291 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Link2Job — LinkedIn travaille pour toi, pas l'inverse.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link2Job — LinkedIn travaille pour toi, pas l'inverse.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-  :root {
-    --orange: #FF6B00;
-    --orange-dark: #D95A00;
-    --orange-glow: rgba(255, 107, 0, 0.18);
-    --bg: #0C0C18;
-    --bg2: #111124;
-    --bg3: #1A1A2E;
-    --text: #FAFAF8;
-    --text-muted: rgba(250,250,248,0.5);
-    --text-dim: rgba(250,250,248,0.25);
-    --linkedin: #0A66C2;
-    --success: #22C55E;
-    --glass: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.08);
-    --r-sm: 8px;
-    --r-md: 14px;
-    --r-lg: 22px;
-    --r-xl: 32px;
-  }
+      :root {
+        --orange: #ff6b00;
+        --orange-dark: #d95a00;
+        --orange-glow: rgba(255, 107, 0, 0.18);
+        --bg: #0c0c18;
+        --bg2: #111124;
+        --bg3: #1a1a2e;
+        --text: #fafaf8;
+        --text-muted: rgba(250, 250, 248, 0.5);
+        --text-dim: rgba(250, 250, 248, 0.25);
+        --linkedin: #0a66c2;
+        --success: #22c55e;
+        --glass: rgba(255, 255, 255, 0.04);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --r-sm: 8px;
+        --r-md: 14px;
+        --r-lg: 22px;
+        --r-xl: 32px;
+      }
 
-  html { scroll-behavior: smooth; }
+      html {
+        scroll-behavior: smooth;
+      }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
-  }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.6;
+      }
 
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    pointer-events: none;
-    z-index: 0;
-    animation: orbFloat 12s ease-in-out infinite alternate;
-  }
-  .orb-1 { width:600px; height:600px; background:radial-gradient(circle,rgba(255,107,0,0.12) 0%,transparent 70%); top:-200px; left:-150px; animation-duration:14s; }
-  .orb-2 { width:500px; height:500px; background:radial-gradient(circle,rgba(10,102,194,0.1) 0%,transparent 70%); top:200px; right:-100px; animation-duration:18s; animation-delay:-5s; }
-  .orb-3 { width:400px; height:400px; background:radial-gradient(circle,rgba(255,107,0,0.08) 0%,transparent 70%); bottom:0; left:40%; animation-duration:16s; animation-delay:-8s; }
-  @keyframes orbFloat { from{transform:translate(0,0) scale(1);} to{transform:translate(30px,-40px) scale(1.05);} }
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 0;
+        animation: orbFloat 12s ease-in-out infinite alternate;
+      }
+      .orb-1 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 107, 0, 0.12) 0%,
+          transparent 70%
+        );
+        top: -200px;
+        left: -150px;
+        animation-duration: 14s;
+      }
+      .orb-2 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(10, 102, 194, 0.1) 0%,
+          transparent 70%
+        );
+        top: 200px;
+        right: -100px;
+        animation-duration: 18s;
+        animation-delay: -5s;
+      }
+      .orb-3 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 107, 0, 0.08) 0%,
+          transparent 70%
+        );
+        bottom: 0;
+        left: 40%;
+        animation-duration: 16s;
+        animation-delay: -8s;
+      }
+      @keyframes orbFloat {
+        from {
+          transform: translate(0, 0) scale(1);
+        }
+        to {
+          transform: translate(30px, -40px) scale(1.05);
+        }
+      }
 
-  nav {
-    position: fixed; top:0; left:0; right:0; z-index:100;
-    padding: 0 40px; height: 72px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(12,12,24,0.75);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
-  }
-  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; letter-spacing:-0.02em; color:var(--text); text-decoration:none; }
-  .nav-logo span { color:var(--orange); }
-  .nav-links { display:flex; align-items:center; gap:32px; list-style:none; }
-  .nav-links a { color:var(--text-muted); text-decoration:none; font-size:0.9rem; transition:color 0.2s; }
-  .nav-links a:hover { color:var(--text); }
-  .nav-cta { background:var(--orange) !important; color:white !important; padding:10px 22px; border-radius:var(--r-md); font-weight:500 !important; transition:background 0.2s,transform 0.15s !important; }
-  .nav-cta:hover { background:var(--orange-dark) !important; transform:translateY(-1px); }
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 0 40px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(12, 12, 24, 0.75);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .nav-logo {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.4rem;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .nav-logo span {
+        color: var(--orange);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      .nav-cta {
+        background: var(--orange) !important;
+        color: white !important;
+        padding: 10px 22px;
+        border-radius: var(--r-md);
+        font-weight: 500 !important;
+        transition:
+          background 0.2s,
+          transform 0.15s !important;
+      }
+      .nav-cta:hover {
+        background: var(--orange-dark) !important;
+        transform: translateY(-1px);
+      }
 
-  .hero {
-    position:relative; z-index:1;
-    min-height:100vh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
-    padding: 120px 24px 80px;
-  }
-  .hero-badge {
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--glass); border:1px solid var(--glass-border);
-    border-radius:100px; padding:6px 16px;
-    font-size:0.8rem; color:var(--text-muted); margin-bottom:40px;
-    animation:fadeUp 0.6s ease both;
-  }
-  .dot { width:6px; height:6px; border-radius:50%; background:var(--success); box-shadow:0 0 8px var(--success); animation:pulse 2s ease infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.6;transform:scale(0.8);} }
+      .hero {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 24px 80px;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 100px;
+        padding: 6px 16px;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 40px;
+        animation: fadeUp 0.6s ease both;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 8px var(--success);
+        animation: pulse 2s ease infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.6;
+          transform: scale(0.8);
+        }
+      }
 
-  .hero h1 {
-    font-family:'Syne',sans-serif; font-weight:800;
-    font-size:clamp(2.8rem,7vw,5.5rem); line-height:1.05;
-    letter-spacing:-0.03em; margin-bottom:28px;
-    animation:fadeUp 0.6s 0.1s ease both;
-  }
-  .line-orange { color:var(--orange); }
-  .line-dim { color:var(--text-muted); }
+      .hero h1 {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: clamp(2.8rem, 7vw, 5.5rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin-bottom: 28px;
+        animation: fadeUp 0.6s 0.1s ease both;
+      }
+      .line-orange {
+        color: var(--orange);
+      }
+      .line-dim {
+        color: var(--text-muted);
+      }
 
-  .hero-sub {
-    font-size:clamp(1rem,2vw,1.2rem); color:var(--text-muted);
-    max-width:520px; font-weight:300; line-height:1.7; margin-bottom:52px;
-    animation:fadeUp 0.6s 0.2s ease both;
-  }
+      .hero-sub {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        color: var(--text-muted);
+        max-width: 520px;
+        font-weight: 300;
+        line-height: 1.7;
+        margin-bottom: 52px;
+        animation: fadeUp 0.6s 0.2s ease both;
+      }
 
-  .portal-container { display:flex; gap:16px; animation:fadeUp 0.6s 0.3s ease both; flex-wrap:wrap; justify-content:center; }
+      .scroll-hint {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-dim);
+        font-size: 0.75rem;
+        animation: fadeUp 0.6s 0.8s ease both;
+      }
+      .scroll-hint .arrow {
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, var(--text-dim), transparent);
+        animation: scrollDown 2s ease infinite;
+      }
+      @keyframes scrollDown {
+        0%,
+        100% {
+          transform: scaleY(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scaleY(0.6);
+          opacity: 0.4;
+        }
+      }
 
-  .portal-card {
-    position:relative; background:var(--glass); border:1px solid var(--glass-border);
-    border-radius:var(--r-xl); padding:36px 40px; width:280px;
-    text-align:left; cursor:pointer;
-    transition:transform 0.3s,border-color 0.3s,background 0.3s;
-    overflow:hidden; text-decoration:none; color:var(--text); display:block;
-  }
-  .portal-card::before { content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.3s; border-radius:var(--r-xl); }
-  .portal-card.candidate::before { background:radial-gradient(circle at 30% 30%,rgba(255,107,0,0.12),transparent 60%); }
-  .portal-card.employer::before  { background:radial-gradient(circle at 30% 30%,rgba(10,102,194,0.12),transparent 60%); }
-  .portal-card:hover { transform:translateY(-4px); }
-  .portal-card:hover::before { opacity:1; }
-  .portal-card.candidate:hover { border-color:rgba(255,107,0,0.3); }
-  .portal-card.employer:hover  { border-color:rgba(10,102,194,0.3); }
+      section {
+        position: relative;
+        z-index: 1;
+      }
+      .section-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .section-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--orange);
+        margin-bottom: 16px;
+      }
+      .section-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: clamp(2rem, 4vw, 3rem);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin-bottom: 20px;
+      }
+      .section-sub {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        font-weight: 300;
+        max-width: 480px;
+        line-height: 1.7;
+      }
 
-  .portal-icon { width:48px; height:48px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; margin-bottom:20px; font-size:1.4rem; }
-  .portal-card.candidate .portal-icon { background:rgba(255,107,0,0.15); }
-  .portal-card.employer  .portal-icon { background:rgba(10,102,194,0.15); }
+      .stats {
+        padding: 80px 0;
+        border-top: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        text-align: center;
+      }
+      .stat-item {
+        padding: 32px 16px;
+        border-right: 1px solid var(--glass-border);
+      }
+      .stat-item:last-child {
+        border-right: none;
+      }
+      .stat-num {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 2.4rem;
+        letter-spacing: -0.03em;
+        color: var(--orange);
+        display: block;
+        margin-bottom: 6px;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 300;
+      }
 
-  .portal-label { font-size:0.75rem; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin-bottom:6px; }
-  .portal-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1.3rem; margin-bottom:10px; }
-  .portal-desc { font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin-bottom:24px; font-weight:300; }
+      .how {
+        padding: 120px 0;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--bg2),
+          transparent
+        );
+      }
+      .how-header {
+        text-align: center;
+        margin-bottom: 80px;
+      }
+      .how-header .section-sub {
+        margin: 0 auto;
+      }
 
-  .portal-btn {
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:0.85rem; font-weight:500; padding:10px 18px;
-    border-radius:var(--r-md); transition:gap 0.2s;
-  }
-  .portal-card:hover .portal-btn { gap:12px; }
-  .portal-card.candidate .portal-btn { background:var(--orange); color:white; }
-  .portal-card.employer  .portal-btn { background:var(--linkedin); color:white; }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        position: relative;
+      }
+      .steps::before {
+        content: "";
+        position: absolute;
+        top: 52px;
+        left: calc(100% / 6);
+        right: calc(100% / 6);
+        height: 1px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--glass-border),
+          var(--glass-border),
+          transparent
+        );
+      }
+      .step {
+        padding: 40px 32px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        transition:
+          background 0.3s,
+          border-color 0.3s;
+      }
+      .step:first-child {
+        border-radius: var(--r-lg) 0 0 var(--r-lg);
+      }
+      .step:last-child {
+        border-radius: 0 var(--r-lg) var(--r-lg) 0;
+      }
+      .step:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 107, 0, 0.2);
+      }
+      .step-num {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.9rem;
+        color: var(--orange);
+        margin-bottom: 28px;
+      }
+      .step h3 {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+      }
+      .step p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        font-weight: 300;
+      }
 
-  .portal-soon { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); border-radius:100px; padding:3px 10px; font-size:0.7rem; color:var(--text-dim); }
+      .features {
+        padding: 120px 0;
+      }
+      .features-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+      }
+      .features-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-top: 48px;
+      }
+      .feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px;
+        border-radius: var(--r-md);
+        transition: background 0.2s;
+      }
+      .feature-item:hover {
+        background: var(--glass);
+      }
+      .feature-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--r-sm);
+        background: rgba(255, 107, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .feature-text h4 {
+        font-weight: 500;
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+      }
+      .feature-text p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        font-weight: 300;
+      }
 
-  .scroll-hint {
-    position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    color:var(--text-dim); font-size:0.75rem;
-    animation:fadeUp 0.6s 0.8s ease both;
-  }
-  .scroll-hint .arrow { width:1px; height:40px; background:linear-gradient(to bottom,var(--text-dim),transparent); animation:scrollDown 2s ease infinite; }
-  @keyframes scrollDown { 0%,100%{transform:scaleY(1);opacity:1;} 50%{transform:scaleY(0.6);opacity:0.4;} }
+      .score-card {
+        background: var(--bg3);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r-xl);
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+      }
+      .score-card::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 107, 0, 0.12),
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+      .score-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 32px;
+      }
+      .score-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        flex-shrink: 0;
+      }
+      .score-info {
+        flex: 1;
+      }
+      .score-name {
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+      .score-role {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+      .linkedin-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(10, 102, 194, 0.15);
+        border: 1px solid rgba(10, 102, 194, 0.3);
+        border-radius: 100px;
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        color: #5b9bd5;
+      }
+      .score-meter {
+        margin-bottom: 28px;
+      }
+      .score-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 10px;
+      }
+      .score-label span:first-child {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+      .score-value {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.6rem;
+        color: var(--orange);
+      }
+      .score-bar {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 100px;
+        overflow: hidden;
+      }
+      .score-fill {
+        height: 100%;
+        border-radius: 100px;
+        background: linear-gradient(
+          to right,
+          var(--orange-dark),
+          var(--orange)
+        );
+      }
+      .score-checks {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .check-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+      .check-ok {
+        color: var(--success);
+      }
+      .check-warn {
+        color: var(--orange);
+      }
+      .check-bad {
+        color: #ef4444;
+      }
 
-  section { position:relative; z-index:1; }
-  .section-inner { max-width:1100px; margin:0 auto; padding:0 24px; }
-  .section-label { font-size:0.75rem; font-weight:500; text-transform:uppercase; letter-spacing:0.15em; color:var(--orange); margin-bottom:16px; }
-  .section-title { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(2rem,4vw,3rem); letter-spacing:-0.03em; line-height:1.1; margin-bottom:20px; }
-  .section-sub { color:var(--text-muted); font-size:1.05rem; font-weight:300; max-width:480px; line-height:1.7; }
+      .pricing {
+        padding: 120px 0;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--bg2),
+          transparent
+        );
+      }
+      .pricing-header {
+        text-align: center;
+        margin-bottom: 64px;
+      }
+      .pricing-header .section-sub {
+        margin: 0 auto;
+      }
+      .plans {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        align-items: start;
+      }
+      .plan {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r-xl);
+        padding: 36px 32px;
+        transition:
+          border-color 0.3s,
+          transform 0.3s;
+        position: relative;
+      }
+      .plan:hover {
+        transform: translateY(-4px);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+      .plan.featured {
+        background: rgba(255, 107, 0, 0.06);
+        border-color: rgba(255, 107, 0, 0.25);
+        transform: scale(1.02);
+      }
+      .plan.featured:hover {
+        transform: scale(1.02) translateY(-4px);
+      }
+      .plan-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--orange);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 4px 14px;
+        border-radius: 100px;
+        white-space: nowrap;
+      }
+      .plan-name {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+      .plan-desc {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        font-weight: 300;
+        margin-bottom: 28px;
+      }
+      .plan-price {
+        margin-bottom: 32px;
+      }
+      .plan-price .amount {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 2.5rem;
+        letter-spacing: -0.03em;
+      }
+      .plan-price .period {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .plan-price .free {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 2rem;
+        color: var(--success);
+      }
+      .plan-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 36px;
+      }
+      .plan-features li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+      .plan-features li.active {
+        color: var(--text);
+      }
+      .plan-features .check {
+        color: var(--success);
+      }
+      .plan-features .dash {
+        color: var(--text-dim);
+      }
+      .plan-cta {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        border-radius: var(--r-md);
+        text-align: center;
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        text-decoration: none;
+      }
+      .plan-cta.primary {
+        background: var(--orange);
+        color: white;
+      }
+      .plan-cta.primary:hover {
+        background: var(--orange-dark);
+        transform: translateY(-1px);
+      }
+      .plan-cta.secondary {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        color: var(--text);
+      }
+      .plan-cta.secondary:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
 
-  .stats { padding:80px 0; border-top:1px solid var(--glass-border); border-bottom:1px solid var(--glass-border); }
-  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); text-align:center; }
-  .stat-item { padding:32px 16px; border-right:1px solid var(--glass-border); }
-  .stat-item:last-child { border-right:none; }
-  .stat-num { font-family:'Syne',sans-serif; font-weight:800; font-size:2.4rem; letter-spacing:-0.03em; color:var(--orange); display:block; margin-bottom:6px; }
-  .stat-label { font-size:0.85rem; color:var(--text-muted); font-weight:300; }
+      .faq {
+        padding: 120px 0;
+      }
+      .faq-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: start;
+      }
+      .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .faq-item {
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r-md);
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .faq-item.open {
+        border-color: rgba(255, 107, 0, 0.25);
+      }
+      .faq-q {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.92rem;
+        gap: 16px;
+        user-select: none;
+        background: var(--glass);
+        transition: background 0.2s;
+      }
+      .faq-q:hover {
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .faq-chevron {
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        transition: transform 0.3s;
+        flex-shrink: 0;
+      }
+      .faq-item.open .faq-chevron {
+        transform: rotate(180deg);
+        color: var(--orange);
+      }
+      .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: var(--glass);
+      }
+      .faq-item.open .faq-a {
+        max-height: 200px;
+      }
+      .faq-a p {
+        padding: 16px 24px 20px;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        font-weight: 300;
+        line-height: 1.7;
+        border-top: 1px solid var(--glass-border);
+      }
 
-  .how { padding:120px 0; background:linear-gradient(to bottom,transparent,var(--bg2),transparent); }
-  .how-header { text-align:center; margin-bottom:80px; }
-  .how-header .section-sub { margin:0 auto; }
+      .cta-bottom {
+        padding: 120px 0;
+        text-align: center;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--bg2),
+          transparent
+        );
+      }
+      .cta-box {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--r-xl);
+        padding: 80px 60px;
+        position: relative;
+        overflow: hidden;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .cta-box::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 50% 0%,
+          rgba(255, 107, 0, 0.1),
+          transparent 60%
+        );
+      }
+      .cta-box * {
+        position: relative;
+      }
+      .cta-box h2 {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        letter-spacing: -0.03em;
+        margin-bottom: 20px;
+        line-height: 1.1;
+      }
+      .cta-box p {
+        color: var(--text-muted);
+        font-weight: 300;
+        margin-bottom: 40px;
+        font-size: 1.05rem;
+      }
+      .cta-group {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-  .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; position:relative; }
-  .steps::before { content:''; position:absolute; top:52px; left:calc(100%/6); right:calc(100%/6); height:1px; background:linear-gradient(to right,transparent,var(--glass-border),var(--glass-border),transparent); }
-  .step { padding:40px 32px; background:var(--glass); border:1px solid var(--glass-border); transition:background 0.3s,border-color 0.3s; }
-  .step:first-child { border-radius:var(--r-lg) 0 0 var(--r-lg); }
-  .step:last-child  { border-radius:0 var(--r-lg) var(--r-lg) 0; }
-  .step:hover { background:rgba(255,255,255,0.06); border-color:rgba(255,107,0,0.2); }
-  .step-num { width:48px; height:48px; border-radius:50%; background:var(--bg); border:1px solid var(--glass-border); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:0.9rem; color:var(--orange); margin-bottom:28px; }
-  .step h3 { font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:12px; }
-  .step p { color:var(--text-muted); font-size:0.9rem; line-height:1.6; font-weight:300; }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--orange);
+        color: white;
+        padding: 16px 32px;
+        border-radius: var(--r-md);
+        font-weight: 500;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary:hover {
+        background: var(--orange-dark);
+        transform: translateY(-2px);
+      }
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        color: var(--text-muted);
+        padding: 16px 28px;
+        border-radius: var(--r-md);
+        font-size: 0.95rem;
+        text-decoration: none;
+        border: 1px solid var(--glass-border);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-ghost:hover {
+        color: var(--text);
+        border-color: rgba(255, 255, 255, 0.2);
+        background: var(--glass);
+      }
 
-  .features { padding:120px 0; }
-  .features-layout { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
-  .features-list { display:flex; flex-direction:column; gap:4px; margin-top:48px; }
-  .feature-item { display:flex; align-items:flex-start; gap:16px; padding:20px; border-radius:var(--r-md); transition:background 0.2s; }
-  .feature-item:hover { background:var(--glass); }
-  .feature-icon { width:36px; height:36px; border-radius:var(--r-sm); background:rgba(255,107,0,0.1); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; margin-top:2px; }
-  .feature-text h4 { font-weight:500; font-size:0.95rem; margin-bottom:4px; }
-  .feature-text p { color:var(--text-muted); font-size:0.85rem; font-weight:300; }
+      footer {
+        position: relative;
+        z-index: 1;
+        padding: 60px 0 40px;
+        border-top: 1px solid var(--glass-border);
+      }
+      .footer-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+      .footer-logo {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: var(--text);
+      }
+      .footer-logo span {
+        color: var(--orange);
+      }
+      .footer-links {
+        display: flex;
+        gap: 28px;
+        list-style: none;
+        flex-wrap: wrap;
+      }
+      .footer-links a {
+        color: var(--text-dim);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--text-muted);
+      }
+      .footer-copy {
+        color: var(--text-dim);
+        font-size: 0.8rem;
+        font-weight: 300;
+      }
 
-  .score-card { background:var(--bg3); border:1px solid var(--glass-border); border-radius:var(--r-xl); padding:40px; position:relative; overflow:hidden; }
-  .score-card::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:radial-gradient(circle,rgba(255,107,0,0.12),transparent 70%); border-radius:50%; }
-  .score-header { display:flex; align-items:center; gap:12px; margin-bottom:32px; }
-  .score-avatar { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); flex-shrink:0; }
-  .score-info { flex:1; }
-  .score-name { font-weight:500; font-size:0.95rem; }
-  .score-role { color:var(--text-muted); font-size:0.8rem; }
-  .linkedin-badge { display:flex; align-items:center; gap:6px; background:rgba(10,102,194,0.15); border:1px solid rgba(10,102,194,0.3); border-radius:100px; padding:4px 12px; font-size:0.75rem; color:#5b9bd5; }
-  .score-meter { margin-bottom:28px; }
-  .score-label { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
-  .score-label span:first-child { font-size:0.8rem; color:var(--text-muted); }
-  .score-value { font-family:'Syne',sans-serif; font-weight:800; font-size:1.6rem; color:var(--orange); }
-  .score-bar { height:6px; background:rgba(255,255,255,0.06); border-radius:100px; overflow:hidden; }
-  .score-fill { height:100%; border-radius:100px; background:linear-gradient(to right,var(--orange-dark),var(--orange)); }
-  .score-checks { display:flex; flex-direction:column; gap:10px; }
-  .check-item { display:flex; align-items:center; gap:10px; font-size:0.85rem; color:var(--text-muted); }
-  .check-ok  { color:var(--success); }
-  .check-warn { color:var(--orange); }
-  .check-bad { color:#EF4444; }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-  .pricing { padding:120px 0; background:linear-gradient(to bottom,transparent,var(--bg2),transparent); }
-  .pricing-header { text-align:center; margin-bottom:64px; }
-  .pricing-header .section-sub { margin:0 auto; }
-  .plans { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:start; }
-  .plan { background:var(--glass); border:1px solid var(--glass-border); border-radius:var(--r-xl); padding:36px 32px; transition:border-color 0.3s,transform 0.3s; position:relative; }
-  .plan:hover { transform:translateY(-4px); border-color:rgba(255,255,255,0.12); }
-  .plan.featured { background:rgba(255,107,0,0.06); border-color:rgba(255,107,0,0.25); transform:scale(1.02); }
-  .plan.featured:hover { transform:scale(1.02) translateY(-4px); }
-  .plan-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--orange); color:white; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; padding:4px 14px; border-radius:100px; white-space:nowrap; }
-  .plan-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:8px; }
-  .plan-desc { color:var(--text-muted); font-size:0.85rem; font-weight:300; margin-bottom:28px; }
-  .plan-price { margin-bottom:32px; }
-  .plan-price .amount { font-family:'Syne',sans-serif; font-weight:800; font-size:2.5rem; letter-spacing:-0.03em; }
-  .plan-price .period { color:var(--text-muted); font-size:0.85rem; }
-  .plan-price .free { font-family:'Syne',sans-serif; font-weight:800; font-size:2rem; color:var(--success); }
-  .plan-features { list-style:none; display:flex; flex-direction:column; gap:12px; margin-bottom:36px; }
-  .plan-features li { display:flex; align-items:center; gap:10px; font-size:0.88rem; color:var(--text-muted); }
-  .plan-features li.active { color:var(--text); }
-  .plan-features .check { color:var(--success); }
-  .plan-features .dash  { color:var(--text-dim); }
-  .plan-cta { display:block; width:100%; padding:14px; border-radius:var(--r-md); text-align:center; font-weight:500; font-size:0.9rem; cursor:pointer; transition:all 0.2s; border:none; text-decoration:none; }
-  .plan-cta.primary { background:var(--orange); color:white; }
-  .plan-cta.primary:hover { background:var(--orange-dark); transform:translateY(-1px); }
-  .plan-cta.secondary { background:var(--glass); border:1px solid var(--glass-border); color:var(--text); }
-  .plan-cta.secondary:hover { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.15); }
+      @media (max-width: 900px) {
+        nav {
+          padding: 0 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .steps {
+          grid-template-columns: 1fr;
+        }
+        .steps::before {
+          display: none;
+        }
+        .step {
+          border-radius: var(--r-md) !important;
+        }
+        .features-layout {
+          grid-template-columns: 1fr;
+        }
+        .plans {
+          grid-template-columns: 1fr;
+        }
+        .plan.featured {
+          transform: none;
+        }
+        .plan.featured:hover {
+          transform: translateY(-4px);
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .stat-item:nth-child(2) {
+          border-right: none;
+        }
+        .faq-layout {
+          grid-template-columns: 1fr;
+        }
+        .cta-box {
+          padding: 48px 28px;
+        }
+      }
 
-  .faq { padding:120px 0; }
-  .faq-layout { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
-  .faq-list { display:flex; flex-direction:column; gap:2px; }
-  .faq-item { border:1px solid var(--glass-border); border-radius:var(--r-md); overflow:hidden; transition:border-color 0.2s; }
-  .faq-item.open { border-color:rgba(255,107,0,0.25); }
-  .faq-q { display:flex; align-items:center; justify-content:space-between; padding:20px 24px; cursor:pointer; font-weight:500; font-size:0.92rem; gap:16px; user-select:none; background:var(--glass); transition:background 0.2s; }
-  .faq-q:hover { background:rgba(255,255,255,0.06); }
-  .faq-chevron { font-size:0.8rem; color:var(--text-dim); transition:transform 0.3s; flex-shrink:0; }
-  .faq-item.open .faq-chevron { transform:rotate(180deg); color:var(--orange); }
-  .faq-a { max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1); background:var(--glass); }
-  .faq-item.open .faq-a { max-height:200px; }
-  .faq-a p { padding:16px 24px 20px; color:var(--text-muted); font-size:0.88rem; font-weight:300; line-height:1.7; border-top:1px solid var(--glass-border); }
+      /* ── FORMULAIRE HERO ── */
+      .analyze-form-wrap {
+        width: 100%;
+        max-width: 680px;
+        animation: fadeUp 0.6s 0.3s ease both;
+      }
+      .analyze-form-box {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 107, 0, 0.25);
+        border-radius: var(--r-xl);
+        padding: 28px 28px 20px;
+        backdrop-filter: blur(16px);
+      }
+      .form-label-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .form-label-icon {
+        font-size: 1rem;
+      }
+      .form-label-text {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 500;
+        letter-spacing: 0.03em;
+      }
+      .form-input-row {
+        display: flex;
+        gap: 10px;
+      }
+      .linkedin-input {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--r-md);
+        padding: 14px 18px;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .linkedin-input::placeholder {
+        color: var(--text-dim);
+      }
+      .linkedin-input:focus {
+        border-color: rgba(255, 107, 0, 0.5);
+        box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.08);
+      }
+      .analyze-btn {
+        background: var(--orange);
+        color: #fff;
+        border: none;
+        border-radius: var(--r-md);
+        padding: 14px 22px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        transition:
+          background 0.2s,
+          transform 0.15s,
+          box-shadow 0.2s;
+        box-shadow: 0 0 24px rgba(255, 107, 0, 0.3);
+      }
+      .analyze-btn:hover {
+        background: var(--orange-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 0 40px rgba(255, 107, 0, 0.45);
+      }
+      .analyze-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .btn-arrow {
+        transition: transform 0.2s;
+      }
+      .analyze-btn:hover .btn-arrow {
+        transform: translateX(3px);
+      }
+      .form-note {
+        margin-top: 12px;
+        font-size: 0.75rem;
+        color: var(--text-dim);
+        text-align: center;
+      }
 
-  .cta-bottom { padding:120px 0; text-align:center; background:linear-gradient(to bottom,transparent,var(--bg2),transparent); }
-  .cta-box { background:var(--glass); border:1px solid var(--glass-border); border-radius:var(--r-xl); padding:80px 60px; position:relative; overflow:hidden; max-width:700px; margin:0 auto; }
-  .cta-box::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,rgba(255,107,0,0.1),transparent 60%); }
-  .cta-box * { position:relative; }
-  .cta-box h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.8rem,4vw,2.8rem); letter-spacing:-0.03em; margin-bottom:20px; line-height:1.1; }
-  .cta-box p { color:var(--text-muted); font-weight:300; margin-bottom:40px; font-size:1.05rem; }
-  .cta-group { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+      /* ── LOADING ── */
+      .loading-wrap {
+        width: 100%;
+        max-width: 480px;
+        animation: fadeUp 0.4s ease both;
+      }
+      .loading-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+        border-radius: var(--r-xl);
+        padding: 28px;
+      }
+      .loading-orb {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: conic-gradient(var(--orange), transparent);
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .loading-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+      .lstep {
+        font-size: 0.82rem;
+        color: var(--text-dim);
+        padding: 4px 0;
+        transition: color 0.3s;
+      }
+      .lstep.active {
+        color: var(--orange);
+        font-weight: 500;
+      }
+      .lstep.done {
+        color: var(--success);
+      }
 
-  .btn-primary { display:inline-flex; align-items:center; gap:8px; background:var(--orange); color:white; padding:16px 32px; border-radius:var(--r-md); font-weight:500; font-size:0.95rem; text-decoration:none; transition:background 0.2s,transform 0.15s; border:none; cursor:pointer; }
-  .btn-primary:hover { background:var(--orange-dark); transform:translateY(-2px); }
-  .btn-ghost { display:inline-flex; align-items:center; gap:8px; background:transparent; color:var(--text-muted); padding:16px 28px; border-radius:var(--r-md); font-size:0.95rem; text-decoration:none; border:1px solid var(--glass-border); cursor:pointer; transition:all 0.2s; }
-  .btn-ghost:hover { color:var(--text); border-color:rgba(255,255,255,0.2); background:var(--glass); }
+      /* ── RÉSULTATS ── */
+      #resultsSection {
+        width: 100%;
+        padding: 80px 5vw;
+        position: relative;
+        z-index: 1;
+        display: none;
+      }
+      #resultsSection.visible {
+        display: block;
+        animation: fadeUp 0.6s ease both;
+      }
+      .results-inner {
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-  footer { position:relative; z-index:1; padding:60px 0 40px; border-top:1px solid var(--glass-border); }
-  .footer-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
-  .footer-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--text); }
-  .footer-logo span { color:var(--orange); }
-  .footer-links { display:flex; gap:28px; list-style:none; flex-wrap:wrap; }
-  .footer-links a { color:var(--text-dim); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
-  .footer-links a:hover { color:var(--text-muted); }
-  .footer-copy { color:var(--text-dim); font-size:0.8rem; font-weight:300; }
+      .score-header {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+        border-radius: var(--r-xl);
+        padding: 2.5rem;
+      }
+      .score-ring-wrap {
+        position: relative;
+        width: 130px;
+        height: 130px;
+        flex-shrink: 0;
+      }
+      .score-ring-wrap svg {
+        transform: rotate(-90deg);
+      }
+      .score-ring-bg {
+        stroke: rgba(255, 255, 255, 0.08);
+      }
+      .score-ring-fill {
+        stroke: var(--orange);
+        stroke-dasharray: 345;
+        stroke-dashoffset: 345;
+        stroke-linecap: round;
+        filter: drop-shadow(0 0 8px rgba(255, 107, 0, 0.4));
+        transition: stroke-dashoffset 1.5s ease;
+      }
+      .score-ring-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .score-ring-num {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 2.2rem;
+        color: var(--orange);
+        line-height: 1;
+      }
+      .score-ring-sub {
+        font-size: 0.65rem;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
 
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
-  .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
-  .reveal.visible { opacity:1; transform:translateY(0); }
+      .score-info {
+        flex: 1;
+      }
+      .score-info h2 {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.6rem;
+        margin-bottom: 0.4rem;
+      }
+      .score-info p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        font-weight: 300;
+        margin-bottom: 1.2rem;
+      }
+      .score-bars-mini {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .mini-bar-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .mini-bar-label {
+        font-size: 0.78rem;
+        color: var(--text-dim);
+        width: 110px;
+        flex-shrink: 0;
+      }
+      .mini-bar-track {
+        flex: 1;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .mini-bar-fill {
+        height: 100%;
+        border-radius: 3px;
+        background: linear-gradient(
+          to right,
+          var(--orange),
+          var(--orange-dark)
+        );
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 1.2s ease;
+      }
+      .mini-bar-score {
+        font-size: 0.75rem;
+        font-weight: 600;
+        width: 30px;
+        text-align: right;
+      }
 
-  @media (max-width:900px) {
-    nav { padding:0 20px; }
-    .nav-links { display:none; }
-    .steps { grid-template-columns:1fr; }
-    .steps::before { display:none; }
-    .step { border-radius:var(--r-md) !important; }
-    .features-layout { grid-template-columns:1fr; }
-    .plans { grid-template-columns:1fr; }
-    .plan.featured { transform:none; }
-    .plan.featured:hover { transform:translateY(-4px); }
-    .stats-grid { grid-template-columns:repeat(2,1fr); }
-    .stat-item:nth-child(2) { border-right:none; }
-    .faq-layout { grid-template-columns:1fr; }
-    .cta-box { padding:48px 28px; }
-  }
+      .reco-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+      }
+      .reco-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: var(--r-lg);
+        padding: 1.5rem;
+        transition:
+          border-color 0.3s,
+          transform 0.2s;
+      }
+      .reco-card:hover {
+        border-color: rgba(255, 107, 0, 0.25);
+        transform: translateY(-2px);
+      }
+      .reco-card-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 0.75rem;
+      }
+      .reco-icon {
+        font-size: 1.2rem;
+      }
+      .reco-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        flex: 1;
+      }
+      .reco-score-badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 100px;
+        background: rgba(255, 107, 0, 0.12);
+        color: var(--orange);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+      }
+      .reco-score-badge.ok {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+        border-color: rgba(34, 197, 94, 0.2);
+      }
+      .reco-priority {
+        font-size: 0.72rem;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .reco-priority.haute {
+        color: #ef4444;
+      }
+      .reco-priority.moyenne {
+        color: #f59e0b;
+      }
+      .reco-priority.basse {
+        color: #22c55e;
+      }
+      .reco-conseil {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-weight: 300;
+      }
 
-  /* ── FORMULAIRE HERO ───────────────────────────── */
-  .analyze-form-wrap { width:100%; max-width:680px; animation:fadeUp 0.6s 0.3s ease both; }
-  .analyze-form-box {
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,107,0,0.25);
-    border-radius:var(--r-xl);
-    padding:28px 28px 20px;
-    backdrop-filter:blur(16px);
-  }
-  .form-label-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
-  .form-label-icon { font-size:1rem; }
-  .form-label-text { font-size:0.85rem; color:var(--text-muted); font-weight:500; letter-spacing:0.03em; }
-  .form-input-row { display:flex; gap:10px; }
-  .linkedin-input {
-    flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);
-    border-radius:var(--r-md); padding:14px 18px;
-    color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.95rem;
-    outline:none; transition:border-color 0.2s, box-shadow 0.2s;
-  }
-  .linkedin-input::placeholder { color:var(--text-dim); }
-  .linkedin-input:focus { border-color:rgba(255,107,0,0.5); box-shadow:0 0 0 3px rgba(255,107,0,0.08); }
-  .analyze-btn {
-    background:var(--orange); color:#fff; border:none; border-radius:var(--r-md);
-    padding:14px 22px; font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:600;
-    cursor:pointer; display:flex; align-items:center; gap:8px; white-space:nowrap;
-    transition:background 0.2s, transform 0.15s, box-shadow 0.2s;
-    box-shadow:0 0 24px rgba(255,107,0,0.3);
-  }
-  .analyze-btn:hover { background:var(--orange-dark); transform:translateY(-1px); box-shadow:0 0 40px rgba(255,107,0,0.45); }
-  .analyze-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
-  .btn-arrow { transition:transform 0.2s; }
-  .analyze-btn:hover .btn-arrow { transform:translateX(3px); }
-  .form-note { margin-top:12px; font-size:0.75rem; color:var(--text-dim); text-align:center; }
+      .optimized-section {
+        margin-top: 2rem;
+      }
+      .optimized-section h3 {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        margin-bottom: 1.25rem;
+      }
+      .headline-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+      .headline-opt {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--r-md);
+        padding: 1rem 1.25rem;
+        transition: border-color 0.2s;
+      }
+      .headline-opt:hover {
+        border-color: rgba(255, 107, 0, 0.3);
+      }
+      .headline-opt-text {
+        font-size: 0.92rem;
+        color: var(--text);
+        flex: 1;
+      }
+      .copy-btn {
+        background: rgba(255, 107, 0, 0.1);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+        color: var(--orange);
+        border-radius: var(--r-sm);
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .copy-btn:hover {
+        background: rgba(255, 107, 0, 0.2);
+      }
+      .copy-btn.copied {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+        border-color: rgba(34, 197, 94, 0.3);
+      }
 
-  /* ── LOADING ────────────────────────────────────── */
-  .loading-wrap { width:100%; max-width:480px; animation:fadeUp 0.4s ease both; }
-  .loading-box {
-    display:flex; align-items:flex-start; gap:20px;
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,107,0,0.2);
-    border-radius:var(--r-xl); padding:28px;
-  }
-  .loading-orb {
-    width:44px; height:44px; border-radius:50%; flex-shrink:0;
-    background:conic-gradient(var(--orange), transparent);
-    animation:spin 1s linear infinite;
-  }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .loading-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin-bottom:12px; }
-  .lstep { font-size:0.82rem; color:var(--text-dim); padding:4px 0; transition:color 0.3s; }
-  .lstep.active { color:var(--orange); font-weight:500; }
-  .lstep.done { color:var(--success); }
+      .about-box {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--r-lg);
+        padding: 1.5rem;
+      }
+      .about-box-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .about-box-label {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+      .about-text {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-weight: 300;
+        white-space: pre-line;
+      }
 
-  /* ── RÉSULTATS ──────────────────────────────────── */
-  #resultsSection {
-    width:100%; padding:80px 5vw; position:relative; z-index:1;
-    display:none;
-  }
-  #resultsSection.visible { display:block; animation:fadeUp 0.6s ease both; }
+      .results-new-btn {
+        margin-top: 2.5rem;
+        text-align: center;
+      }
+      .results-new-btn button {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-muted);
+        border-radius: var(--r-md);
+        padding: 0.75rem 2rem;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          color 0.2s;
+      }
+      .results-new-btn button:hover {
+        border-color: rgba(255, 107, 0, 0.3);
+        color: var(--text);
+      }
 
-  .results-inner { max-width:900px; margin:0 auto; }
+      @media (max-width: 640px) {
+        .form-input-row {
+          flex-direction: column;
+        }
+        .analyze-btn {
+          justify-content: center;
+        }
+        .score-header {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+      }
 
-  /* Score global */
-  .score-header {
-    display:flex; align-items:center; gap:2rem; flex-wrap:wrap;
-    margin-bottom:3rem;
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,107,0,0.2);
-    border-radius:var(--r-xl); padding:2.5rem;
-  }
-  .score-ring-wrap { position:relative; width:130px; height:130px; flex-shrink:0; }
-  .score-ring-wrap svg { transform:rotate(-90deg); }
-  .score-ring-bg { stroke:rgba(255,255,255,0.08); }
-  .score-ring-fill { stroke:var(--orange); stroke-dasharray:345; stroke-dashoffset:345; stroke-linecap:round; filter:drop-shadow(0 0 8px rgba(255,107,0,0.4)); transition:stroke-dashoffset 1.5s ease; }
-  .score-ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .score-ring-num { font-family:'Syne',sans-serif; font-weight:800; font-size:2.2rem; color:var(--orange); line-height:1; }
-  .score-ring-sub { font-size:0.65rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; }
+      /* ── GUIDE LINKEDIN ── */
+      .visibility-card {
+        grid-column: 1 / -1;
+        background: rgba(10, 102, 194, 0.06);
+        border: 1px solid rgba(10, 102, 194, 0.25);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+      }
+      .visibility-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem;
+        cursor: pointer;
+        gap: 1rem;
+        transition: background 0.2s;
+      }
+      .visibility-header:hover {
+        background: rgba(10, 102, 194, 0.05);
+      }
+      .visibility-header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .visibility-header-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+      }
+      .visibility-header-sub {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+      .visibility-toggle {
+        background: rgba(10, 102, 194, 0.15);
+        border: 1px solid rgba(10, 102, 194, 0.3);
+        color: #5ba4e0;
+        border-radius: var(--r-sm);
+        padding: 6px 14px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: background 0.2s;
+      }
+      .visibility-header:hover .visibility-toggle {
+        background: rgba(10, 102, 194, 0.25);
+      }
+      .visibility-body {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.5s ease,
+          padding 0.3s;
+        padding: 0 1.5rem;
+      }
+      .visibility-card.open .visibility-body {
+        max-height: 1200px;
+        padding: 0 1.5rem 1.5rem;
+      }
+      .visibility-toggle-arrow {
+        transition: transform 0.3s;
+        display: inline-block;
+      }
+      .visibility-card.open .visibility-toggle-arrow {
+        transform: rotate(180deg);
+      }
+      .otw-warning {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: var(--r-md);
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+      .otw-warning-icon {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+      }
+      .otw-warning-text {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+      .otw-warning-text strong {
+        color: #ef4444;
+      }
+      .guide-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .guide-step {
+        display: flex;
+        gap: 16px;
+        position: relative;
+        padding-bottom: 1.5rem;
+      }
+      .guide-step:last-child {
+        padding-bottom: 0;
+      }
+      .guide-step-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .guide-step-num {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: rgba(10, 102, 194, 0.2);
+        border: 1px solid rgba(10, 102, 194, 0.4);
+        color: #5ba4e0;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .guide-step-line {
+        width: 1px;
+        flex: 1;
+        margin-top: 6px;
+        background: linear-gradient(
+          to bottom,
+          rgba(10, 102, 194, 0.3),
+          transparent
+        );
+        min-height: 20px;
+      }
+      .guide-step:last-child .guide-step-line {
+        display: none;
+      }
+      .guide-step-content {
+        flex: 1;
+        padding-top: 4px;
+      }
+      .guide-step-title {
+        font-weight: 600;
+        font-size: 0.92rem;
+        margin-bottom: 4px;
+      }
+      .guide-step-desc {
+        font-size: 0.83rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+      .sim-ui {
+        margin-top: 8px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--r-sm);
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .sim-ui .sim-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+        flex-shrink: 0;
+      }
+      .sim-ui .sim-arrow {
+        color: var(--text-dim);
+      }
+      .sim-ui .sim-highlight {
+        background: rgba(10, 102, 194, 0.15);
+        color: #5ba4e0;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 500;
+      }
+      .sim-radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .sim-radio {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: var(--r-sm);
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+      .sim-radio.selected {
+        border-color: rgba(34, 197, 94, 0.4);
+        background: rgba(34, 197, 94, 0.06);
+        color: var(--text);
+      }
+      .sim-radio-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+      .sim-radio.selected .sim-radio-dot {
+        border-color: #22c55e;
+        background: #22c55e;
+      }
+      .sim-radio-bad .sim-radio-dot {
+        border-color: #ef4444;
+      }
+      .sim-radio-bad {
+        opacity: 0.5;
+      }
+      .sim-radio-label {
+        flex: 1;
+      }
+      .sim-radio-badge {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      .sim-radio.selected .sim-radio-badge {
+        background: rgba(34, 197, 94, 0.15);
+        color: #22c55e;
+      }
+      .sim-radio-bad .sim-radio-badge {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+      }
+      .guide-result {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(34, 197, 94, 0.08);
+        border: 1px solid rgba(34, 197, 94, 0.25);
+        border-radius: var(--r-md);
+        padding: 1rem 1.25rem;
+        margin-top: 1.25rem;
+      }
+      .guide-result-icon {
+        font-size: 1.3rem;
+      }
+      .guide-result-text {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+      .guide-result-text strong {
+        color: #22c55e;
+      }
 
-  .score-info { flex:1; }
-  .score-info h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:1.6rem; margin-bottom:0.4rem; }
-  .score-info p { color:var(--text-muted); font-size:0.95rem; font-weight:300; margin-bottom:1.2rem; }
-  .score-bars-mini { display:flex; flex-direction:column; gap:0.5rem; }
-  .mini-bar-row { display:flex; align-items:center; gap:10px; }
-  .mini-bar-label { font-size:0.78rem; color:var(--text-dim); width:110px; flex-shrink:0; }
-  .mini-bar-track { flex:1; height:5px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
-  .mini-bar-fill { height:100%; border-radius:3px; background:linear-gradient(to right,var(--orange),var(--orange-dark)); transform:scaleX(0); transform-origin:left; transition:transform 1.2s ease; }
-  .mini-bar-score { font-size:0.75rem; font-weight:600; width:30px; text-align:right; }
+      /* ── MODAL AUTH ── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .modal-box {
+        background: var(--bg2);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+        border-radius: var(--r-xl);
+        padding: 2.5rem 2rem;
+        width: 100%;
+        max-width: 420px;
+        position: relative;
+        transform: translateY(20px);
+        transition: transform 0.3s;
+      }
+      .modal-overlay.open .modal-box {
+        transform: none;
+      }
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-muted);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .modal-logo {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.2rem;
+        margin-bottom: 0.25rem;
+      }
+      .modal-logo span {
+        color: var(--orange);
+      }
+      .modal-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.5rem;
+        margin-bottom: 0.4rem;
+      }
+      .modal-sub {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 1.75rem;
+      }
+      .modal-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.75rem;
+      }
+      .modal-tab {
+        flex: 1;
+        padding: 0.6rem;
+        border-radius: var(--r-sm);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text-muted);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .modal-tab.active {
+        background: rgba(255, 107, 0, 0.12);
+        border-color: rgba(255, 107, 0, 0.3);
+        color: var(--orange);
+      }
+      .modal-field {
+        margin-bottom: 1rem;
+      }
+      .modal-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+        display: block;
+        font-weight: 500;
+      }
+      .modal-input {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--r-sm);
+        padding: 12px 14px;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .modal-input::placeholder {
+        color: var(--text-dim);
+      }
+      .modal-input:focus {
+        border-color: rgba(255, 107, 0, 0.4);
+        box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.08);
+      }
+      .modal-error {
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: var(--r-sm);
+        padding: 10px 14px;
+        font-size: 0.82rem;
+        color: #ef4444;
+        margin-bottom: 1rem;
+        display: none;
+      }
+      .modal-error.show {
+        display: block;
+      }
+      .modal-submit {
+        width: 100%;
+        background: var(--orange);
+        color: #fff;
+        border: none;
+        border-radius: var(--r-md);
+        padding: 13px;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: "DM Sans", sans-serif;
+        cursor: pointer;
+        box-shadow: 0 0 24px rgba(255, 107, 0, 0.3);
+        transition:
+          background 0.2s,
+          transform 0.15s,
+          box-shadow 0.2s;
+        margin-top: 0.5rem;
+      }
+      .modal-submit:hover {
+        background: var(--orange-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 0 40px rgba(255, 107, 0, 0.45);
+      }
+      .modal-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .modal-switch {
+        text-align: center;
+        margin-top: 1.25rem;
+        font-size: 0.83rem;
+        color: var(--text-dim);
+      }
+      .modal-switch a {
+        color: var(--orange);
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .modal-switch a:hover {
+        text-decoration: underline;
+      }
 
-  /* Grille recommandations */
-  .reco-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; margin-bottom:2.5rem; }
-  .reco-card {
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
-    border-radius:var(--r-lg); padding:1.5rem;
-    transition:border-color 0.3s, transform 0.2s;
-  }
-  .reco-card:hover { border-color:rgba(255,107,0,0.25); transform:translateY(-2px); }
-  .reco-card-top { display:flex; align-items:center; gap:10px; margin-bottom:0.75rem; }
-  .reco-icon { font-size:1.2rem; }
-  .reco-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; flex:1; }
-  .reco-score-badge {
-    font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:100px;
-    background:rgba(255,107,0,0.12); color:var(--orange); border:1px solid rgba(255,107,0,0.2);
-  }
-  .reco-score-badge.ok { background:rgba(34,197,94,0.1); color:#22C55E; border-color:rgba(34,197,94,0.2); }
-  .reco-priority { font-size:0.72rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem; }
-  .reco-priority.haute { color:#EF4444; }
-  .reco-priority.moyenne { color:#F59E0B; }
-  .reco-priority.basse { color:#22C55E; }
-  .reco-conseil { font-size:0.88rem; color:var(--text-muted); line-height:1.6; font-weight:300; }
+      /* Nav user zone */
+      .nav-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav-user-badge {
+        background: rgba(255, 107, 0, 0.1);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+        border-radius: 100px;
+        padding: 5px 12px;
+        font-size: 0.78rem;
+        color: var(--orange);
+        font-weight: 500;
+      }
+      .nav-user-btn {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-muted);
+        border-radius: var(--r-sm);
+        padding: 6px 14px;
+        font-size: 0.82rem;
+        cursor: pointer;
+        font-family: "DM Sans", sans-serif;
+        transition: background 0.2s;
+      }
+      .nav-user-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+      }
 
-  /* Textes optimisés */
-  .optimized-section { margin-top:2rem; }
-  .optimized-section h3 { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; margin-bottom:1.25rem; }
-  .headline-options { display:flex; flex-direction:column; gap:0.75rem; margin-bottom:2rem; }
-  .headline-opt {
-    display:flex; align-items:center; justify-content:space-between; gap:1rem;
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-    border-radius:var(--r-md); padding:1rem 1.25rem;
-    transition:border-color 0.2s;
-  }
-  .headline-opt:hover { border-color:rgba(255,107,0,0.3); }
-  .headline-opt-text { font-size:0.92rem; color:var(--text); flex:1; }
-  .copy-btn {
-    background:rgba(255,107,0,0.1); border:1px solid rgba(255,107,0,0.2);
-    color:var(--orange); border-radius:var(--r-sm); padding:6px 14px;
-    font-size:0.75rem; font-weight:600; cursor:pointer; white-space:nowrap;
-    transition:background 0.2s; font-family:'DM Sans',sans-serif;
-  }
-  .copy-btn:hover { background:rgba(255,107,0,0.2); }
-  .copy-btn.copied { background:rgba(34,197,94,0.1); color:#22C55E; border-color:rgba(34,197,94,0.3); }
+      /* Quota bar */
+      .quota-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 107, 0, 0.06);
+        border: 1px solid rgba(255, 107, 0, 0.15);
+        border-radius: var(--r-md);
+        padding: 10px 16px;
+        margin-bottom: 1.5rem;
+        font-size: 0.83rem;
+        color: var(--text-muted);
+      }
+      .quota-bar strong {
+        color: var(--orange);
+      }
+      .quota-bar.warning {
+        background: rgba(239, 68, 68, 0.06);
+        border-color: rgba(239, 68, 68, 0.2);
+      }
+      .quota-bar.warning strong {
+        color: #ef4444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-  .about-box {
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-    border-radius:var(--r-lg); padding:1.5rem;
-  }
-  .about-box-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
-  .about-box-label { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; }
-  .about-text { font-size:0.9rem; color:var(--text-muted); line-height:1.8; font-weight:300; white-space:pre-line; }
+    <!-- NAV -->
+    <nav>
+      <a href="#" class="nav-logo">Link<span>2</span>Job</a>
+      <ul class="nav-links">
+        <li><a href="#how">Comment ça marche</a></li>
+        <li><a href="#features">Fonctionnalités</a></li>
+        <li><a href="#pricing">Tarifs</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li id="navAuthZone">
+          <a href="#" class="nav-cta" onclick="openAuthModal(event)"
+            >Commencer gratuitement</a
+          >
+        </li>
+      </ul>
+    </nav>
 
-  .results-new-btn {
-    margin-top:2.5rem; text-align:center;
-  }
-  .results-new-btn button {
-    background:transparent; border:1px solid rgba(255,255,255,0.1);
-    color:var(--text-muted); border-radius:var(--r-md); padding:0.75rem 2rem;
-    font-family:'DM Sans',sans-serif; font-size:0.9rem; cursor:pointer;
-    transition:border-color 0.2s, color 0.2s;
-  }
-  .results-new-btn button:hover { border-color:rgba(255,107,0,0.3); color:var(--text); }
-
-  @media(max-width:640px) {
-    .form-input-row { flex-direction:column; }
-    .analyze-btn { justify-content:center; }
-    .score-header { flex-direction:column; align-items:center; text-align:center; }
-  }
-
-  /* ── GUIDE LINKEDIN PAS-À-PAS ───────────────────────────────────── */
-  .visibility-card {
-    grid-column: 1 / -1;
-    background: rgba(10,102,194,0.06);
-    border: 1px solid rgba(10,102,194,0.25);
-    border-radius: var(--r-lg);
-    overflow: hidden;
-  }
-  .visibility-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.5rem; cursor: pointer; gap: 1rem;
-    transition: background 0.2s;
-  }
-  .visibility-header:hover { background: rgba(10,102,194,0.05); }
-  .visibility-header-left { display: flex; align-items: center; gap: 12px; }
-  .visibility-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
-  .visibility-header-sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
-  .visibility-toggle {
-    background: rgba(10,102,194,0.15); border: 1px solid rgba(10,102,194,0.3);
-    color: #5BA4E0; border-radius: var(--r-sm); padding: 6px 14px;
-    font-size: 0.78rem; font-weight: 600; white-space: nowrap;
-    transition: background 0.2s;
-  }
-  .visibility-header:hover .visibility-toggle { background: rgba(10,102,194,0.25); }
-
-  .visibility-body {
-    max-height: 0; overflow: hidden;
-    transition: max-height 0.5s ease, padding 0.3s;
-    padding: 0 1.5rem;
-  }
-  .visibility-card.open .visibility-body {
-    max-height: 1200px;
-    padding: 0 1.5rem 1.5rem;
-  }
-  .visibility-toggle-arrow { transition: transform 0.3s; display: inline-block; }
-  .visibility-card.open .visibility-toggle-arrow { transform: rotate(180deg); }
-
-  /* Warning badge */
-  .otw-warning {
-    display: flex; align-items: flex-start; gap: 12px;
-    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
-    border-radius: var(--r-md); padding: 1rem 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-  .otw-warning-icon { font-size: 1.4rem; flex-shrink: 0; }
-  .otw-warning-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
-  .otw-warning-text strong { color: #EF4444; }
-
-  /* Steps */
-  .guide-steps { display: flex; flex-direction: column; gap: 0; }
-  .guide-step {
-    display: flex; gap: 16px; position: relative;
-    padding-bottom: 1.5rem;
-  }
-  .guide-step:last-child { padding-bottom: 0; }
-  .guide-step-left { display: flex; flex-direction: column; align-items: center; }
-  .guide-step-num {
-    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-    background: rgba(10,102,194,0.2); border: 1px solid rgba(10,102,194,0.4);
-    color: #5BA4E0; font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
-  }
-  .guide-step-line {
-    width: 1px; flex: 1; margin-top: 6px;
-    background: linear-gradient(to bottom, rgba(10,102,194,0.3), transparent);
-    min-height: 20px;
-  }
-  .guide-step:last-child .guide-step-line { display: none; }
-  .guide-step-content { flex: 1; padding-top: 4px; }
-  .guide-step-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
-  .guide-step-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
-
-  /* Simulated UI elements */
-  .sim-ui {
-    margin-top: 8px;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: var(--r-sm); padding: 8px 12px;
-    font-size: 0.8rem; color: var(--text-dim);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .sim-ui .sim-avatar {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
-    flex-shrink: 0;
-  }
-  .sim-ui .sim-arrow { color: var(--text-dim); }
-  .sim-ui .sim-highlight {
-    background: rgba(10,102,194,0.15); color: #5BA4E0;
-    padding: 2px 8px; border-radius: 4px; font-weight: 500;
-  }
-  .sim-radio-group { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
-  .sim-radio {
-    display: flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
-    border-radius: var(--r-sm); padding: 8px 12px; font-size: 0.8rem;
-  }
-  .sim-radio.selected {
-    border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06);
-    color: var(--text);
-  }
-  .sim-radio-dot {
-    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
-    border: 2px solid rgba(255,255,255,0.2);
-  }
-  .sim-radio.selected .sim-radio-dot {
-    border-color: #22C55E; background: #22C55E;
-  }
-  .sim-radio-bad .sim-radio-dot { border-color: #EF4444; }
-  .sim-radio-bad { opacity: 0.5; }
-  .sim-radio-label { flex: 1; }
-  .sim-radio-badge {
-    font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;
-  }
-  .sim-radio.selected .sim-radio-badge { background: rgba(34,197,94,0.15); color: #22C55E; }
-  .sim-radio-bad .sim-radio-badge { background: rgba(239,68,68,0.1); color: #EF4444; }
-
-  /* Result badge */
-  .guide-result {
-    display: flex; align-items: center; gap: 10px;
-    background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25);
-    border-radius: var(--r-md); padding: 1rem 1.25rem; margin-top: 1.25rem;
-  }
-  .guide-result-icon { font-size: 1.3rem; }
-  .guide-result-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
-  .guide-result-text strong { color: #22C55E; }
-
-
-  /* ── MODAL AUTH ─────────────────────────────────────────────────── */
-  .modal-overlay {
-    position:fixed; inset:0; z-index:1000;
-    background:rgba(0,0,0,0.75); backdrop-filter:blur(8px);
-    display:flex; align-items:center; justify-content:center;
-    padding:1rem;
-    opacity:0; pointer-events:none; transition:opacity 0.3s;
-  }
-  .modal-overlay.open { opacity:1; pointer-events:all; }
-
-  .modal-box {
-    background:var(--bg2); border:1px solid rgba(255,107,0,0.2);
-    border-radius:var(--r-xl); padding:2.5rem 2rem;
-    width:100%; max-width:420px; position:relative;
-    transform:translateY(20px); transition:transform 0.3s;
-  }
-  .modal-overlay.open .modal-box { transform:none; }
-
-  .modal-close {
-    position:absolute; top:1rem; right:1rem;
-    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
-    color:var(--text-muted); width:32px; height:32px; border-radius:50%;
-    cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;
-    transition:background 0.2s;
-  }
-  .modal-close:hover { background:rgba(255,255,255,0.12); }
-
-  .modal-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; margin-bottom:0.25rem; }
-  .modal-logo span { color:var(--orange); }
-  .modal-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; margin-bottom:0.4rem; }
-  .modal-sub { font-size:0.85rem; color:var(--text-muted); margin-bottom:1.75rem; }
-
-  .modal-tabs { display:flex; gap:0.5rem; margin-bottom:1.75rem; }
-  .modal-tab {
-    flex:1; padding:0.6rem; border-radius:var(--r-sm);
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-    color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:0.9rem;
-    font-weight:500; cursor:pointer; transition:all 0.2s;
-  }
-  .modal-tab.active {
-    background:rgba(255,107,0,0.12); border-color:rgba(255,107,0,0.3);
-    color:var(--orange);
-  }
-
-  .modal-field { margin-bottom:1rem; }
-  .modal-label { font-size:0.8rem; color:var(--text-muted); margin-bottom:6px; display:block; font-weight:500; }
-  .modal-input {
-    width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);
-    border-radius:var(--r-sm); padding:12px 14px;
-    color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.95rem;
-    outline:none; transition:border-color 0.2s, box-shadow 0.2s;
-  }
-  .modal-input::placeholder { color:var(--text-dim); }
-  .modal-input:focus { border-color:rgba(255,107,0,0.4); box-shadow:0 0 0 3px rgba(255,107,0,0.08); }
-
-  .modal-error {
-    background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2);
-    border-radius:var(--r-sm); padding:10px 14px;
-    font-size:0.82rem; color:#EF4444; margin-bottom:1rem; display:none;
-  }
-  .modal-error.show { display:block; }
-
-  .modal-submit {
-    width:100%; background:var(--orange); color:#fff; border:none;
-    border-radius:var(--r-md); padding:13px; font-size:1rem; font-weight:600;
-    font-family:'DM Sans',sans-serif; cursor:pointer;
-    box-shadow:0 0 24px rgba(255,107,0,0.3);
-    transition:background 0.2s, transform 0.15s, box-shadow 0.2s;
-    margin-top:0.5rem;
-  }
-  .modal-submit:hover { background:var(--orange-dark); transform:translateY(-1px); box-shadow:0 0 40px rgba(255,107,0,0.45); }
-  .modal-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
-
-  .modal-switch { text-align:center; margin-top:1.25rem; font-size:0.83rem; color:var(--text-dim); }
-  .modal-switch a { color:var(--orange); cursor:pointer; text-decoration:none; }
-  .modal-switch a:hover { text-decoration:underline; }
-
-  /* Nav user zone */
-  .nav-user {
-    display:flex; align-items:center; gap:10px;
-  }
-  .nav-user-badge {
-    background:rgba(255,107,0,0.1); border:1px solid rgba(255,107,0,0.2);
-    border-radius:100px; padding:5px 12px;
-    font-size:0.78rem; color:var(--orange); font-weight:500;
-  }
-  .nav-user-btn {
-    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
-    color:var(--text-muted); border-radius:var(--r-sm); padding:6px 14px;
-    font-size:0.82rem; cursor:pointer; font-family:'DM Sans',sans-serif;
-    transition:background 0.2s;
-  }
-  .nav-user-btn:hover { background:rgba(255,255,255,0.1); color:var(--text); }
-
-  /* Quota bar in results */
-  .quota-bar {
-    display:flex; align-items:center; gap:10px;
-    background:rgba(255,107,0,0.06); border:1px solid rgba(255,107,0,0.15);
-    border-radius:var(--r-md); padding:10px 16px; margin-bottom:1.5rem;
-    font-size:0.83rem; color:var(--text-muted);
-  }
-  .quota-bar strong { color:var(--orange); }
-  .quota-bar.warning { background:rgba(239,68,68,0.06); border-color:rgba(239,68,68,0.2); }
-  .quota-bar.warning strong { color:#EF4444; }
-
-</style>
-</head>
-<body>
-
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Link<span>2</span>Job</a>
-  <ul class="nav-links">
-    <li><a href="#how">Comment ça marche</a></li>
-    <li><a href="#features">Fonctionnalités</a></li>
-    <li><a href="#pricing">Tarifs</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li id="navAuthZone">
-      <a href="#" class="nav-cta" onclick="openAuthModal(event)">Commencer gratuitement</a>
-    </li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">
-    <span class="dot"></span>
-    Bientôt disponible — Rejoins la liste d'attente
-  </div>
-  <h1>
-    LinkedIn travaille<br>
-    <span class="line-orange">pour toi,</span><br>
-    <span class="line-dim">pas l'inverse.</span>
-  </h1>
-  <p class="hero-sub">
-    Tu te connectes une fois. Link2Job analyse ton profil, l'optimise, et candidate pour toi — avec ton accord à chaque étape.
-  </p>
-  <p class="hero-sub" style="margin-top:-.5rem;font-size:.95rem;">
-    Pas encore de profil LinkedIn ? <span style="color:var(--orange);font-weight:500;">On te le crée de zéro. ✨</span>
-  </p>
-  <!-- FORMULAIRE ANALYSE -->
-  <div class="analyze-form-wrap" id="analyzeFormWrap">
-    <div class="analyze-form-box">
-      <div class="form-label-row">
-        <span class="form-label-icon">🔗</span>
-        <span class="form-label-text">Colle ton URL LinkedIn publique</span>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Bientôt disponible — Rejoins la liste d'attente
       </div>
-      <div class="form-input-row">
-        <input type="url" id="linkedinUrl" class="linkedin-input"
-          placeholder="https://www.linkedin.com/in/ton-nom/"
-          autocomplete="off" spellcheck="false"/>
-        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeProfile()">
-          <span class="btn-label">Analyser mon profil</span>
-          <span class="btn-arrow">→</span>
-        </button>
-      </div>
-      <div class="form-note">
-        🔒 URL publique · <span id="formNoteAuth">Connecte-toi pour sauvegarder tes résultats</span>
-      </div>
-    </div>
-  </div>
-  <!-- LOADING -->
-  <div class="loading-wrap" id="loadingWrap" style="display:none;">
-    <div class="loading-box">
-      <div class="loading-orb"></div>
-      <div class="loading-texts">
-        <div class="loading-title">Analyse en cours…</div>
-        <div class="loading-steps">
-          <div class="lstep" id="ls1">🔍 Récupération du profil</div>
-          <div class="lstep" id="ls2">🧠 Analyse IA en cours</div>
-          <div class="lstep" id="ls3">✍️ Génération des textes optimisés</div>
-          <div class="lstep" id="ls4">📊 Calcul du score final</div>
+      <h1>
+        LinkedIn travaille<br />
+        <span class="line-orange">pour toi,</span><br />
+        <span class="line-dim">pas l'inverse.</span>
+      </h1>
+      <p class="hero-sub">
+        Tu te connectes une fois. Link2Job analyse ton profil, l'optimise, et
+        candidate pour toi — avec ton accord à chaque étape.
+      </p>
+      <p class="hero-sub" style="margin-top: -0.5rem; font-size: 0.95rem">
+        Pas encore de profil LinkedIn ?
+        <span style="color: var(--orange); font-weight: 500"
+          >On te le crée de zéro. ✨</span
+        >
+      </p>
+
+      <!-- FORMULAIRE ANALYSE -->
+      <div class="analyze-form-wrap" id="analyzeFormWrap">
+        <div class="analyze-form-box">
+          <div class="form-label-row">
+            <span class="form-label-icon">🔗</span>
+            <span class="form-label-text">Colle ton URL LinkedIn publique</span>
+          </div>
+          <div class="form-input-row">
+            <input
+              type="url"
+              id="linkedinUrl"
+              class="linkedin-input"
+              placeholder="https://www.linkedin.com/in/ton-nom/"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button
+              class="analyze-btn"
+              id="analyzeBtn"
+              onclick="analyzeProfile()"
+            >
+              <span class="btn-label">Analyser mon profil</span>
+              <span class="btn-arrow">→</span>
+            </button>
+          </div>
+          <div class="form-note">
+            🔒 URL publique ·
+            <span id="formNoteAuth"
+              >Connecte-toi pour sauvegarder tes résultats</span
+            >
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="scroll-hint">
-    <span>Découvrir</span>
-    <div class="arrow"></div>
-  </div>
-</section>
 
-<!-- STATS -->
-<section class="stats">
-  <div class="section-inner">
-    <div class="stats-grid">
-      <div class="stat-item reveal"><span class="stat-num">+40%</span><span class="stat-label">de réponses avec un profil optimisé</span></div>
-      <div class="stat-item reveal"><span class="stat-num">30s</span><span class="stat-label">pour analyser ton profil complet</span></div>
-      <div class="stat-item reveal"><span class="stat-num">100%</span><span class="stat-label">accord utilisateur avant chaque action</span></div>
-      <div class="stat-item reveal"><span class="stat-num">0€</span><span class="stat-label">pour commencer — 3 analyses gratuites</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how" id="how">
-  <div class="section-inner">
-    <div class="how-header reveal">
-      <div class="section-label">Comment ça marche</div>
-      <h2 class="section-title">En 3 étapes,<br>ton LinkedIn est prêt.</h2>
-      <p class="section-sub">Pas de magie noire. Pas de spam. Juste une IA qui travaille intelligemment pour toi.</p>
-    </div>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step-num">01</div>
-        <h3>Tu colles ton URL LinkedIn</h3>
-        <p>Aucun accès à tes credentials. On analyse uniquement ton profil public. C'est tout ce dont on a besoin pour commencer.</p>
-      </div>
-      <div class="step reveal" style="transition-delay:0.1s">
-        <div class="step-num">02</div>
-        <h3>L'IA analyse et score ton profil</h3>
-        <p>Notre IA passe en revue chaque section — titre, résumé, compétences, photo — et te donne un score de 0 à 100 avec des recommandations concrètes.</p>
-      </div>
-      <div class="step reveal" style="transition-delay:0.2s">
-        <div class="step-num">03</div>
-        <h3>Tu copies les textes optimisés</h3>
-        <p>Titre professionnel, résumé LinkedIn — l'IA les réécrit pour toi. Tu les copies-colles. Ton score monte. Les recruteurs te trouvent.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="section-inner">
-    <div class="features-layout">
-      <div>
-        <div class="reveal">
-          <div class="section-label">Ce qu'on analyse</div>
-          <h2 class="section-title">Chaque pixel<br>de ton profil.</h2>
-          <p class="section-sub">LinkedIn, c'est ton CV permanent. On le traite comme tel.</p>
-        </div>
-        <div class="features-list">
-          <div class="feature-item reveal"><div class="feature-icon">✍️</div><div class="feature-text"><h4>Titre professionnel</h4><p>Optimisation par mots-clés pour apparaître dans les recherches recruteurs.</p></div></div>
-          <div class="feature-item reveal" style="transition-delay:0.05s"><div class="feature-icon">📝</div><div class="feature-text"><h4>Résumé (About)</h4><p>Les 3 premières lignes sont cruciales. On les rend irrésistibles.</p></div></div>
-          <div class="feature-item reveal" style="transition-delay:0.1s"><div class="feature-icon">📸</div><div class="feature-text"><h4>Photo de profil</h4><p>Checklist qualité : lumière, cadrage, professionnalisme, fond.</p></div></div>
-          <div class="feature-item reveal" style="transition-delay:0.15s"><div class="feature-icon">🏷️</div><div class="feature-text"><h4>Compétences & Recommandations</h4><p>Sélection stratégique des skills les plus recherchés dans ton secteur.</p></div></div>
-          <div class="feature-item reveal" style="transition-delay:0.2s"><div class="feature-icon">📡</div><div class="feature-text"><h4>Activité & Visibilité recruteurs</h4><p>Stratégie de visibilité adaptée à ton profil — on t'explique pourquoi "Open to Work" peut jouer contre toi.</p></div></div>
+      <!-- LOADING -->
+      <div class="loading-wrap" id="loadingWrap" style="display: none">
+        <div class="loading-box">
+          <div class="loading-orb"></div>
+          <div class="loading-texts">
+            <div class="loading-title">Analyse en cours…</div>
+            <div class="loading-steps">
+              <div class="lstep" id="ls1">🔍 Récupération du profil</div>
+              <div class="lstep" id="ls2">🧠 Analyse IA en cours</div>
+              <div class="lstep" id="ls3">
+                ✍️ Génération des textes optimisés
+              </div>
+              <div class="lstep" id="ls4">📊 Calcul du score final</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Score Card mockup -->
-      <div class="score-card reveal">
+      <div class="scroll-hint">
+        <span>Découvrir</span>
+        <div class="arrow"></div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+      <div class="section-inner">
+        <div class="stats-grid">
+          <div class="stat-item reveal">
+            <span class="stat-num">+40%</span
+            ><span class="stat-label">de réponses avec un profil optimisé</span>
+          </div>
+          <div class="stat-item reveal">
+            <span class="stat-num">30s</span
+            ><span class="stat-label">pour analyser ton profil complet</span>
+          </div>
+          <div class="stat-item reveal">
+            <span class="stat-num">100%</span
+            ><span class="stat-label"
+              >accord utilisateur avant chaque action</span
+            >
+          </div>
+          <div class="stat-item reveal">
+            <span class="stat-num">0€</span
+            ><span class="stat-label"
+              >pour commencer — 3 analyses gratuites</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+      <div class="section-inner">
+        <div class="how-header reveal">
+          <div class="section-label">Comment ça marche</div>
+          <h2 class="section-title">
+            En 3 étapes,<br />ton LinkedIn est prêt.
+          </h2>
+          <p class="section-sub">
+            Pas de magie noire. Pas de spam. Juste une IA qui travaille
+            intelligemment pour toi.
+          </p>
+        </div>
+        <div class="steps">
+          <div class="step reveal">
+            <div class="step-num">01</div>
+            <h3>Tu colles ton URL LinkedIn</h3>
+            <p>
+              Aucun accès à tes credentials. On analyse uniquement ton profil
+              public. C'est tout ce dont on a besoin pour commencer.
+            </p>
+          </div>
+          <div class="step reveal" style="transition-delay: 0.1s">
+            <div class="step-num">02</div>
+            <h3>L'IA analyse et score ton profil</h3>
+            <p>
+              Notre IA passe en revue chaque section — titre, résumé,
+              compétences, photo — et te donne un score de 0 à 100 avec des
+              recommandations concrètes.
+            </p>
+          </div>
+          <div class="step reveal" style="transition-delay: 0.2s">
+            <div class="step-num">03</div>
+            <h3>Tu copies les textes optimisés</h3>
+            <p>
+              Titre professionnel, résumé LinkedIn — l'IA les réécrit pour toi.
+              Tu les copies-colles. Ton score monte. Les recruteurs te trouvent.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+      <div class="section-inner">
+        <div class="features-layout">
+          <div>
+            <div class="reveal">
+              <div class="section-label">Ce qu'on analyse</div>
+              <h2 class="section-title">Chaque pixel<br />de ton profil.</h2>
+              <p class="section-sub">
+                LinkedIn, c'est ton CV permanent. On le traite comme tel.
+              </p>
+            </div>
+            <div class="features-list">
+              <div class="feature-item reveal">
+                <div class="feature-icon">✍️</div>
+                <div class="feature-text">
+                  <h4>Titre professionnel</h4>
+                  <p>
+                    Optimisation par mots-clés pour apparaître dans les
+                    recherches recruteurs.
+                  </p>
+                </div>
+              </div>
+              <div class="feature-item reveal" style="transition-delay: 0.05s">
+                <div class="feature-icon">📝</div>
+                <div class="feature-text">
+                  <h4>Résumé (About)</h4>
+                  <p>
+                    Les 3 premières lignes sont cruciales. On les rend
+                    irrésistibles.
+                  </p>
+                </div>
+              </div>
+              <div class="feature-item reveal" style="transition-delay: 0.1s">
+                <div class="feature-icon">📸</div>
+                <div class="feature-text">
+                  <h4>Photo de profil</h4>
+                  <p>
+                    Checklist qualité : lumière, cadrage, professionnalisme,
+                    fond.
+                  </p>
+                </div>
+              </div>
+              <div class="feature-item reveal" style="transition-delay: 0.15s">
+                <div class="feature-icon">🏷️</div>
+                <div class="feature-text">
+                  <h4>Compétences & Recommandations</h4>
+                  <p>
+                    Sélection stratégique des skills les plus recherchés dans
+                    ton secteur.
+                  </p>
+                </div>
+              </div>
+              <div class="feature-item reveal" style="transition-delay: 0.2s">
+                <div class="feature-icon">📡</div>
+                <div class="feature-text">
+                  <h4>Activité & Visibilité recruteurs</h4>
+                  <p>
+                    Stratégie de visibilité adaptée à ton profil — on t'explique
+                    pourquoi "Open to Work" peut jouer contre toi.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="score-card reveal">
+            <div class="score-header">
+              <div class="score-avatar"></div>
+              <div class="score-info">
+                <div class="score-name">Alex Dupont</div>
+                <div class="score-role">Développeur Frontend · Paris</div>
+              </div>
+              <div class="linkedin-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="#0A66C2">
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                  />
+                </svg>
+                LinkedIn
+              </div>
+            </div>
+            <div class="score-meter">
+              <div class="score-label">
+                <span>Score avant</span
+                ><span
+                  class="score-value"
+                  style="color: var(--text-muted); font-size: 1.2rem"
+                  >38/100</span
+                >
+              </div>
+              <div class="score-bar">
+                <div
+                  class="score-fill"
+                  style="
+                    width: 38%;
+                    background: linear-gradient(to right, #333, #555);
+                  "
+                ></div>
+              </div>
+            </div>
+            <div class="score-meter">
+              <div class="score-label">
+                <span>Score après optimisation</span
+                ><span class="score-value">87/100</span>
+              </div>
+              <div class="score-bar">
+                <div class="score-fill" style="width: 87%"></div>
+              </div>
+            </div>
+            <div class="score-checks">
+              <div class="check-item">
+                <span class="check-ok">✓</span> Titre professionnel optimisé
+              </div>
+              <div class="check-item">
+                <span class="check-ok">✓</span> Résumé réécrit — +3 mots-clés
+                ciblés
+              </div>
+              <div class="check-item">
+                <span class="check-ok">✓</span> Visibilité recruteurs — option
+                "Recruteurs uniquement" conseillée
+              </div>
+              <div class="check-item">
+                <span class="check-warn">⚠</span> Photo : fond à améliorer
+              </div>
+              <div class="check-item">
+                <span class="check-bad">✗</span> 0 recommandation — action
+                requise
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+      <div class="section-inner">
+        <div class="pricing-header reveal">
+          <div class="section-label">Tarifs</div>
+          <h2 class="section-title">
+            Simple. Transparent.<br />Accessible à tous.
+          </h2>
+          <p class="section-sub">
+            Commence gratuitement. Passe au plan suivant quand tu es prêt.
+          </p>
+        </div>
+        <div class="plans">
+          <div class="plan reveal">
+            <div class="plan-name">Gratuit</div>
+            <div class="plan-desc">Pour découvrir et tester.</div>
+            <div class="plan-price"><span class="free">0€</span></div>
+            <ul class="plan-features">
+              <li class="active">
+                <span class="check">✓</span> 3 analyses de profil
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Score LinkedIn 0–100
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Recommandations de base
+              </li>
+              <li><span class="dash">–</span> Textes optimisés par IA</li>
+              <li><span class="dash">–</span> Rapport PDF</li>
+              <li><span class="dash">–</span> Analyses illimitées</li>
+            </ul>
+            <a href="#" class="plan-cta secondary">Commencer gratuitement</a>
+          </div>
+          <div class="plan featured reveal" style="transition-delay: 0.1s">
+            <div class="plan-badge">Le plus populaire</div>
+            <div class="plan-name">Candidat</div>
+            <div class="plan-desc">Pour décrocher ton prochain poste.</div>
+            <div class="plan-price">
+              <span class="amount">9,99€</span><span class="period">/mois</span>
+            </div>
+            <ul class="plan-features">
+              <li class="active">
+                <span class="check">✓</span> Analyses illimitées
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Score LinkedIn détaillé
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Textes optimisés par IA
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Rapport PDF téléchargeable
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Historique des analyses
+              </li>
+              <li><span class="dash">–</span> Extension Chrome (V2)</li>
+            </ul>
+            <button class="plan-cta primary" onclick="upgradeToCandidat()">
+              Commencer — 9,99€/mois
+            </button>
+          </div>
+          <div class="plan reveal" style="transition-delay: 0.2s">
+            <div class="plan-name">Candidat Pro</div>
+            <div class="plan-desc">Pour automatiser ta recherche.</div>
+            <div class="plan-price">
+              <span class="amount">19,99€</span
+              ><span class="period">/mois</span>
+            </div>
+            <ul class="plan-features">
+              <li class="active">
+                <span class="check">✓</span> Tout le plan Candidat
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Extension Chrome (V2)
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Candidature 1 clic
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Suivi des candidatures
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Messages personnalisés IA
+              </li>
+              <li class="active">
+                <span class="check">✓</span> Relance automatique
+              </li>
+            </ul>
+            <a href="#" class="plan-cta secondary"
+              >Rejoindre la liste d'attente</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="section-inner">
+        <div class="faq-layout">
+          <div class="reveal">
+            <div class="section-label">FAQ</div>
+            <h2 class="section-title">
+              Des questions ?<br />On a les réponses.
+            </h2>
+            <p class="section-sub">
+              Tout ce que tu veux savoir sur LINK TO JOB, la sécurité, et
+              comment ça marche vraiment.
+            </p>
+          </div>
+          <div class="faq-list">
+            <div class="faq-item reveal">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                Est-ce que vous accédez à mon mot de passe LinkedIn ?<span
+                  class="faq-chevron"
+                  >▼</span
+                >
+              </div>
+              <div class="faq-a">
+                <p>
+                  Non, jamais. En V1, on analyse uniquement l'URL publique de
+                  ton profil — aucun accès à ton compte. En V2 (extension
+                  Chrome), tu gardes le contrôle total : l'extension agit depuis
+                  ton navigateur, et tu valides chaque action avant qu'elle soit
+                  exécutée.
+                </p>
+              </div>
+            </div>
+            <div class="faq-item reveal" style="transition-delay: 0.05s">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                Est-ce que c'est conforme aux CGU LinkedIn ?<span
+                  class="faq-chevron"
+                  >▼</span
+                >
+              </div>
+              <div class="faq-a">
+                <p>
+                  L'analyse de profils publics (V1) est 100% légale. Pour
+                  l'extension Chrome (V2), on suit les mêmes pratiques que les
+                  outils établis du marché, avec en plus l'accord explicite de
+                  l'utilisateur avant chaque action.
+                </p>
+              </div>
+            </div>
+            <div class="faq-item reveal" style="transition-delay: 0.1s">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                Mon profil LinkedIn doit-il être en français ?<span
+                  class="faq-chevron"
+                  >▼</span
+                >
+              </div>
+              <div class="faq-a">
+                <p>
+                  Non, notre IA analyse les profils en français et en anglais.
+                  Elle génère aussi les textes optimisés dans la langue de ton
+                  profil, ou dans les deux si tu cibles des marchés
+                  internationaux.
+                </p>
+              </div>
+            </div>
+            <div class="faq-item reveal" style="transition-delay: 0.15s">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                L'extension Chrome, c'est pour quand ?<span class="faq-chevron"
+                  >▼</span
+                >
+              </div>
+              <div class="faq-a">
+                <p>
+                  L'extension fait partie de la V2, prévue après le lancement de
+                  la web app (V1). Rejoins la liste d'attente pour être notifié
+                  en priorité et accéder à un tarif early adopter.
+                </p>
+              </div>
+            </div>
+            <div class="faq-item reveal" style="transition-delay: 0.2s">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                Puis-je annuler mon abonnement à tout moment ?<span
+                  class="faq-chevron"
+                  >▼</span
+                >
+              </div>
+              <div class="faq-a">
+                <p>
+                  Oui, sans engagement et sans frais. Tu peux annuler depuis ton
+                  tableau de bord à tout moment. Ton accès reste actif jusqu'à
+                  la fin de la période facturée.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BOTTOM -->
+    <section class="cta-bottom">
+      <div class="section-inner">
+        <div class="cta-box reveal">
+          <h2>Ton prochain emploi<br />commence maintenant.</h2>
+          <p>
+            Rejoins les premiers utilisateurs de LINK TO JOB.<br />3 analyses
+            gratuites, sans carte bancaire.
+          </p>
+          <div class="cta-group">
+            <a href="#" class="btn-primary">Optimiser mon profil LinkedIn →</a>
+            <a href="#" class="btn-ghost">Voir comment ça marche</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RÉSULTATS ANALYSE -->
+    <section id="resultsSection">
+      <div class="results-inner">
         <div class="score-header">
-          <div class="score-avatar"></div>
+          <div class="score-ring-wrap">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle
+                class="score-ring-bg"
+                cx="65"
+                cy="65"
+                r="55"
+                fill="none"
+                stroke-width="9"
+              />
+              <circle
+                class="score-ring-fill"
+                id="scoreRingFill"
+                cx="65"
+                cy="65"
+                r="55"
+                fill="none"
+                stroke-width="9"
+              />
+            </svg>
+            <div class="score-ring-label">
+              <div class="score-ring-num" id="scoreNum">0</div>
+              <div class="score-ring-sub">/ 100</div>
+            </div>
+          </div>
           <div class="score-info">
-            <div class="score-name">Alex Dupont</div>
-            <div class="score-role">Développeur Frontend · Paris</div>
+            <h2 id="scoreTitle">Profil analysé ✅</h2>
+            <p id="scoreDesc">
+              Voici ton score LinkedIn détaillé et les actions prioritaires pour
+              le faire décoller.
+            </p>
+            <div class="score-bars-mini" id="scoreBars"></div>
           </div>
-          <div class="linkedin-badge">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            LinkedIn
+        </div>
+
+        <h3
+          style="
+            font-family: &quot;Syne&quot;, sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 1.25rem;
+          "
+        >
+          Recommandations par section
+        </h3>
+        <div class="reco-grid" id="recoGrid"></div>
+
+        <div class="optimized-section">
+          <h3>✍️ Textes optimisés — copie-colle directement</h3>
+          <p
+            style="
+              font-size: 0.85rem;
+              color: var(--text-dim);
+              margin-bottom: 1rem;
+            "
+          >
+            3 propositions de titres professionnels générées par IA :
+          </p>
+          <div class="headline-options" id="headlineOptions"></div>
+          <p
+            style="
+              font-size: 0.85rem;
+              color: var(--text-dim);
+              margin: 1.5rem 0 1rem;
+            "
+          >
+            Résumé LinkedIn (About) optimisé :
+          </p>
+          <div class="about-box">
+            <div class="about-box-top">
+              <div class="about-box-label">📝 Ton nouveau résumé LinkedIn</div>
+              <button class="copy-btn" id="copyAboutBtn" onclick="copyAbout()">
+                Copier
+              </button>
+            </div>
+            <div class="about-text" id="aboutText"></div>
           </div>
         </div>
-        <div class="score-meter">
-          <div class="score-label"><span>Score avant</span><span class="score-value" style="color:var(--text-muted);font-size:1.2rem">38/100</span></div>
-          <div class="score-bar"><div class="score-fill" style="width:38%;background:linear-gradient(to right,#333,#555);"></div></div>
-        </div>
-        <div class="score-meter">
-          <div class="score-label"><span>Score après optimisation</span><span class="score-value">87/100</span></div>
-          <div class="score-bar"><div class="score-fill" style="width:87%"></div></div>
-        </div>
-        <div class="score-checks">
-          <div class="check-item"><span class="check-ok">✓</span> Titre professionnel optimisé</div>
-          <div class="check-item"><span class="check-ok">✓</span> Résumé réécrit — +3 mots-clés ciblés</div>
-          <div class="check-item"><span class="check-ok">✓</span> Visibilité recruteurs — option "Recruteurs uniquement" conseillée</div>
-          <div class="check-item"><span class="check-warn">⚠</span> Photo : fond à améliorer</div>
-          <div class="check-item"><span class="check-bad">✗</span> 0 recommandation — action requise</div>
+
+        <div class="results-new-btn">
+          <button onclick="resetAnalysis()">← Analyser un autre profil</button>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- PRICING -->
-<section class="pricing" id="pricing">
-  <div class="section-inner">
-    <div class="pricing-header reveal">
-      <div class="section-label">Tarifs</div>
-      <h2 class="section-title">Simple. Transparent.<br>Accessible à tous.</h2>
-      <p class="section-sub">Commence gratuitement. Passe au plan suivant quand tu es prêt.</p>
-    </div>
-    <div class="plans">
-      <div class="plan reveal">
-        <div class="plan-name">Gratuit</div>
-        <div class="plan-desc">Pour découvrir et tester.</div>
-        <div class="plan-price"><span class="free">0€</span></div>
-        <ul class="plan-features">
-          <li class="active"><span class="check">✓</span> 3 analyses de profil</li>
-          <li class="active"><span class="check">✓</span> Score LinkedIn 0–100</li>
-          <li class="active"><span class="check">✓</span> Recommandations de base</li>
-          <li><span class="dash">–</span> Textes optimisés par IA</li>
-          <li><span class="dash">–</span> Rapport PDF</li>
-          <li><span class="dash">–</span> Analyses illimitées</li>
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-logo">Link<span>2</span>Job</div>
+        <ul class="footer-links">
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">CGU</a></li>
+          <li><a href="#">Contact</a></li>
         </ul>
-        <a href="#" class="plan-cta secondary">Commencer gratuitement</a>
-      </div>
-      <div class="plan featured reveal" style="transition-delay:0.1s">
-        <div class="plan-badge">Le plus populaire</div>
-        <div class="plan-name">Candidat</div>
-        <div class="plan-desc">Pour décrocher ton prochain poste.</div>
-        <div class="plan-price"><span class="amount">9,99€</span><span class="period">/mois</span></div>
-        <ul class="plan-features">
-          <li class="active"><span class="check">✓</span> Analyses illimitées</li>
-          <li class="active"><span class="check">✓</span> Score LinkedIn détaillé</li>
-          <li class="active"><span class="check">✓</span> Textes optimisés par IA</li>
-          <li class="active"><span class="check">✓</span> Rapport PDF téléchargeable</li>
-          <li class="active"><span class="check">✓</span> Historique des analyses</li>
-          <li><span class="dash">–</span> Extension Chrome (V2)</li>
-        </ul>
-        <button class="plan-cta primary" onclick="upgradeToCandidat()">Commencer — 9,99€/mois</button>
-      </div>
-      <div class="plan reveal" style="transition-delay:0.2s">
-        <div class="plan-name">Candidat Pro</div>
-        <div class="plan-desc">Pour automatiser ta recherche.</div>
-        <div class="plan-price"><span class="amount">19,99€</span><span class="period">/mois</span></div>
-        <ul class="plan-features">
-          <li class="active"><span class="check">✓</span> Tout le plan Candidat</li>
-          <li class="active"><span class="check">✓</span> Extension Chrome (V2)</li>
-          <li class="active"><span class="check">✓</span> Candidature 1 clic</li>
-          <li class="active"><span class="check">✓</span> Suivi des candidatures</li>
-          <li class="active"><span class="check">✓</span> Messages personnalisés IA</li>
-          <li class="active"><span class="check">✓</span> Relance automatique</li>
-        </ul>
-        <a href="#" class="plan-cta secondary">Rejoindre la liste d'attente</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq" id="faq">
-  <div class="section-inner">
-    <div class="faq-layout">
-      <div class="reveal">
-        <div class="section-label">FAQ</div>
-        <h2 class="section-title">Des questions ?<br>On a les réponses.</h2>
-        <p class="section-sub">Tout ce que tu veux savoir sur LINK TO JOB, la sécurité, et comment ça marche vraiment.</p>
-      </div>
-      <div class="faq-list">
-        <div class="faq-item reveal">
-          <div class="faq-q" onclick="toggleFaq(this)">Est-ce que vous accédez à mon mot de passe LinkedIn ?<span class="faq-chevron">▼</span></div>
-          <div class="faq-a"><p>Non, jamais. En V1, on analyse uniquement l'URL publique de ton profil — aucun accès à ton compte. En V2 (extension Chrome), tu gardes le contrôle total : l'extension agit depuis ton navigateur, et tu valides chaque action avant qu'elle soit exécutée.</p></div>
-        </div>
-        <div class="faq-item reveal" style="transition-delay:0.05s">
-          <div class="faq-q" onclick="toggleFaq(this)">Est-ce que c'est conforme aux CGU LinkedIn ?<span class="faq-chevron">▼</span></div>
-          <div class="faq-a"><p>L'analyse de profils publics (V1) est 100% légale. Pour l'extension Chrome (V2), on suit les mêmes pratiques que les outils établis du marché, avec en plus l'accord explicite de l'utilisateur avant chaque action.</p></div>
-        </div>
-        <div class="faq-item reveal" style="transition-delay:0.1s">
-          <div class="faq-q" onclick="toggleFaq(this)">Mon profil LinkedIn doit-il être en français ?<span class="faq-chevron">▼</span></div>
-          <div class="faq-a"><p>Non, notre IA analyse les profils en français et en anglais. Elle génère aussi les textes optimisés dans la langue de ton profil, ou dans les deux si tu cibles des marchés internationaux.</p></div>
-        </div>
-        <div class="faq-item reveal" style="transition-delay:0.15s">
-          <div class="faq-q" onclick="toggleFaq(this)">L'extension Chrome, c'est pour quand ?<span class="faq-chevron">▼</span></div>
-          <div class="faq-a"><p>L'extension fait partie de la V2, prévue après le lancement de la web app (V1). Rejoins la liste d'attente pour être notifié en priorité et accéder à un tarif early adopter.</p></div>
-        </div>
-        <div class="faq-item reveal" style="transition-delay:0.2s">
-          <div class="faq-q" onclick="toggleFaq(this)">Puis-je annuler mon abonnement à tout moment ?<span class="faq-chevron">▼</span></div>
-          <div class="faq-a"><p>Oui, sans engagement et sans frais. Tu peux annuler depuis ton tableau de bord à tout moment. Ton accès reste actif jusqu'à la fin de la période facturée.</p></div>
+        <div class="footer-copy">
+          © 2026 linktojob.fr — Fait avec ❤️ pour tous ceux qui méritent mieux
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </footer>
 
-<!-- CTA BOTTOM -->
-<section class="cta-bottom">
-  <div class="section-inner">
-    <div class="cta-box reveal">
-      <h2>Ton prochain emploi<br>commence maintenant.</h2>
-      <p>Rejoins les premiers utilisateurs de LINK TO JOB.<br>3 analyses gratuites, sans carte bancaire.</p>
-      <div class="cta-group">
-        <a href="#" class="btn-primary">Optimiser mon profil LinkedIn →</a>
-        <a href="#" class="btn-ghost">Voir comment ça marche</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══ RÉSULTATS ANALYSE ══════════════════════════════════════════ -->
-<section id="resultsSection">
-  <div class="results-inner">
-
-    <!-- Score global -->
-    <div class="score-header">
-      <div class="score-ring-wrap">
-        <svg width="130" height="130" viewBox="0 0 130 130">
-          <circle class="score-ring-bg" cx="65" cy="65" r="55" fill="none" stroke-width="9"/>
-          <circle class="score-ring-fill" id="scoreRingFill" cx="65" cy="65" r="55" fill="none" stroke-width="9"/>
-        </svg>
-        <div class="score-ring-label">
-          <div class="score-ring-num" id="scoreNum">0</div>
-          <div class="score-ring-sub">/ 100</div>
-        </div>
-      </div>
-      <div class="score-info">
-        <h2 id="scoreTitle">Profil analysé ✅</h2>
-        <p id="scoreDesc">Voici ton score LinkedIn détaillé et les actions prioritaires pour le faire décoller.</p>
-        <div class="score-bars-mini" id="scoreBars"></div>
-      </div>
-    </div>
-
-    <!-- Recommandations -->
-    <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;margin-bottom:1.25rem;">
-      Recommandations par section
-    </h3>
-    <div class="reco-grid" id="recoGrid"></div>
-
-    <!-- Textes optimisés -->
-    <div class="optimized-section">
-      <h3>✍️ Textes optimisés — copie-colle directement</h3>
-
-      <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem;">
-        3 propositions de titres professionnels générées par IA :
-      </p>
-      <div class="headline-options" id="headlineOptions"></div>
-
-      <p style="font-size:0.85rem;color:var(--text-dim);margin:1.5rem 0 1rem;">
-        Résumé LinkedIn (About) optimisé :
-      </p>
-      <div class="about-box">
-        <div class="about-box-top">
-          <div class="about-box-label">📝 Ton nouveau résumé LinkedIn</div>
-          <button class="copy-btn" id="copyAboutBtn" onclick="copyAbout()">Copier</button>
-        </div>
-        <div class="about-text" id="aboutText"></div>
-      </div>
-    </div>
-
-    <div class="results-new-btn">
-      <button onclick="resetAnalysis()">← Analyser un autre profil</button>
-    </div>
-
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-logo">Link<span>2</span>Job</div>
-    <ul class="footer-links">
-      <li><a href="#">Mentions légales</a></li>
-      <li><a href="#">Confidentialité</a></li>
-      <li><a href="#">CGU</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-    <div class="footer-copy">© 2026 linktojob.fr — Fait avec ❤️ pour tous ceux qui méritent mieux</div>
-  </div>
-</footer>
-
-<script>
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach(el => observer.observe(el));
-
-  function toggleFaq(el) {
-    const item = el.parentElement;
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-  }
-
-  window.addEventListener('scroll', () => {
-    document.querySelector('nav').style.borderBottomColor = window.scrollY > 60 ? 'rgba(255,255,255,0.1)' : 'var(--glass-border)';
-  });
-
-  // ══ LINK2JOB — ANALYSE PROFILE ══════════════════════════════════
-  const API_URL = 'http://127.0.0.1:8000';
-
-  const SECTION_META = {
-    headline:        { icon:'✍️', label:'Titre professionnel', max:20 },
-    about:           { icon:'📝', label:'Résumé (About)',      max:20 },
-    photo:           { icon:'📸', label:'Photo de profil',     max:15 },
-    experience:      { icon:'💼', label:'Expériences',         max:15 },
-    skills:          { icon:'🧠', label:'Compétences',         max:10 },
-    education:       { icon:'🎓', label:'Formation',           max:10 },
-    recommendations: { icon:'⭐', label:'Recommandations',     max:5  },
-    activity:        { icon:'📡', label:'Activité',            max:5  },
-  };
-
-  async function analyzeProfile() {
-    const url = document.getElementById('linkedinUrl').value.trim();
-    if (!url) { flashInput(); return; }
-
-    // Si pas connecté → ouvre le modal et mémorise l'analyse en attente
-    if (!currentUser) {
-      pendingAnalysis = true;
-      openAuthModal(null, 'register');
-      return;
-    }
-
-    // UI → loading
-    document.getElementById('analyzeFormWrap').style.display = 'none';
-    document.getElementById('loadingWrap').style.display = 'flex';
-    animateLoadingSteps();
-
-    try {
-      const token = getToken();
-      const res = await fetch(`${API_URL}/api/analyze-profile`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    <script>
+      // ── Reveal on scroll ──
+      const reveals = document.querySelectorAll(".reveal");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              observer.unobserve(e.target);
+            }
+          });
         },
-        body: JSON.stringify({ linkedin_url: url }),
+        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+      );
+      reveals.forEach((el) => observer.observe(el));
+
+      function toggleFaq(el) {
+        const item = el.parentElement;
+        const isOpen = item.classList.contains("open");
+        document
+          .querySelectorAll(".faq-item.open")
+          .forEach((i) => i.classList.remove("open"));
+        if (!isOpen) item.classList.add("open");
+      }
+
+      window.addEventListener("scroll", () => {
+        document.querySelector("nav").style.borderBottomColor =
+          window.scrollY > 60 ? "rgba(255,255,255,0.1)" : "var(--glass-border)";
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || 'Erreur serveur');
-      }
+      // ══ CONFIG ══
+      const API_URL = "http://127.0.0.1:8000";
 
-      const data = await res.json();
-      showResults(data);
+      const SECTION_META = {
+        headline: { icon: "✍️", label: "Titre professionnel", max: 20 },
+        about: { icon: "📝", label: "Résumé (About)", max: 20 },
+        photo: { icon: "📸", label: "Photo de profil", max: 15 },
+        experience: { icon: "💼", label: "Expériences", max: 15 },
+        skills: { icon: "🧠", label: "Compétences", max: 10 },
+        education: { icon: "🎓", label: "Formation", max: 10 },
+        recommendations: { icon: "⭐", label: "Recommandations", max: 5 },
+        activity: { icon: "📡", label: "Activité", max: 5 },
+      };
 
-    } catch (e) {
-      document.getElementById('loadingWrap').style.display = 'none';
-      document.getElementById('analyzeFormWrap').style.display = 'block';
-      showToast('❌ ' + (e.message || 'Erreur — vérifie que le backend tourne.'));
-    }
-  }
+      // ══ AUTH STATE ══
+      let currentUser = null;
+      let authMode = "register";
+      let pendingAnalysis = false;
 
-  function showResults(data) {
-    document.getElementById('loadingWrap').style.display = 'none';
-
-    const score = data.score_before;
-    const details = data.score_details;
-    const recos = data.recommendations;
-    const texts = data.optimized_texts;
-
-    // Mise à jour quota utilisateur
-    if (data.analyses_remaining !== null && data.analyses_remaining !== undefined) {
-      if (currentUser) {
-        currentUser.analyses_remaining = data.analyses_remaining;
-        currentUser.analyses_used = data.analyses_used;
-        localStorage.setItem('l2j_user', JSON.stringify(currentUser));
-        updateNavUser();
-      }
-      // Affiche le quota dans les résultats
-      const remaining = data.analyses_remaining;
-      const warn = remaining <= 1;
-      const existingQuota = document.getElementById('quotaBar');
-      if (existingQuota) existingQuota.remove();
-      const quotaEl = document.createElement('div');
-      quotaEl.id = 'quotaBar';
-      quotaEl.className = 'quota-bar' + (warn ? ' warning' : '');
-      quotaEl.innerHTML = warn
-        ? `⚠️ Il te reste <strong>${remaining} analyse${remaining > 1 ? 's' : ''}</strong> gratuite${remaining > 1 ? 's' : ''}. <a href="#pricing" style="color:var(--orange)">Passer au plan Candidat →</a>`
-        : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 3.`;
-      document.querySelector('.results-inner').prepend(quotaEl);
-    }
-
-    // Scroll vers résultats
-    const section = document.getElementById('resultsSection');
-    section.classList.add('visible');
-    setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-
-    // Score ring animation
-    const circumference = 345;
-    const offset = circumference - (score / 100) * circumference;
-    const ring = document.getElementById('scoreRingFill');
-    setTimeout(() => { ring.style.strokeDashoffset = offset; }, 200);
-
-    // Counter animation
-    animateCounter('scoreNum', 0, score, 1400);
-
-    // Score color
-    ring.style.stroke = score >= 70 ? '#22C55E' : score >= 40 ? 'var(--orange)' : '#EF4444';
-
-    // Score title
-    document.getElementById('scoreTitle').textContent =
-      score >= 70 ? 'Profil solide 💪' : score >= 40 ? 'Profil à optimiser 🚀' : 'Profil à reconstruire 🛠️';
-    document.getElementById('scoreDesc').textContent =
-      `Score : ${score}/100 — Voici les actions prioritaires pour faire décoller ton profil LinkedIn.`;
-
-    // Mini bars
-    const barsEl = document.getElementById('scoreBars');
-    barsEl.innerHTML = '';
-    Object.entries(SECTION_META).forEach(([key, meta]) => {
-      const val = details[key] ?? 0;
-      const pct = Math.round((val / meta.max) * 100);
-      const color = pct === 100 ? '#22C55E' : pct >= 60 ? 'var(--orange)' : '#EF4444';
-      barsEl.innerHTML += `
-        <div class="mini-bar-row">
-          <div class="mini-bar-label">${meta.icon} ${meta.label}</div>
-          <div class="mini-bar-track">
-            <div class="mini-bar-fill" style="background:${color};" data-pct="${pct/100}"></div>
-          </div>
-          <div class="mini-bar-score" style="color:${color}">${val}/${meta.max}</div>
-        </div>`;
-    });
-    // Animate bars after paint
-    setTimeout(() => {
-      document.querySelectorAll('.mini-bar-fill').forEach(el => {
-        el.style.transform = `scaleX(${el.dataset.pct})`;
-      });
-    }, 300);
-
-    // Reco cards
-    const grid = document.getElementById('recoGrid');
-    grid.innerHTML = '';
-    Object.entries(SECTION_META).forEach(([key, meta]) => {
-      const reco = recos[key];
-      if (!reco) return;
-      const score_val = reco.score ?? details[key] ?? 0;
-      const isOk = score_val === meta.max;
-      grid.innerHTML += `
-        <div class="reco-card">
-          <div class="reco-card-top">
-            <span class="reco-icon">${meta.icon}</span>
-            <span class="reco-title">${meta.label}</span>
-            <span class="reco-score-badge ${isOk ? 'ok' : ''}">${score_val}/${meta.max}</span>
-          </div>
-          <div class="reco-priority ${reco.priority || ''}">${reco.priority ? 'Priorité ' + reco.priority : ''}</div>
-          <div class="reco-conseil">${reco.conseil || ''}</div>
-        </div>`;
-    });
-
-    // Visibilité recruteurs — guide interactif complet
-    grid.innerHTML += `
-      <div class="visibility-card" id="visibilityCard">
-        <div class="visibility-header" onclick="toggleVisibilityGuide()">
-          <div class="visibility-header-left">
-            <span style="font-size:1.4rem;">👁️</span>
-            <div>
-              <div class="visibility-header-title">Visibilité recruteurs — Guide pas-à-pas</div>
-              <div class="visibility-header-sub">Comment être visible des recruteurs sans afficher le badge "Open to Work" public</div>
-            </div>
-          </div>
-          <div class="visibility-toggle">
-            Voir le guide <span class="visibility-toggle-arrow">▾</span>
-          </div>
-        </div>
-
-        <div class="visibility-body">
-
-          <!-- Warning -->
-          <div class="otw-warning">
-            <span class="otw-warning-icon">⚠️</span>
-            <div class="otw-warning-text">
-              <strong>Évite le badge "Open to Work" visible de tous.</strong>
-              Il peut donner une image de désespoir, surtout pour les profils expérimentés.
-              Les recruteurs sérieux utilisent LinkedIn Recruiter — ils voient les profils disponibles
-              <em>sans que tu aies besoin d'afficher ce badge public.</em>
-            </div>
-          </div>
-
-          <!-- Steps -->
-          <div class="guide-steps">
-
-            <div class="guide-step">
-              <div class="guide-step-left">
-                <div class="guide-step-num">1</div>
-                <div class="guide-step-line"></div>
-              </div>
-              <div class="guide-step-content">
-                <div class="guide-step-title">Clique sur ta photo de profil en haut à droite</div>
-                <div class="guide-step-desc">Sur LinkedIn, en haut à droite de n'importe quelle page. Un menu déroulant apparaît.</div>
-                <div class="sim-ui">
-                  <div class="sim-avatar"></div>
-                  <span class="sim-arrow">→</span>
-                  <span>Menu déroulant</span>
-                  <span class="sim-arrow">→</span>
-                  <span class="sim-highlight">Voir le profil</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="guide-step">
-              <div class="guide-step-left">
-                <div class="guide-step-num">2</div>
-                <div class="guide-step-line"></div>
-              </div>
-              <div class="guide-step-content">
-                <div class="guide-step-title">Clique sur le bouton "Disponible pour"</div>
-                <div class="guide-step-desc">Ce bouton se trouve juste sous ton nom et ton titre, sur ta page profil. Il est parfois affiché comme "Ouvrir à" selon la langue.</div>
-                <div class="sim-ui">
-                  <span>Ta page profil</span>
-                  <span class="sim-arrow">→</span>
-                  <span class="sim-highlight">Disponible pour</span>
-                  <span class="sim-arrow">→</span>
-                  <span>Trouver un emploi</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="guide-step">
-              <div class="guide-step-left">
-                <div class="guide-step-num">3</div>
-                <div class="guide-step-line"></div>
-              </div>
-              <div class="guide-step-content">
-                <div class="guide-step-title">Remplis tes préférences d'emploi</div>
-                <div class="guide-step-desc">Un formulaire s'ouvre. Indique le type de poste recherché, le secteur, la localisation, le type de contrat (CDI, stage, alternance…). Plus c'est précis, plus les recruteurs pertinents te trouveront.</div>
-              </div>
-            </div>
-
-            <div class="guide-step">
-              <div class="guide-step-left">
-                <div class="guide-step-num">4</div>
-                <div class="guide-step-line"></div>
-              </div>
-              <div class="guide-step-content">
-                <div class="guide-step-title">⭐ L'étape clé — "Qui peut voir que tu cherches un emploi ?"</div>
-                <div class="guide-step-desc">Tout en bas du formulaire, tu trouveras cette question. C'est ici que tout se joue :</div>
-                <div class="sim-radio-group">
-                  <div class="sim-radio sim-radio-bad">
-                    <div class="sim-radio-dot"></div>
-                    <div class="sim-radio-label">Tous les membres LinkedIn</div>
-                    <span class="sim-radio-badge" style="background:rgba(239,68,68,0.1);color:#EF4444;">❌ Éviter</span>
-                  </div>
-                  <div class="sim-radio selected">
-                    <div class="sim-radio-dot"></div>
-                    <div class="sim-radio-label">Recruteurs uniquement</div>
-                    <span class="sim-radio-badge">✅ Recommandé</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="guide-step">
-              <div class="guide-step-left">
-                <div class="guide-step-num">5</div>
-                <div class="guide-step-line"></div>
-              </div>
-              <div class="guide-step-content">
-                <div class="guide-step-title">Clique sur "Enregistrer" ✅</div>
-                <div class="guide-step-desc">C'est tout ! Tu es maintenant visible des recruteurs qui utilisent LinkedIn Recruiter, sans que ton employeur actuel ou tes collègues le sachent.</div>
-              </div>
-            </div>
-
-          </div><!-- /steps -->
-
-          <!-- Résultat final -->
-          <div class="guide-result">
-            <span class="guide-result-icon">🎯</span>
-            <div class="guide-result-text">
-              <strong>Résultat :</strong> tu apparais dans les recherches des recruteurs professionnels,
-              sans le badge vert "Open to Work" qui s'affiche sur ta photo.
-              Discret, efficace, et stratégique.
-            </div>
-          </div>
-
-        </div><!-- /visibility-body -->
-      </div>`;
-
-    // Titres optimisés
-    const headlineEl = document.getElementById('headlineOptions');
-    headlineEl.innerHTML = '';
-    (texts.headline_suggestions || []).forEach((h, i) => {
-      headlineEl.innerHTML += `
-        <div class="headline-opt">
-          <span class="headline-opt-text">${h}</span>
-          <button class="copy-btn" onclick="copyText(this, '${h.replace(/'/g,"\'")}')">Copier</button>
-        </div>`;
-    });
-
-    // About optimisé
-    const aboutRaw = texts.about_optimized || '';
-    document.getElementById('aboutText').textContent = aboutRaw;
-  }
-
-  function toggleVisibilityGuide() {
-    const card = document.getElementById('visibilityCard');
-    if (card) card.classList.toggle('open');
-  }
-
-  function resetAnalysis() {
-    document.getElementById('resultsSection').classList.remove('visible');
-    document.getElementById('analyzeFormWrap').style.display = 'block';
-    document.getElementById('linkedinUrl').value = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // ── Helpers ──────────────────────────────────────
-  function flashInput() {
-    const el = document.getElementById('linkedinUrl');
-    el.style.borderColor = '#EF4444';
-    el.placeholder = "Entre ton URL LinkedIn d'abord !";
-    setTimeout(() => {
-      el.style.borderColor = '';
-      el.placeholder = 'https://www.linkedin.com/in/ton-nom/';
-    }, 2000);
-  }
-
-  function animateCounter(id, from, to, duration) {
-    const el = document.getElementById(id);
-    const start = performance.now();
-    function tick(now) {
-      const p = Math.min((now - start) / duration, 1);
-      el.textContent = Math.round(from + (to - from) * easeOut(p));
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-
-  function animateLoadingSteps() {
-    const steps = ['ls1','ls2','ls3','ls4'];
-    let i = 0;
-    steps.forEach(id => document.getElementById(id).className = 'lstep');
-    const iv = setInterval(() => {
-      if (i > 0) document.getElementById(steps[i-1]).className = 'lstep done';
-      if (i < steps.length) {
-        document.getElementById(steps[i]).className = 'lstep active';
-        i++;
-      } else {
-        clearInterval(iv);
-      }
-    }, 900);
-  }
-
-  function copyText(btn, text) {
-    navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = '✓ Copié !';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
-    });
-  }
-
-  function copyAbout() {
-    const text = document.getElementById('aboutText').textContent;
-    copyText(document.getElementById('copyAboutBtn'), text);
-  }
-
-  function showToast(msg) {
-    const t = document.createElement('div');
-    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(239,68,68,0.3);color:#ef4444;padding:12px 20px;border-radius:12px;font-size:0.85rem;z-index:9999;animation:fadeUp 0.3s ease';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 4000);
-  }
-
-
-  // ══ AUTH ══════════════════════════════════════════════════════════
-  let currentUser = null;
-  let authMode = 'register'; // 'register' | 'login'
-  let pendingAnalysis = false; // analyse en attente après login
-
-  // Charge le user depuis localStorage au démarrage
-  function initAuth() {
-    const saved = localStorage.getItem('l2j_user');
-    const token = localStorage.getItem('l2j_token');
-    if (saved && token) {
-      currentUser = JSON.parse(saved);
-      updateNavUser();
-    }
-  }
-
-  function updateNavUser() {
-    const zone = document.getElementById('navAuthZone');
-    if (!zone) return;
-    if (currentUser) {
-      const remaining = currentUser.analyses_remaining ?? 3;
-      const warn = remaining <= 1;
-      zone.innerHTML = `
-        <div class="nav-user">
-          <span class="nav-user-badge ${warn ? 'style=\"color:#EF4444;border-color:rgba(239,68,68,0.3)\"' : ''}">
-            ${remaining} analyse${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''}
-          </span>
-          <a href="dashboard.html" class="nav-user-btn" style="text-decoration:none;">📊 Mon dashboard</a>
-          <button class="nav-user-btn" onclick="logout()">Déconnexion</button>
-        </div>`;
-      // Met à jour la form note
-      const note = document.getElementById('formNoteAuth');
-      if (note) note.textContent = currentUser.full_name || currentUser.email;
-    } else {
-      zone.innerHTML = `<a href="#" class="nav-cta" onclick="openAuthModal(event)">Commencer gratuitement</a>`;
-      const note = document.getElementById('formNoteAuth');
-      if (note) note.textContent = 'Connecte-toi pour sauvegarder tes résultats';
-    }
-  }
-
-  function openAuthModal(e, mode) {
-    if (e) e.preventDefault();
-    if (currentUser) return; // déjà connecté
-    switchTab(mode || 'register');
-    document.getElementById('authModal').classList.add('open');
-  }
-
-  function closeAuthModal() {
-    document.getElementById('authModal').classList.remove('open');
-    clearModalError();
-    pendingAnalysis = false;
-  }
-
-  function switchTab(mode) {
-    authMode = mode;
-    const isRegister = mode === 'register';
-    document.getElementById('tabRegister').classList.toggle('active', isRegister);
-    document.getElementById('tabLogin').classList.toggle('active', !isRegister);
-    document.getElementById('fieldName').style.display = isRegister ? 'block' : 'none';
-    document.getElementById('modalTitle').textContent = isRegister ? 'Créer un compte' : 'Se connecter';
-    document.getElementById('modalSub').textContent = isRegister
-      ? '3 analyses gratuites · Sans carte bancaire'
-      : 'Bon retour sur Link2Job 👋';
-    document.getElementById('modalSubmit').textContent = isRegister
-      ? 'Créer mon compte gratuit →'
-      : 'Se connecter →';
-    document.getElementById('modalSwitch').innerHTML = isRegister
-      ? 'Déjà un compte ? <a onclick="switchTab(\'login\')">Se connecter</a>'
-      : 'Pas encore de compte ? <a onclick="switchTab(\'register\')">Créer un compte</a>';
-    clearModalError();
-  }
-
-  function showModalError(msg) {
-    const el = document.getElementById('modalError');
-    el.textContent = msg; el.classList.add('show');
-  }
-  function clearModalError() {
-    const el = document.getElementById('modalError');
-    el.textContent = ''; el.classList.remove('show');
-  }
-
-  async function submitAuth() {
-    const email = document.getElementById('inputEmail').value.trim();
-    const password = document.getElementById('inputPassword').value;
-    const name = document.getElementById('inputName').value.trim();
-    const btn = document.getElementById('modalSubmit');
-
-    if (!email || !password) { showModalError('Email et mot de passe requis.'); return; }
-    if (authMode === 'register' && password.length < 8) {
-      showModalError('Le mot de passe doit faire au moins 8 caractères.'); return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Chargement…';
-    clearModalError();
-
-    try {
-      let res, data;
-
-      if (authMode === 'register') {
-        res = await fetch(`${API_URL}/api/auth/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, full_name: name || null }),
-        });
-      } else {
-        // Login utilise form-data (OAuth2PasswordRequestForm)
-        const form = new FormData();
-        form.append('username', email);
-        form.append('password', password);
-        res = await fetch(`${API_URL}/api/auth/login`, { method: 'POST', body: form });
-      }
-
-      data = await res.json();
-
-      if (!res.ok) {
-        showModalError(data.detail || 'Une erreur est survenue.');
-        btn.disabled = false;
-        btn.textContent = authMode === 'register' ? 'Créer mon compte gratuit →' : 'Se connecter →';
-        return;
-      }
-
-      // Succès
-      localStorage.setItem('l2j_token', data.access_token);
-      localStorage.setItem('l2j_user', JSON.stringify(data.user));
-      currentUser = data.user;
-      updateNavUser();
-      closeAuthModal();
-      showToast(`Bienvenue ${data.user.full_name || data.user.email} ! 🎉`);
-
-      // Lance l'analyse si elle était en attente
-      if (pendingAnalysis) {
-        pendingAnalysis = false;
-        analyzeProfile();
-      }
-
-    } catch(err) {
-      showModalError('Erreur réseau — vérifie que le backend tourne.');
-      btn.disabled = false;
-      btn.textContent = authMode === 'register' ? 'Créer mon compte gratuit →' : 'Se connecter →';
-    }
-  }
-
-  // ── STRIPE CHECKOUT ──────────────────────────────────────────────
-  async function upgradeToCandidat() {
-    if (!currentUser) { openAuthModal(null, 'register'); return; }
-
-    const btn = document.getElementById('upgradeBtn');
-    if (btn) { btn.disabled = true; btn.textContent = 'Redirection...'; }
-
-    try {
-      const res = await fetch(`${API_URL}/api/stripe/create-checkout`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${getToken()}` },
-      });
-      const data = await res.json();
-      if (data.checkout_url) {
-        window.location.href = data.checkout_url;
-      } else {
-        showToast('❌ Erreur Stripe — réessaie.');
-        if (btn) { btn.disabled = false; btn.textContent = 'Passer au plan Candidat →'; }
-      }
-    } catch(e) {
-      showToast('❌ Erreur réseau.');
-      if (btn) { btn.disabled = false; btn.textContent = 'Passer au plan Candidat →'; }
-    }
-  }
-
-  function logout() {
-    localStorage.removeItem('l2j_token');
-    localStorage.removeItem('l2j_user');
-    currentUser = null;
-    updateNavUser();
-    showToast('Déconnecté. À bientôt ! 👋');
-  }
-
-  function getToken() {
-    return localStorage.getItem('l2j_token');
-  }
-
-  // Ferme le modal en cliquant sur l'overlay
-  document.getElementById('authModal')?.addEventListener('click', function(e) {
-    if (e.target === this) closeAuthModal();
-  });
-
-  // Touche Escape ferme le modal
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeAuthModal();
-  });
-
-  // Enter key support
-  document.addEventListener('DOMContentLoaded', () => {
-    initAuth();
-    // Vérifie si retour de Stripe
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('upgrade') === 'success') {
-      showToast('🎉 Abonnement activé ! Bienvenue dans le plan Candidat.');
-      // Recharge les infos user
-      fetch(`${API_URL}/api/auth/me`, {
-        headers: { 'Authorization': `Bearer ${getToken()}` }
-      }).then(r => r.json()).then(user => {
-        if (user.plan) {
-          currentUser = { ...currentUser, ...user };
-          localStorage.setItem('l2j_user', JSON.stringify(currentUser));
+      // ══ initAuth — appelé au DOMContentLoaded ══
+      // forceRefresh=true quand retour de Stripe pour récupérer le nouveau plan
+      function initAuth(forceRefresh = false) {
+        const saved = localStorage.getItem("l2j_user");
+        const token = localStorage.getItem("l2j_token");
+        if (saved && token) {
+          currentUser = JSON.parse(saved);
+          // Rafraîchit depuis l'API si retour Stripe OU si plan non défini
+          if (forceRefresh || !currentUser.plan) {
+            fetch(`${API_URL}/api/auth/me`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+              .then((r) => r.json())
+              .then((user) => {
+                if (user && user.email) {
+                  currentUser = { ...currentUser, ...user };
+                  localStorage.setItem("l2j_user", JSON.stringify(currentUser));
+                }
+                updateNavUser();
+              })
+              .catch(() => {
+                // Fallback si API lente : force candidat si upgrade
+                if (forceRefresh && currentUser) {
+                  currentUser.plan = "candidat";
+                  localStorage.setItem("l2j_user", JSON.stringify(currentUser));
+                }
+                updateNavUser();
+              });
+          } else {
+            updateNavUser();
+          }
+        } else {
           updateNavUser();
         }
-      }).catch(() => {});
-    }
-    document.getElementById('linkedinUrl')?.addEventListener('keydown', e => {
-      if (e.key === 'Enter') analyzeProfile();
-    });
-  });
+      }
 
-</script>
+      function updateNavUser() {
+        const zone = document.getElementById("navAuthZone");
+        if (!zone) return;
+        if (currentUser) {
+          const isPaid = currentUser.plan && currentUser.plan !== "free";
+          const remaining = currentUser.analyses_remaining ?? 3;
+          const warn = !isPaid && remaining <= 1;
+          const badgeContent = isPaid
+            ? "∞ Illimité"
+            : `${remaining} analyse${remaining > 1 ? "s" : ""} restante${remaining > 1 ? "s" : ""}`;
+          const badgeStyle = warn
+            ? 'style="color:#EF4444;border-color:rgba(239,68,68,0.3)"'
+            : isPaid
+              ? 'style="color:#22C55E;border-color:rgba(34,197,94,0.3)"'
+              : "";
+          zone.innerHTML = `
+            <div class="nav-user">
+              <span class="nav-user-badge" ${badgeStyle}>${badgeContent}</span>
+              <a href="dashboard.html" class="nav-user-btn" style="text-decoration:none;">📊 Mon dashboard</a>
+              <button class="nav-user-btn" onclick="logout()">Déconnexion</button>
+            </div>`;
+          const note = document.getElementById("formNoteAuth");
+          if (note)
+            note.textContent = currentUser.full_name || currentUser.email;
+        } else {
+          zone.innerHTML = `<a href="#" class="nav-cta" onclick="openAuthModal(event)">Commencer gratuitement</a>`;
+          const note = document.getElementById("formNoteAuth");
+          if (note)
+            note.textContent = "Connecte-toi pour sauvegarder tes résultats";
+        }
+      }
 
-<!-- ══ MODAL AUTH ══════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="authModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-    <div class="modal-logo">Link<span>2</span>Job</div>
-    <div class="modal-title" id="modalTitle">Créer un compte</div>
-    <div class="modal-sub" id="modalSub">3 analyses gratuites · Sans carte bancaire</div>
+      // ══ ANALYSE ══
+      async function analyzeProfile() {
+        const url = document.getElementById("linkedinUrl").value.trim();
+        if (!url) {
+          flashInput();
+          return;
+        }
 
-    <div class="modal-tabs">
-      <button class="modal-tab active" id="tabRegister" onclick="switchTab('register')">Inscription</button>
-      <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Connexion</button>
+        if (!currentUser) {
+          pendingAnalysis = true;
+          openAuthModal(null, "register");
+          return;
+        }
+
+        document.getElementById("analyzeFormWrap").style.display = "none";
+        document.getElementById("loadingWrap").style.display = "flex";
+        animateLoadingSteps();
+
+        try {
+          const token = getToken();
+          const res = await fetch(`${API_URL}/api/analyze-profile`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({ linkedin_url: url }),
+          });
+
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.detail || "Erreur serveur");
+          }
+
+          const data = await res.json();
+          showResults(data);
+        } catch (e) {
+          document.getElementById("loadingWrap").style.display = "none";
+          document.getElementById("analyzeFormWrap").style.display = "block";
+          showToast(
+            "❌ " + (e.message || "Erreur — vérifie que le backend tourne."),
+          );
+        }
+      }
+
+      function showResults(data) {
+        document.getElementById("loadingWrap").style.display = "none";
+
+        const score = data.score_before;
+        const details = data.score_details;
+        const recos = data.recommendations;
+        const texts = data.optimized_texts;
+
+        // Quota — uniquement pour les utilisateurs gratuits
+        const isPaidUser =
+          currentUser && currentUser.plan && currentUser.plan !== "free";
+        if (
+          !isPaidUser &&
+          data.analyses_remaining !== null &&
+          data.analyses_remaining !== undefined
+        ) {
+          if (currentUser) {
+            currentUser.analyses_remaining = data.analyses_remaining;
+            currentUser.analyses_used = data.analyses_used;
+            localStorage.setItem("l2j_user", JSON.stringify(currentUser));
+            updateNavUser();
+          }
+          const remaining = data.analyses_remaining;
+          const warn = remaining <= 1;
+          const existingQuota = document.getElementById("quotaBar");
+          if (existingQuota) existingQuota.remove();
+          const quotaEl = document.createElement("div");
+          quotaEl.id = "quotaBar";
+          quotaEl.className = "quota-bar" + (warn ? " warning" : "");
+          quotaEl.innerHTML = warn
+            ? `⚠️ Il te reste <strong>${remaining} analyse${remaining > 1 ? "s" : ""}</strong> gratuite${remaining > 1 ? "s" : ""}. <a href="#pricing" style="color:var(--orange)">Passer au plan Candidat →</a>`
+            : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 3.`;
+          document.querySelector(".results-inner").prepend(quotaEl);
+        }
+
+        const section = document.getElementById("resultsSection");
+        section.classList.add("visible");
+        setTimeout(
+          () => section.scrollIntoView({ behavior: "smooth", block: "start" }),
+          100,
+        );
+
+        const circumference = 345;
+        const offset = circumference - (score / 100) * circumference;
+        const ring = document.getElementById("scoreRingFill");
+        setTimeout(() => {
+          ring.style.strokeDashoffset = offset;
+        }, 200);
+
+        animateCounter("scoreNum", 0, score, 1400);
+        ring.style.stroke =
+          score >= 70 ? "#22C55E" : score >= 40 ? "var(--orange)" : "#EF4444";
+
+        document.getElementById("scoreTitle").textContent =
+          score >= 70
+            ? "Profil solide 💪"
+            : score >= 40
+              ? "Profil à optimiser 🚀"
+              : "Profil à reconstruire 🛠️";
+        document.getElementById("scoreDesc").textContent =
+          `Score : ${score}/100 — Voici les actions prioritaires pour faire décoller ton profil LinkedIn.`;
+
+        const barsEl = document.getElementById("scoreBars");
+        barsEl.innerHTML = "";
+        Object.entries(SECTION_META).forEach(([key, meta]) => {
+          const val = details[key] ?? 0;
+          const pct = Math.round((val / meta.max) * 100);
+          const color =
+            pct === 100 ? "#22C55E" : pct >= 60 ? "var(--orange)" : "#EF4444";
+          barsEl.innerHTML += `
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">${meta.icon} ${meta.label}</div>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" style="background:${color};" data-pct="${pct / 100}"></div>
+              </div>
+              <div class="mini-bar-score" style="color:${color}">${val}/${meta.max}</div>
+            </div>`;
+        });
+        setTimeout(() => {
+          document.querySelectorAll(".mini-bar-fill").forEach((el) => {
+            el.style.transform = `scaleX(${el.dataset.pct})`;
+          });
+        }, 300);
+
+        const grid = document.getElementById("recoGrid");
+        grid.innerHTML = "";
+        Object.entries(SECTION_META).forEach(([key, meta]) => {
+          const reco = recos[key];
+          if (!reco) return;
+          const score_val = reco.score ?? details[key] ?? 0;
+          const isOk = score_val === meta.max;
+          grid.innerHTML += `
+            <div class="reco-card">
+              <div class="reco-card-top">
+                <span class="reco-icon">${meta.icon}</span>
+                <span class="reco-title">${meta.label}</span>
+                <span class="reco-score-badge ${isOk ? "ok" : ""}">${score_val}/${meta.max}</span>
+              </div>
+              <div class="reco-priority ${reco.priority || ""}">${reco.priority ? "Priorité " + reco.priority : ""}</div>
+              <div class="reco-conseil">${reco.conseil || ""}</div>
+            </div>`;
+        });
+
+        grid.innerHTML += `
+          <div class="visibility-card" id="visibilityCard">
+            <div class="visibility-header" onclick="toggleVisibilityGuide()">
+              <div class="visibility-header-left">
+                <span style="font-size:1.4rem;">👁️</span>
+                <div>
+                  <div class="visibility-header-title">Visibilité recruteurs — Guide pas-à-pas</div>
+                  <div class="visibility-header-sub">Comment être visible des recruteurs sans afficher le badge "Open to Work" public</div>
+                </div>
+              </div>
+              <div class="visibility-toggle">Voir le guide <span class="visibility-toggle-arrow">▾</span></div>
+            </div>
+            <div class="visibility-body">
+              <div class="otw-warning">
+                <span class="otw-warning-icon">⚠️</span>
+                <div class="otw-warning-text">
+                  <strong>Évite le badge "Open to Work" visible de tous.</strong>
+                  Il peut donner une image de désespoir, surtout pour les profils expérimentés.
+                  Les recruteurs sérieux utilisent LinkedIn Recruiter — ils voient les profils disponibles
+                  <em>sans que tu aies besoin d'afficher ce badge public.</em>
+                </div>
+              </div>
+              <div class="guide-steps">
+                <div class="guide-step">
+                  <div class="guide-step-left"><div class="guide-step-num">1</div><div class="guide-step-line"></div></div>
+                  <div class="guide-step-content">
+                    <div class="guide-step-title">Clique sur ta photo de profil en haut à droite</div>
+                    <div class="guide-step-desc">Sur LinkedIn, en haut à droite de n'importe quelle page. Un menu déroulant apparaît.</div>
+                    <div class="sim-ui"><div class="sim-avatar"></div><span class="sim-arrow">→</span><span>Menu déroulant</span><span class="sim-arrow">→</span><span class="sim-highlight">Voir le profil</span></div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="guide-step-left"><div class="guide-step-num">2</div><div class="guide-step-line"></div></div>
+                  <div class="guide-step-content">
+                    <div class="guide-step-title">Clique sur le bouton "Disponible pour"</div>
+                    <div class="guide-step-desc">Ce bouton se trouve juste sous ton nom et ton titre, sur ta page profil.</div>
+                    <div class="sim-ui"><span>Ta page profil</span><span class="sim-arrow">→</span><span class="sim-highlight">Disponible pour</span><span class="sim-arrow">→</span><span>Trouver un emploi</span></div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="guide-step-left"><div class="guide-step-num">3</div><div class="guide-step-line"></div></div>
+                  <div class="guide-step-content">
+                    <div class="guide-step-title">Remplis tes préférences d'emploi</div>
+                    <div class="guide-step-desc">Un formulaire s'ouvre. Indique le type de poste recherché, le secteur, la localisation, le type de contrat (CDI, stage, alternance…).</div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="guide-step-left"><div class="guide-step-num">4</div><div class="guide-step-line"></div></div>
+                  <div class="guide-step-content">
+                    <div class="guide-step-title">⭐ L'étape clé — "Qui peut voir que tu cherches un emploi ?"</div>
+                    <div class="guide-step-desc">Tout en bas du formulaire, tu trouveras cette question. C'est ici que tout se joue :</div>
+                    <div class="sim-radio-group">
+                      <div class="sim-radio sim-radio-bad">
+                        <div class="sim-radio-dot"></div>
+                        <div class="sim-radio-label">Tous les membres LinkedIn</div>
+                        <span class="sim-radio-badge" style="background:rgba(239,68,68,0.1);color:#EF4444;">❌ Éviter</span>
+                      </div>
+                      <div class="sim-radio selected">
+                        <div class="sim-radio-dot"></div>
+                        <div class="sim-radio-label">Recruteurs uniquement</div>
+                        <span class="sim-radio-badge">✅ Recommandé</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="guide-step-left"><div class="guide-step-num">5</div><div class="guide-step-line"></div></div>
+                  <div class="guide-step-content">
+                    <div class="guide-step-title">Clique sur "Enregistrer" ✅</div>
+                    <div class="guide-step-desc">C'est tout ! Tu es maintenant visible des recruteurs qui utilisent LinkedIn Recruiter, sans que ton employeur actuel ou tes collègues le sachent.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="guide-result">
+                <span class="guide-result-icon">🎯</span>
+                <div class="guide-result-text">
+                  <strong>Résultat :</strong> tu apparais dans les recherches des recruteurs professionnels, sans le badge vert "Open to Work" qui s'affiche sur ta photo. Discret, efficace, et stratégique.
+                </div>
+              </div>
+            </div>
+          </div>`;
+
+        const headlineEl = document.getElementById("headlineOptions");
+        headlineEl.innerHTML = "";
+        (texts.headline_suggestions || []).forEach((h) => {
+          headlineEl.innerHTML += `
+            <div class="headline-opt">
+              <span class="headline-opt-text">${h}</span>
+              <button class="copy-btn" onclick="copyText(this, '${h.replace(/'/g, "\\'")}')">Copier</button>
+            </div>`;
+        });
+
+        document.getElementById("aboutText").textContent =
+          texts.about_optimized || "";
+      }
+
+      function toggleVisibilityGuide() {
+        const card = document.getElementById("visibilityCard");
+        if (card) card.classList.toggle("open");
+      }
+
+      function resetAnalysis() {
+        document.getElementById("resultsSection").classList.remove("visible");
+        document.getElementById("analyzeFormWrap").style.display = "block";
+        document.getElementById("linkedinUrl").value = "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // ── Helpers ──
+      function flashInput() {
+        const el = document.getElementById("linkedinUrl");
+        el.style.borderColor = "#EF4444";
+        el.placeholder = "Entre ton URL LinkedIn d'abord !";
+        setTimeout(() => {
+          el.style.borderColor = "";
+          el.placeholder = "https://www.linkedin.com/in/ton-nom/";
+        }, 2000);
+      }
+
+      function animateCounter(id, from, to, duration) {
+        const el = document.getElementById(id);
+        const start = performance.now();
+        function tick(now) {
+          const p = Math.min((now - start) / duration, 1);
+          el.textContent = Math.round(from + (to - from) * easeOut(p));
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+      function easeOut(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function animateLoadingSteps() {
+        const steps = ["ls1", "ls2", "ls3", "ls4"];
+        let i = 0;
+        steps.forEach(
+          (id) => (document.getElementById(id).className = "lstep"),
+        );
+        const iv = setInterval(() => {
+          if (i > 0)
+            document.getElementById(steps[i - 1]).className = "lstep done";
+          if (i < steps.length) {
+            document.getElementById(steps[i]).className = "lstep active";
+            i++;
+          } else clearInterval(iv);
+        }, 900);
+      }
+
+      function copyText(btn, text) {
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = "✓ Copié !";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = "Copier";
+            btn.classList.remove("copied");
+          }, 2000);
+        });
+      }
+
+      function copyAbout() {
+        const text = document.getElementById("aboutText").textContent;
+        copyText(document.getElementById("copyAboutBtn"), text);
+      }
+
+      function showToast(msg) {
+        const t = document.createElement("div");
+        t.style.cssText =
+          "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(239,68,68,0.3);color:#ef4444;padding:12px 20px;border-radius:12px;font-size:0.85rem;z-index:9999;animation:fadeUp 0.3s ease";
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+      }
+
+      // ══ AUTH MODAL ══
+      function openAuthModal(e, mode) {
+        if (e) e.preventDefault();
+        if (currentUser) return;
+        switchTab(mode || "register");
+        document.getElementById("authModal").classList.add("open");
+      }
+
+      function closeAuthModal() {
+        document.getElementById("authModal").classList.remove("open");
+        clearModalError();
+        pendingAnalysis = false;
+      }
+
+      function switchTab(mode) {
+        authMode = mode;
+        const isRegister = mode === "register";
+        document
+          .getElementById("tabRegister")
+          .classList.toggle("active", isRegister);
+        document
+          .getElementById("tabLogin")
+          .classList.toggle("active", !isRegister);
+        document.getElementById("fieldName").style.display = isRegister
+          ? "block"
+          : "none";
+        document.getElementById("modalTitle").textContent = isRegister
+          ? "Créer un compte"
+          : "Se connecter";
+        document.getElementById("modalSub").textContent = isRegister
+          ? "3 analyses gratuites · Sans carte bancaire"
+          : "Bon retour sur Link2Job 👋";
+        document.getElementById("modalSubmit").textContent = isRegister
+          ? "Créer mon compte gratuit →"
+          : "Se connecter →";
+        document.getElementById("modalSwitch").innerHTML = isRegister
+          ? "Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>"
+          : "Pas encore de compte ? <a onclick=\"switchTab('register')\">Créer un compte</a>";
+        clearModalError();
+      }
+
+      function showModalError(msg) {
+        const el = document.getElementById("modalError");
+        el.textContent = msg;
+        el.classList.add("show");
+      }
+      function clearModalError() {
+        const el = document.getElementById("modalError");
+        el.textContent = "";
+        el.classList.remove("show");
+      }
+
+      async function submitAuth() {
+        const email = document.getElementById("inputEmail").value.trim();
+        const password = document.getElementById("inputPassword").value;
+        const name = document.getElementById("inputName").value.trim();
+        const btn = document.getElementById("modalSubmit");
+
+        if (!email || !password) {
+          showModalError("Email et mot de passe requis.");
+          return;
+        }
+        if (authMode === "register" && password.length < 8) {
+          showModalError("Le mot de passe doit faire au moins 8 caractères.");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Chargement…";
+        clearModalError();
+
+        try {
+          let res, data;
+          if (authMode === "register") {
+            res = await fetch(`${API_URL}/api/auth/register`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email,
+                password,
+                full_name: name || null,
+              }),
+            });
+          } else {
+            const form = new FormData();
+            form.append("username", email);
+            form.append("password", password);
+            res = await fetch(`${API_URL}/api/auth/login`, {
+              method: "POST",
+              body: form,
+            });
+          }
+
+          data = await res.json();
+
+          if (!res.ok) {
+            showModalError(data.detail || "Une erreur est survenue.");
+            btn.disabled = false;
+            btn.textContent =
+              authMode === "register"
+                ? "Créer mon compte gratuit →"
+                : "Se connecter →";
+            return;
+          }
+
+          localStorage.setItem("l2j_token", data.access_token);
+          localStorage.setItem("l2j_user", JSON.stringify(data.user));
+          currentUser = data.user;
+          updateNavUser();
+          closeAuthModal();
+          showToast(`Bienvenue ${data.user.full_name || data.user.email} ! 🎉`);
+
+          if (pendingAnalysis) {
+            pendingAnalysis = false;
+            analyzeProfile();
+          }
+        } catch (err) {
+          showModalError("Erreur réseau — vérifie que le backend tourne.");
+          btn.disabled = false;
+          btn.textContent =
+            authMode === "register"
+              ? "Créer mon compte gratuit →"
+              : "Se connecter →";
+        }
+      }
+
+      // ══ STRIPE ══
+      async function upgradeToCandidat() {
+        if (!currentUser) {
+          openAuthModal(null, "register");
+          return;
+        }
+        const btn = document.getElementById("upgradeBtn");
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Redirection...";
+        }
+        try {
+          const res = await fetch(`${API_URL}/api/stripe/create-checkout`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${getToken()}` },
+          });
+          const data = await res.json();
+          if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+          } else {
+            showToast("❌ Erreur Stripe — réessaie.");
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = "Passer au plan Candidat →";
+            }
+          }
+        } catch (e) {
+          showToast("❌ Erreur réseau.");
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Passer au plan Candidat →";
+          }
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem("l2j_token");
+        localStorage.removeItem("l2j_user");
+        currentUser = null;
+        updateNavUser();
+        showToast("Déconnecté. À bientôt ! 👋");
+      }
+
+      function getToken() {
+        return localStorage.getItem("l2j_token");
+      }
+
+      // ══ EVENTS ══
+      document
+        .getElementById("authModal")
+        ?.addEventListener("click", function (e) {
+          if (e.target === this) closeAuthModal();
+        });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeAuthModal();
+      });
+
+      // ══ INIT ══
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const isUpgrade = params.get("upgrade") === "success";
+
+        if (isUpgrade) {
+          showToast("🎉 Abonnement activé ! Bienvenue dans le plan Candidat.");
+        }
+
+        // initAuth avec forceRefresh=true si retour Stripe
+        // → fetche /api/auth/me → récupère le plan candidat depuis la DB
+        initAuth(isUpgrade);
+
+        document
+          .getElementById("linkedinUrl")
+          ?.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") analyzeProfile();
+          });
+      });
+    </script>
+
+    <!-- MODAL AUTH -->
+    <div class="modal-overlay" id="authModal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeAuthModal()">✕</button>
+        <div class="modal-logo">Link<span>2</span>Job</div>
+        <div class="modal-title" id="modalTitle">Créer un compte</div>
+        <div class="modal-sub" id="modalSub">
+          3 analyses gratuites · Sans carte bancaire
+        </div>
+
+        <div class="modal-tabs">
+          <button
+            class="modal-tab active"
+            id="tabRegister"
+            onclick="switchTab('register')"
+          >
+            Inscription
+          </button>
+          <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">
+            Connexion
+          </button>
+        </div>
+
+        <div id="modalError" class="modal-error"></div>
+
+        <div class="modal-field" id="fieldName">
+          <label class="modal-label">Prénom et nom</label>
+          <input
+            type="text"
+            class="modal-input"
+            id="inputName"
+            placeholder="Raymond Gadji"
+          />
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-label">Email</label>
+          <input
+            type="email"
+            class="modal-input"
+            id="inputEmail"
+            placeholder="toi@email.com"
+          />
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-label">Mot de passe</label>
+          <input
+            type="password"
+            class="modal-input"
+            id="inputPassword"
+            placeholder="8 caractères minimum"
+          />
+        </div>
+
+        <button class="modal-submit" id="modalSubmit" onclick="submitAuth()">
+          Créer mon compte gratuit →
+        </button>
+
+        <div class="modal-switch" id="modalSwitch">
+          Déjà un compte ? <a onclick="switchTab('login')">Se connecter</a>
+        </div>
+      </div>
     </div>
-
-    <div id="modalError" class="modal-error"></div>
-
-    <!-- Champ nom (inscription seulement) -->
-    <div class="modal-field" id="fieldName">
-      <label class="modal-label">Prénom et nom</label>
-      <input type="text" class="modal-input" id="inputName" placeholder="Raymond Gadji"/>
-    </div>
-
-    <div class="modal-field">
-      <label class="modal-label">Email</label>
-      <input type="email" class="modal-input" id="inputEmail" placeholder="toi@email.com"/>
-    </div>
-
-    <div class="modal-field">
-      <label class="modal-label">Mot de passe</label>
-      <input type="password" class="modal-input" id="inputPassword" placeholder="8 caractères minimum"/>
-    </div>
-
-    <button class="modal-submit" id="modalSubmit" onclick="submitAuth()">
-      Créer mon compte gratuit →
-    </button>
-
-    <div class="modal-switch" id="modalSwitch">
-      Déjà un compte ? <a onclick="switchTab('login')">Se connecter</a>
-    </div>
-  </div>
-</div>
-
-</body>
+  </body>
 </html>
