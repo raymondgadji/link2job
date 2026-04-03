@@ -58,6 +58,8 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - SQLite en dev (PostgreSQL Railway en prod)
 - Dashboard progression : graphique SVG courbe + 4 stats cards + historique
 - Lien "📊 Mon dashboard" dans la nav après connexion
+- stripe_router.py créé avec create-checkout + webhook + subscription-status
+- Bouton "Commencer — 9,99€/mois" connecté à upgradeToCandidat()
 
 ### Commits GitHub
 - e9398b2 — initial project structure
@@ -65,7 +67,44 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - 381fb4c — frontend connecté au backend
 - 50b67cc — guide visibilité recruteurs + CLAUDE.md session 1
 - ddaceab — auth modal complet
-- 8d787da — dashboard progression (dernier commit)
+- 8d787da — dashboard progression (dernier commit pushé)
+
+---
+
+## 🚨 BUG À CORRIGER EN PRIORITÉ (session 3)
+
+### Bug Stripe — UnicodeEncodeError
+**Symptôme :** `POST /api/stripe/create-checkout` retourne 400
+**Erreur exacte :**
+```
+UnicodeEncodeError: 'latin-1' codec can't encode character '\u2190'
+in position 121: ordinal not in range(256)
+```
+**Cause probable :** Le caractère `←` (\u2190) se trouve quelque part dans
+les données envoyées à Stripe. Position 121 dans la requête HTTP.
+**Pistes à investiguer :**
+1. Le `full_name` de l'utilisateur en DB contient peut-être "Ray Gadji ←" ou similaire
+2. Le `customer_email` contient un caractère spécial
+3. Les metadata `user_id` ou autre champ
+4. La clé `STRIPE_SECRET_KEY` dans .env (vérifier caractère par caractère)
+
+**Fix à essayer en session 3 :**
+```python
+# Dans stripe_router.py, sanitiser les données avant envoi à Stripe
+import unicodedata
+
+def sanitize(s: str) -> str:
+    """Supprime les caractères non-latin1 pour Stripe."""
+    return unicodedata.normalize('NFKD', s).encode('latin-1', 'ignore').decode('latin-1')
+
+# Puis dans create_checkout :
+session = stripe.checkout.Session.create(
+    ...
+    customer_email=sanitize(current_user.email),
+    metadata={"user_id": str(current_user.id)},
+    ...
+)
+```
 
 ---
 
@@ -73,43 +112,45 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 
 ```
 backend/
-├── main.py           ← FastAPI v0.2.0 — tous les endpoints
-├── auth.py           ← Register/login/me + JWT + compteur freemium
-├── database.py       ← SQLAlchemy — User + Analysis models
-├── .env              ← ANTHROPIC_API_KEY + SECRET_KEY (jamais commiter)
-├── .env.example      ← Template
+├── main.py              ← FastAPI v0.2.0
+├── auth.py              ← Register/login/me + JWT + argon2
+├── database.py          ← SQLAlchemy — User + Analysis models
+├── stripe_router.py     ← Stripe checkout + webhook + status
+├── .env                 ← Toutes les clés (jamais commiter)
+├── .env.example
 ├── requirements.txt
 └── utils/
     ├── __init__.py
     ├── linkedin_parser.py  ← MOCK actif en dev
-    ├── scorer.py           ← Score 0-100 (8 sections pondérées)
-    └── ai_agent.py         ← Claude Sonnet — analyse + génération
+    ├── scorer.py
+    └── ai_agent.py
 
 frontend/
-├── index.html        ← Landing page + formulaire + résultats + modal auth
+├── index.html        ← Landing + formulaire + résultats + modal auth + Stripe
 └── dashboard.html    ← Dashboard progression SVG + historique
 ```
 
 ### Endpoints backend actifs
 ```
 GET  /api/health
-POST /api/auth/register     ← email + password + full_name → JWT
-POST /api/auth/login        ← form-data username/password → JWT
-GET  /api/auth/me           ← profil user connecté
-POST /api/analyze-profile   ← URL LinkedIn → score + recommandations + textes
-GET  /api/my-analyses       ← historique analyses de l'user connecté
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+POST /api/analyze-profile
+GET  /api/my-analyses
+POST /api/stripe/create-checkout   ← BUG Unicode à corriger
+POST /api/stripe/webhook
+GET  /api/stripe/subscription-status
 ```
 
-### Stack technique validée
-| Couche | Techno |
-|--------|--------|
-| Frontend | HTML/CSS/JS vanilla |
-| Backend | Python FastAPI |
-| IA | Claude Sonnet 4 (Anthropic API) |
-| Auth | JWT (python-jose) + argon2 (hash passwords) |
-| DB Dev | SQLite (fichier local link2job.db) |
-| DB Prod | PostgreSQL sur Railway |
-| Paiement | Stripe (à intégrer) |
+### Variables .env nécessaires
+```
+ANTHROPIC_API_KEY=sk-ant-...
+SECRET_KEY=L2J#xK9mP2qL8nR4vT6wY1uI3oE5aS7d
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PRICE_ID=price_1...
+STRIPE_WEBHOOK_SECRET=whsec_...    (optionnel en dev)
+```
 
 ---
 
@@ -119,15 +160,12 @@ GET  /api/my-analyses       ← historique analyses de l'user connecté
 Primaire :       #FF6B00 (orange vif)
 Primaire foncé : #D95A00
 Fond sombre :    #0C0C18 / #1A1A2E
-Fond clair :     #FAFAF8
 Succès :         #22C55E
 Erreur :         #EF4444
 Accent bleu :    #0A66C2 (LinkedIn)
-
 Typo titres :    Syne 800
 Typo corps :     DM Sans
 Border radius :  sm=8px md=14px lg=22px xl=32px
-Effets :         Glassmorphism, orbs animés, noise texture, gradients orange
 ```
 
 ---
@@ -136,118 +174,92 @@ Effets :         Glassmorphism, orbs animés, noise texture, gradients orange
 
 ### V1 — "Le Profil Parfait" ← ON EST ICI
 - [x] Landing page complète
-- [x] Analyse IA (Claude Sonnet) — score + recommandations + textes
+- [x] Analyse IA Claude Sonnet — score + recommandations + textes
 - [x] Guide interactif "Visibilité recruteurs"
-- [x] Système auth — inscription/connexion JWT + compteur 3 analyses gratuites
-- [x] Dashboard progression — graphique SVG + historique
-- [ ] **Stripe** — abonnement 9,99€/mois (PROCHAINE ÉTAPE)
-- [ ] Formulaire saisie guidée (remplace le mock LinkedIn)
+- [x] Auth register/login JWT + compteur 3 analyses gratuites
+- [x] Dashboard progression SVG + historique
+- [x] stripe_router.py créé
+- [ ] **🚨 Fix bug Stripe Unicode** ← PRIORITÉ SESSION 3
+- [ ] Formulaire saisie guidée (remplace mock LinkedIn)
 - [ ] Export rapport PDF
 
 ### V2 — "La Candidature Intelligente"
 - [ ] Extension Chrome Manifest V3
-- [ ] Candidature 1 clic avec accord utilisateur
-- [ ] CV uploadé → moteur ATS cv-ats-ready (Raymond partagera les fichiers)
-- [ ] Lettre de motivation générée par IA + question "Tu veux ajouter quelque chose ?"
-- [ ] Dashboard suivi candidatures + relance intelligente
+- [ ] CV uploadé → moteur ATS cv-ats-ready
+- [ ] Lettre de motivation IA contextuelle
+- [ ] Dashboard suivi candidatures
 
 ### V3 — "L'Écosystème Emploi"
 - [ ] Volet Employeur
-- [ ] Indeed, Welcome to the Jungle, France Travail
-- [ ] Licences B2B grandes écoles (500-2000€/an)
-- [ ] App mobile iOS/Android
+- [ ] Multi-plateformes (Indeed, WTTJ, France Travail)
+- [ ] Licences B2B grandes écoles
+- [ ] App mobile
 
 ---
 
-## 💰 Modèle économique & justification prix (PITCH DECK)
+## 💰 Modèle économique & pitch
 
-### Plans tarifaires
+### Plans
 | Plan | Prix | Inclus |
 |------|------|--------|
 | Gratuit | 0€ | 3 analyses (cycle amélioration) |
 | Candidat | 9,99€/mois | Analyses illimitées + textes IA |
-| Candidat Pro | 19,99€/mois | + Extension Chrome + suivi candidatures |
-| Grande École | 500-2000€/an | Licence multi-utilisateurs B2B |
-| Employeur | 99-299€/mois | Accès profils + tableau de bord (V3) |
+| Candidat Pro | 19,99€/mois | + Extension Chrome + suivi |
+| Grande École | 500-2000€/an | Licence B2B |
+| Employeur | 99-299€/mois | Tableau de bord V3 |
 
-### 💡 Justification 9,99€ — Arguments de pitch
-
-**Structure de coûts par abonné (9,99€/mois) :**
+### Arguments pitch 9,99€
 ```
-Claude Sonnet (10 analyses/mois)  ≈ 0,30€
-Hébergement Railway               ≈ 0,05€ (mutualisé)
-Stripe commission                 ≈ 0,35€
-─────────────────────────────────────────
-Coût total par abonné             ≈ 0,70€
-Marge nette par abonné            ≈ 9,29€
-Taux de marge                     ≈ 93%
+Coût par abonné/mois :
+  Claude Sonnet (10 analyses)  ≈ 0,30€
+  Hébergement Railway          ≈ 0,05€
+  Stripe commission            ≈ 0,35€
+  ─────────────────────────────────────
+  Total coût                   ≈ 0,70€
+  Marge nette                  ≈ 9,29€ (93%)
+
+Projections MRR :
+  10 abonnés  →   100€/mois →  93€ marge
+  100 abonnés → 1 000€/mois → 930€ marge
+  500 abonnés → 5 000€/mois → 4 650€ marge
+
+Psychologie prix :
+  - Moins de 10€ → pas besoin autorisation parentale
+  - ROI si job à 2000€/mois → rentabilisé en 1h de travail
+  - Référence : Spotify 9,99€ → premium mais accessible
+  - 93% de marge → impossible de perdre de l'argent
+  - Ne jamais baisser le prix affiché
 ```
-
-**Projections MRR :**
-```
-10 abonnés   →   100€/mois  →  93€ marge nette
-50 abonnés   →   500€/mois  → 465€ marge nette
-100 abonnés  → 1 000€/mois  → 930€ marge nette
-500 abonnés  → 5 000€/mois  → 4 650€ marge nette
-```
-
-**Pourquoi 9,99€ est le prix parfait :**
-- Moins de 10€ → pas besoin d'autorisation parentale (cible lycéens)
-- "Moins cher qu'un kebab par semaine" pour un étudiant
-- Si ça trouve un job à 2 000€/mois → ROI en 1h de travail
-- Référence marché : Netflix 5,99€, Spotify 9,99€ → premium mais accessible
-- 93% de marge → on ne peut pas perdre d'argent par abonné
-
-**Le vrai risque = le churn, pas le prix :**
-Les utilisateurs trouvent un job et se désabonnent. La réponse :
-le dashboard de progression crée de l'attachement (mécanisme Duolingo).
-L'utilisateur veut voir son score monter → il reste abonné même après avoir trouvé.
-
-**Règle de pricing :** Ne jamais baisser le prix affiché — ça dévalue le produit.
-Promotions ponctuelles OK. Prix catalogue = 9,99€ toujours.
 
 ---
 
 ## 🧠 Décisions produit importantes
 
-- **"Open to Work" public = déconseillé** — on conseille "Recruteurs uniquement" partout
-- **LinkedIn parser = MOCK** — LinkedIn bloque le scraping. Alternative : formulaire de saisie guidée (l'user remplit ses propres données — 100% légal, gratuit, plus précis)
-- **Proxycurl est mort** — LinkedIn lawsuit juillet 2025. Netrows = liste d'attente. On reste sur le mock + formulaire guidé.
-- **3 analyses gratuites** = 3 analyses du MÊME profil (cycle : analyser → appliquer → re-analyser). Pas 3 URLs différentes.
-- **Création profil LinkedIn de zéro** = feature V1 différenciante pour lycéens 16 ans
-- **CV + Lettre de motivation** = feature V2, moteur cv-ats-ready réutilisé
-- **Dashboard = produit payant** — voir son score évoluer dans le temps justifie l'abonnement
-
----
-
-## ⚠️ Risques et mitigation
-
-### LinkedIn CGU (CRITIQUE)
-V1 : formulaire saisie guidée (données de l'user lui-même → 100% légal)
-V2 : extension Chrome simule actions humaines (standard industrie)
-
-### Churn
-Mécanisme de rétention : dashboard progression + streak score (comme Duolingo)
-
-### Dépendance Claude API
-Fallback propre codé dans ai_agent.py si API down
+- **LinkedIn parser = MOCK** → formulaire saisie guidée (100% légal, gratuit)
+- **Proxycurl fermé** (lawsuit LinkedIn 2025). Netrows = liste d'attente.
+- **3 analyses gratuites** = même profil, cycle amélioration
+- **Dashboard = produit payant** — progression dans le temps justifie l'abo
+- **Churn mitigation** = dashboard progression (mécanisme Duolingo)
+- **CV + LM** = feature V2, moteur cv-ats-ready réutilisé
 
 ---
 
 ## 🛠️ Pour démarrer une session
 
+### Terminal 1 — Backend
 ```powershell
 cd C:\Projects\link_to_job\backend
 python -m uvicorn main:app --reload
 ```
-→ Swagger : http://127.0.0.1:8000/docs
-→ Frontend : ouvrir frontend/index.html dans Chrome
 
-**Variables .env nécessaires :**
+### Terminal 2 — Frontend
+```powershell
+cd C:\Projects\link_to_job\frontend
+python -m http.server 5500
 ```
-ANTHROPIC_API_KEY=sk-ant-...
-SECRET_KEY=link2job-dev-secret-change-in-prod
-STRIPE_SECRET_KEY=sk_test_...        (à ajouter)
-STRIPE_WEBHOOK_SECRET=whsec_...      (à ajouter)
-STRIPE_PRICE_ID=price_...            (à ajouter)
-```
+
+→ Backend Swagger : http://127.0.0.1:8000/docs
+→ Frontend : http://localhost:5500/index.html
+→ Dashboard : http://localhost:5500/dashboard.html
+
+**⚠️ Toujours utiliser localhost:5500 et jamais file:// pour le frontend**

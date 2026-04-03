@@ -888,7 +888,7 @@
           <li class="active"><span class="check">✓</span> Historique des analyses</li>
           <li><span class="dash">–</span> Extension Chrome (V2)</li>
         </ul>
-        <a href="#" class="plan-cta primary">Commencer — 9,99€/mois</a>
+        <button class="plan-cta primary" onclick="upgradeToCandidat()">Commencer — 9,99€/mois</button>
       </div>
       <div class="plan reveal" style="transition-delay:0.2s">
         <div class="plan-name">Candidat Pro</div>
@@ -1559,6 +1559,31 @@
     }
   }
 
+  // ── STRIPE CHECKOUT ──────────────────────────────────────────────
+  async function upgradeToCandidat() {
+    if (!currentUser) { openAuthModal(null, 'register'); return; }
+
+    const btn = document.getElementById('upgradeBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Redirection...'; }
+
+    try {
+      const res = await fetch(`${API_URL}/api/stripe/create-checkout`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${getToken()}` },
+      });
+      const data = await res.json();
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        showToast('❌ Erreur Stripe — réessaie.');
+        if (btn) { btn.disabled = false; btn.textContent = 'Passer au plan Candidat →'; }
+      }
+    } catch(e) {
+      showToast('❌ Erreur réseau.');
+      if (btn) { btn.disabled = false; btn.textContent = 'Passer au plan Candidat →'; }
+    }
+  }
+
   function logout() {
     localStorage.removeItem('l2j_token');
     localStorage.removeItem('l2j_user');
@@ -1584,6 +1609,21 @@
   // Enter key support
   document.addEventListener('DOMContentLoaded', () => {
     initAuth();
+    // Vérifie si retour de Stripe
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('upgrade') === 'success') {
+      showToast('🎉 Abonnement activé ! Bienvenue dans le plan Candidat.');
+      // Recharge les infos user
+      fetch(`${API_URL}/api/auth/me`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+      }).then(r => r.json()).then(user => {
+        if (user.plan) {
+          currentUser = { ...currentUser, ...user };
+          localStorage.setItem('l2j_user', JSON.stringify(currentUser));
+          updateNavUser();
+        }
+      }).catch(() => {});
+    }
     document.getElementById('linkedinUrl')?.addEventListener('keydown', e => {
       if (e.key === 'Enter') analyzeProfile();
     });

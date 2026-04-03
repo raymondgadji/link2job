@@ -7,6 +7,7 @@ import json
 
 from database import get_db, init_db, Analysis, User
 from auth import router as auth_router, get_current_user, require_user, _analyses_remaining, FREE_ANALYSES_LIMIT
+from stripe_router import router as stripe_router
 from utils.linkedin_parser import parse_linkedin_profile
 from utils.ai_agent import analyze_profile
 from utils.scorer import compute_score
@@ -25,6 +26,7 @@ def startup():
     init_db()
 
 app.include_router(auth_router)
+app.include_router(stripe_router)
 
 class AnalyzeRequest(BaseModel):
     linkedin_url: str

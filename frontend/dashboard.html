@@ -254,7 +254,7 @@
         <h3>🚀 Passe au plan Candidat</h3>
         <p>Analyses illimitées + textes IA optimisés + suivi de progression sans limite.</p>
       </div>
-      <a class="btn-orange" href="index.html#pricing">Voir les offres → 9,99€/mois</a>
+      <button class="btn-orange" onclick="upgradeToCandidat()">Passer au Candidat → 9,99€/mois</button>
     </div>
 
     <!-- GRAPHIQUE PROGRESSION -->
@@ -527,6 +527,26 @@
           ${deltaHtml}
         </div>`;
     }).join('');
+  }
+
+  // ── STRIPE ───────────────────────────────────────────────────────
+  async function upgradeToCandidat() {
+    try {
+      const res = await fetch(`${API_URL}/api/stripe/create-checkout`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.checkout_url) window.location.href = data.checkout_url;
+    } catch(e) {
+      alert('Erreur réseau — vérifie que le backend tourne.');
+    }
+  }
+
+  // Vérifie retour Stripe
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('upgrade') === 'success') {
+    setTimeout(() => alert('🎉 Abonnement activé ! Bienvenue dans le plan Candidat.'), 500);
   }
 
   // ── START ─────────────────────────────────────────────────────────
