@@ -1,13 +1,10 @@
 """
 stripe_router.py — Intégration Stripe pour Link2Job
-- POST /api/stripe/create-checkout  → crée une session de paiement
-- POST /api/stripe/webhook          → écoute les événements Stripe
-- GET  /api/stripe/success          → confirmation après paiement
 """
 import os
+import re
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request
-from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from database import get_db, User
@@ -16,9 +13,16 @@ from auth import require_user
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_PRICE_ID       = os.getenv("STRIPE_PRICE_ID", "")
-FRONTEND_URL          = os.getenv("FRONTEND_URL", "http://127.0.0.1:5500")
 
 router = APIRouter(prefix="/api/stripe", tags=["stripe"])
+
+
+def sanitize(s: str) -> str:
+    """Supprime tout caractère non-ASCII pour éviter UnicodeEncodeError avec Stripe."""
+    if not s:
+        return ""
+    # Garde uniquement les caractères ASCII imprimables
+    return re.sub(r'[^\x20-\x7E]', '', str(s))
 
 
 # ── CRÉER UNE SESSION DE PAIEMENT ────────────────────────────────────
@@ -28,12 +32,15 @@ async def create_checkout(
     current_user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """
-    Crée une session Stripe Checkout.
-    Redirige l'utilisateur vers la page de paiement Stripe.
-    """
     if not STRIPE_PRICE_ID:
         raise HTTPException(status_code=500, detail="STRIPE_PRICE_ID non configuré.")
+
+    # Sanitise toutes les données avant envoi à Stripe
+    safe_email   = sanitize(current_user.email)
+    safe_user_id = sanitize(str(current_user.id))
+
+    print(f"[Stripe] Checkout pour user_id={safe_user_id} email={safe_email}")
+    print(f"[Stripe] PRICE_ID={STRIPE_PRICE_ID}")
 
     try:
         session = stripe.checkout.Session.create(
@@ -43,35 +50,33 @@ async def create_checkout(
                 "price": STRIPE_PRICE_ID,
                 "quantity": 1,
             }],
-            customer_email=current_user.email,
-            metadata={"user_id": str(current_user.id)},
-            success_url=f"{FRONTEND_URL}/dashboard.html?upgrade=success",
-            cancel_url=f"{FRONTEND_URL}/index.html?upgrade=cancelled",
+            customer_email=safe_email,
+            metadata={"user_id": safe_user_id},
+            success_url="http://localhost:5500/dashboard.html?upgrade=success",
+            cancel_url="http://localhost:5500/index.html?upgrade=cancelled",
         )
+        print(f"[Stripe] Session créée : {session.id}")
         return {"checkout_url": session.url, "session_id": session.id}
 
     except stripe.error.StripeError as e:
-        print(f"❌ STRIPE ERROR: {e.user_message} | {e}")
-        raise HTTPException(status_code=400, detail=str(e.user_message))
+        print(f"[Stripe] ERREUR : {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"[Stripe] ERREUR INATTENDUE : {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ── WEBHOOK STRIPE ───────────────────────────────────────────────────
 
 @router.post("/webhook")
 async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
-    """
-    Reçoit les événements Stripe (paiement réussi, abonnement annulé...).
-    Stripe envoie les événements ici automatiquement.
-    """
-    payload = await request.body()
+    payload    = await request.body()
     sig_header = request.headers.get("stripe-signature", "")
 
-    # Vérifie la signature Stripe (sécurité)
     try:
         if STRIPE_WEBHOOK_SECRET:
             event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
         else:
-            # En dev sans webhook secret, on parse directement
             import json
             event = json.loads(payload)
     except Exception as e:
@@ -79,39 +84,33 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
     event_type = event.get("type") if isinstance(event, dict) else event.type
 
-    # ── Paiement réussi → upgrade plan ──────────────────────────────
     if event_type == "checkout.session.completed":
-        session_data = event["data"]["object"] if isinstance(event, dict) else event.data.object
-        user_id = int(session_data.get("metadata", {}).get("user_id", 0))
+            session_data = event["data"]["object"] if isinstance(event, dict) else event.data.object
+            # Objet Stripe → accès par attribut, pas par .get()
+            try:
+                metadata = session_data.metadata if hasattr(session_data, 'metadata') else session_data.get("metadata", {})
+                user_id = int(metadata.get("user_id", 0) if isinstance(metadata, dict) else metadata["user_id"])
+            except Exception:
+                user_id = 0
+            if user_id:
+                user = db.query(User).filter(User.id == user_id).first()
+                if user:
+                    user.plan = "candidat"
+                    db.commit()
+                    print(f"[Stripe] ✅ User {user.email} upgradé vers plan Candidat")
 
-        if user_id:
-            user = db.query(User).filter(User.id == user_id).first()
-            if user:
-                user.plan = "candidat"
-                db.commit()
-                print(f"✅ User {user.email} upgradé vers plan Candidat")
-
-    # ── Abonnement annulé → retour plan free ────────────────────────
     elif event_type in ("customer.subscription.deleted", "customer.subscription.paused"):
-        subscription = event["data"]["object"] if isinstance(event, dict) else event.data.object
-        customer_email = subscription.get("customer_email") or ""
-
-        if customer_email:
-            user = db.query(User).filter(User.email == customer_email).first()
-            if user:
-                user.plan = "free"
-                user.analyses_used = 0  # reset compteur
-                db.commit()
-                print(f"⚠️ User {user.email} repassé en plan Free")
-
-    return {"status": "ok"}
+            session_data = event["data"]["object"] if isinstance(event, dict) else event.data.object
+            try:
+                customer_email = session_data.customer_email if hasattr(session_data, 'customer_email') else session_data.get("customer_email", "")
+            except Exception:
+                customer_email = ""
 
 
 # ── STATUT ABONNEMENT ────────────────────────────────────────────────
 
 @router.get("/subscription-status")
 def subscription_status(current_user: User = Depends(require_user)):
-    """Retourne le statut d'abonnement de l'utilisateur."""
     from auth import _analyses_remaining
     return {
         "plan": current_user.plan,
