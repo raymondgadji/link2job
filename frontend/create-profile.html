@@ -1485,11 +1485,11 @@
           if (!res.ok) throw new Error("Erreur serveur");
           const data = await res.json();
           showResult(data);
-        } catch (e) {
-          // Fallback mock si backend pas encore branché
-          await new Promise((r) => setTimeout(r, 2000));
-          showResult(mockResult(payload));
-        }
+              } catch(e) {
+        // Remplace mockResult par un vrai message d'erreur
+        showToast('❌ Erreur — vérifie que le backend tourne.');
+        showStep(4); // Retour à l'étape 4
+      }
       }
 
       function mockResult(p) {

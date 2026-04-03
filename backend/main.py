@@ -9,7 +9,7 @@ from database import get_db, init_db, Analysis, User
 from auth import router as auth_router, get_current_user, require_user, _analyses_remaining, FREE_ANALYSES_LIMIT
 from stripe_router import router as stripe_router
 from utils.linkedin_parser import parse_linkedin_profile
-from utils.ai_agent import analyze_profile
+from utils.ai_agent import analyze_profile, create_profile_from_scratch
 from utils.scorer import compute_score
 
 app = FastAPI(title="Link2Job API", version="0.2.0")
@@ -110,3 +110,27 @@ def my_analyses(
         ],
         "total": len(analyses),
     }
+
+
+class CreateProfileRequest(BaseModel):
+    prenom: str
+    nom: Optional[str] = ""
+    secteur: str
+    niveau: str
+    ville: Optional[str] = ""
+    experiences: Optional[list] = []
+    hard_skills: Optional[list] = []
+    soft_skills: Optional[list] = []
+    langues: Optional[str] = ""
+    contrat: str
+    poste_vise: Optional[str] = ""
+    infos_sup: Optional[str] = ""
+
+@app.post("/api/create-profile")
+async def create_profile_route(
+    body: CreateProfileRequest,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_current_user),
+):
+    result = await create_profile_from_scratch(body.dict())
+    return result
