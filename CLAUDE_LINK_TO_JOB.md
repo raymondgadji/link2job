@@ -67,7 +67,6 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - ✅ Flow paiement Stripe end-to-end fonctionnel en test
 - ✅ Stripe CLI installé sur Windows (stripe version 1.40.0)
 - ✅ Webhook Stripe via `stripe listen --forward-to localhost:8000/api/stripe/webhook`
-- ✅ Bug stripe_router.py corrigé : notation attribut Stripe
 - ✅ Plan mis à jour en DB après paiement (plan: "candidat")
 - ✅ Nav affiche "∞ Illimité" en vert pour les abonnés
 - ✅ Dashboard affiche "Plan Candidat — illimité ✅"
@@ -79,9 +78,21 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
   - Étape 2 : Expériences avec mini-formulaire ajout/suppression
   - Étape 3 : Hard skills + soft skills en chips + suggestions auto par secteur
   - Étape 4 : Objectif en cards cliquables (CDI, Stage, Alternance…) + poste visé
-  - Étape 5 : Mock IA — 3 titres + résumé LinkedIn + compétences + boutons Copier
+  - Étape 5 : Résultat IA — 3 titres + résumé LinkedIn + compétences + boutons Copier
 - ✅ Lien "On te le crée de zéro. ✨" dans index.html → create-profile.html
 - ✅ Animations step-in/step-out, progress bar, dots de progression
+
+### Session 4 — 4 Avril 2026
+- ✅ `utils/ai_agent.py` — fonction `create_profile_from_scratch()` ajoutée
+- ✅ `main.py` — endpoint `POST /api/create-profile` branché sur Claude Sonnet
+- ✅ `CreateProfileRequest` Pydantic model avec tous les champs
+- ✅ Génération IA réelle : détection du genre depuis le prénom (ex: Aminata → féminin)
+- ✅ Résumé LinkedIn personnalisé 600-900 car : prénom, expériences, skills, ville, contrat
+- ✅ 3 titres LinkedIn optimisés avec mots-clés sectoriels
+- ✅ 8-12 compétences suggérées par l'IA selon le profil
+- ✅ Fallback propre si l'API échoue (`_fallback_create_profile`)
+- ✅ Testé end-to-end : `POST /api/create-profile 200 OK` ✅
+- ✅ Push GitHub : "feat: backend POST /api/create-profile branché sur Claude Sonnet"
 
 ### Commits GitHub
 - e9398b2 — initial project structure
@@ -90,35 +101,28 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 - 50b67cc — guide visibilité recruteurs + CLAUDE.md session 1
 - ddaceab — auth modal complet
 - 8d787da — dashboard progression
-- feat: nouvelle tagline hero + page create-profile.html ✅ (dernier commit pushé)
+- feat: nouvelle tagline hero + page create-profile.html ✅
+- feat: backend POST /api/create-profile branché sur Claude Sonnet ✅ (dernier)
 
 ---
 
-## 🚨 À FAIRE EN SESSION 4 (priorités)
+## 🚨 À FAIRE EN SESSION 5 (priorités)
 
-### 1. Backend POST /api/create-profile ← PRIORITÉ
-Brancher le vrai Claude Sonnet pour générer titre + résumé depuis les données du formulaire.
-
-```python
-POST /api/create-profile
-Body: {
-  prenom, nom, secteur, niveau, ville,
-  experiences: [{poste, entreprise, duree, desc}],
-  hard_skills: [...], soft_skills: [...], langues,
-  contrat, poste_vise, infos_sup
-}
-Response: {
-  headline_suggestions: [str, str, str],
-  about_optimized: str,
-  skills_suggested: [str, ...]
-}
-```
+### 1. Déploiement Railway ← PRIORITÉ
+Mettre en prod sur Railway avec PostgreSQL + variables d'env.
+- Créer projet Railway
+- Ajouter PostgreSQL plugin
+- Variables d'env : ANTHROPIC_API_KEY, SECRET_KEY, STRIPE_SECRET_KEY, STRIPE_PRICE_ID, STRIPE_WEBHOOK_SECRET
+- Remplacer SQLite par PostgreSQL dans database.py
+- Configurer le vrai webhook Stripe (dashboard Stripe live)
+- Pointer link2job.fr vers Railway
 
 ### 2. Genre dans le résumé
-Actuellement "passionné(e)" — détecter masculin/féminin selon prénom ou ajouter champ.
+L'IA détecte déjà bien le genre depuis le prénom (testé ✅).
+Optionnel : ajouter un champ "Genre" dans l'étape 1 pour les prénoms ambigus.
 
-### 3. Déploiement Railway
-Prod sur Railway avec PostgreSQL + variables d'env.
+### 3. Export rapport PDF
+Permettre de télécharger le résultat de l'analyse ou du profil créé en PDF.
 
 ---
 
@@ -137,12 +141,12 @@ backend/
     ├── __init__.py
     ├── linkedin_parser.py  ← MOCK actif en dev
     ├── scorer.py
-    └── ai_agent.py
+    └── ai_agent.py         ← analyze_profile() + create_profile_from_scratch() ✅
 
 frontend/
 ├── index.html           ← Landing + formulaire + résultats + modal auth + Stripe
 ├── dashboard.html       ← Dashboard progression SVG + historique
-└── create-profile.html  ← Formulaire guidé 5 étapes ← NOUVEAU session 3
+└── create-profile.html  ← Formulaire guidé 5 étapes + résultat IA réel ✅
 ```
 
 ### Endpoints backend actifs
@@ -156,7 +160,7 @@ GET  /api/my-analyses
 POST /api/stripe/create-checkout
 POST /api/stripe/webhook
 GET  /api/stripe/subscription-status
-POST /api/create-profile    ← À CRÉER session 4 (mock frontend actif)
+POST /api/create-profile    ✅ OPÉRATIONNEL session 4
 ```
 
 ### Variables .env nécessaires
@@ -220,9 +224,9 @@ Border radius :  sm=8px md=14px lg=22px xl=32px
 - [x] Stripe checkout + webhook fonctionnel end-to-end ✅
 - [x] Nav "∞ Illimité" pour les abonnés ✅
 - [x] Page create-profile.html — formulaire guidé 5 étapes ✅
-- [ ] **Backend POST /api/create-profile avec Claude Sonnet** ← SESSION 4
+- [x] **Backend POST /api/create-profile avec Claude Sonnet** ✅
+- [ ] Déploiement Railway (prod) ← SESSION 5
 - [ ] Export rapport PDF
-- [ ] Déploiement Railway (prod)
 
 ### V2 — "La Candidature Intelligente"
 - [ ] Extension Chrome Manifest V3
@@ -284,6 +288,8 @@ Psychologie prix :
 - **CV + LM** = feature V2, moteur cv-ats-ready réutilisé
 - **Stripe CLI** = obligatoire en dev pour les webhooks
 - **En prod** : remplacer whsec_ dev par le vrai secret du dashboard Stripe live
-- **create-profile.html** = mock IA frontend actif — backend à brancher session 4
+- **create-profile.html** = branché sur le vrai Claude Sonnet depuis session 4 ✅
+- **Détection genre** = Claude déduit masculin/féminin depuis le prénom (ex: Aminata → féminin ✅)
 - **Tagline Gen Z** = douleur vécue + ton familier + "zappé" en orange
 - **link2job.fr** acheté chez Ionos — .com non dispo, .fr stratégique SEO France
+- **ai_agent.py** = 2 fonctions principales : analyze_profile() + create_profile_from_scratch()
