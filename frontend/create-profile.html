@@ -11,13 +11,7 @@
       rel="stylesheet"
     />
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       :root {
         --orange: #ff6b00;
@@ -25,724 +19,346 @@
         --bg: #0c0c18;
         --bg2: #111124;
         --text: #fafaf8;
-        --text-muted: rgba(250, 250, 248, 0.5);
-        --text-dim: rgba(250, 250, 248, 0.25);
+        --text-muted: rgba(250,250,248,0.5);
+        --text-dim: rgba(250,250,248,0.25);
         --success: #22c55e;
-        --glass: rgba(255, 255, 255, 0.04);
-        --glass-border: rgba(255, 255, 255, 0.08);
-        --r-sm: 8px;
-        --r-md: 14px;
-        --r-lg: 22px;
-        --r-xl: 32px;
+        --linkedin: #0a66c2;
+        --glass: rgba(255,255,255,0.04);
+        --glass-border: rgba(255,255,255,0.08);
+        --r-sm: 8px; --r-md: 14px; --r-lg: 22px; --r-xl: 32px;
       }
 
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: "DM Sans", sans-serif;
-        min-height: 100vh;
-        overflow-x: hidden;
-      }
+      html { scroll-behavior: smooth; }
+      body { background: var(--bg); color: var(--text); font-family: "DM Sans", sans-serif; min-height: 100vh; overflow-x: hidden; }
 
       body::before {
         content: "";
-        position: fixed;
-        inset: 0;
+        position: fixed; inset: 0;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0.6;
+        pointer-events: none; z-index: 0; opacity: 0.6;
       }
 
-      .orb {
-        position: fixed;
-        border-radius: 50%;
-        filter: blur(120px);
-        pointer-events: none;
-        z-index: 0;
-      }
-      .orb-1 {
-        width: 500px;
-        height: 500px;
-        background: radial-gradient(
-          circle,
-          rgba(255, 107, 0, 0.12) 0%,
-          transparent 70%
-        );
-        top: -150px;
-        right: -100px;
-      }
-      .orb-2 {
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(
-          circle,
-          rgba(10, 102, 194, 0.08) 0%,
-          transparent 70%
-        );
-        bottom: 0;
-        left: -80px;
-      }
+      .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+      .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,107,0,0.12) 0%, transparent 70%); top: -150px; right: -100px; }
+      .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(10,102,194,0.08) 0%, transparent 70%); bottom: 0; left: -80px; }
 
-      /* ── NAV ── */
       nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
-        padding: 0 40px;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: rgba(12, 12, 24, 0.85);
-        backdrop-filter: blur(20px);
+        position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+        padding: 0 40px; height: 64px;
+        display: flex; align-items: center; justify-content: space-between;
+        background: rgba(12,12,24,0.85); backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--glass-border);
       }
-      .nav-logo {
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        font-size: 1.3rem;
-        color: var(--text);
-        text-decoration: none;
-      }
-      .nav-logo span {
-        color: var(--orange);
-      }
-      .nav-back {
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 0.88rem;
-        transition: color 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .nav-back:hover {
-        color: var(--text);
-      }
+      .nav-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--text); text-decoration: none; }
+      .nav-logo span { color: var(--orange); }
+      .nav-back { color: var(--text-muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+      .nav-back:hover { color: var(--text); }
 
-      /* ── LAYOUT ── */
-      .page {
-        position: relative;
-        z-index: 1;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 100px 24px 60px;
-      }
+      .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 100px 24px 60px; }
 
-      /* ── PROGRESS BAR ── */
-      .progress-wrap {
-        width: 100%;
-        max-width: 560px;
-        margin-bottom: 40px;
-      }
-      .progress-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-      }
-      .progress-label {
-        font-size: 0.78rem;
-        color: var(--text-dim);
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-      }
-      .progress-step {
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.85rem;
-        color: var(--orange);
-      }
-      .progress-bar {
-        height: 4px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 100px;
-        overflow: hidden;
-      }
-      .progress-fill {
-        height: 100%;
-        border-radius: 100px;
-        background: linear-gradient(
-          to right,
-          var(--orange-dark),
-          var(--orange)
-        );
-        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      }
+      .progress-wrap { width: 100%; max-width: 560px; margin-bottom: 40px; }
+      .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+      .progress-label { font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; }
+      .progress-step { font-family: "Syne", sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--orange); }
+      .progress-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+      .progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--orange-dark), var(--orange)); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
 
-      /* ── STEP DOTS ── */
-      .step-dots {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        margin-bottom: 48px;
-      }
-      .step-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--glass-border);
-        transition: all 0.3s;
-      }
-      .step-dot.active {
-        background: var(--orange);
-        transform: scale(1.3);
-      }
-      .step-dot.done {
-        background: var(--success);
-      }
+      .step-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 48px; }
+      .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--glass-border); transition: all 0.3s; }
+      .step-dot.active { background: var(--orange); transform: scale(1.3); }
+      .step-dot.done { background: var(--success); }
 
-      /* ── CARD ── */
       .step-card {
-        width: 100%;
-        max-width: 560px;
-        background: var(--glass);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--r-xl);
-        padding: 2.5rem;
-        animation: stepIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+        width: 100%; max-width: 560px;
+        background: var(--glass); border: 1px solid var(--glass-border);
+        border-radius: var(--r-xl); padding: 2.5rem;
+        animation: stepIn 0.4s cubic-bezier(0.4,0,0.2,1) both;
       }
-      @keyframes stepIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px) scale(0.98);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-      .step-card.exit {
-        animation: stepOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
-      }
-      @keyframes stepOut {
-        from {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        to {
-          opacity: 0;
-          transform: translateY(-16px);
-        }
-      }
+      @keyframes stepIn { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      .step-card.exit { animation: stepOut 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+      @keyframes stepOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-16px); } }
 
-      .step-emoji {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        display: block;
-      }
-      .step-title {
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        font-size: clamp(1.4rem, 3vw, 1.8rem);
-        letter-spacing: -0.02em;
-        margin-bottom: 0.5rem;
-      }
-      .step-subtitle {
-        color: var(--text-muted);
-        font-size: 0.95rem;
-        font-weight: 300;
-        margin-bottom: 2rem;
-      }
+      .step-emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+      .step-title { font-family: "Syne", sans-serif; font-weight: 800; font-size: clamp(1.4rem,3vw,1.8rem); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+      .step-subtitle { color: var(--text-muted); font-size: 0.95rem; font-weight: 300; margin-bottom: 2rem; }
 
-      /* ── FIELDS ── */
-      .field {
-        margin-bottom: 1.25rem;
+      .field { margin-bottom: 1.25rem; }
+      .field-label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+      .field-input, .field-select, .field-textarea {
+        width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--r-md); padding: 14px 18px; color: var(--text);
+        font-family: "DM Sans", sans-serif; font-size: 0.95rem; outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
       }
-      .field-label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: var(--text-muted);
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
-      .field-input,
-      .field-select,
-      .field-textarea {
-        width: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: var(--r-md);
-        padding: 14px 18px;
-        color: var(--text);
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.95rem;
-        outline: none;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
-      }
-      .field-input::placeholder,
-      .field-textarea::placeholder {
-        color: var(--text-dim);
-      }
-      .field-input:focus,
-      .field-select:focus,
-      .field-textarea:focus {
-        border-color: rgba(255, 107, 0, 0.5);
-        box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.08);
-      }
-      .field-select {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(250,250,248,0.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 16px center;
-        cursor: pointer;
-      }
-      .field-select option {
-        background: var(--bg2);
-      }
-      .field-textarea {
-        resize: vertical;
-        min-height: 100px;
-        line-height: 1.6;
-      }
+      .field-input::placeholder, .field-textarea::placeholder { color: var(--text-dim); }
+      .field-input:focus, .field-select:focus, .field-textarea:focus { border-color: rgba(255,107,0,0.5); box-shadow: 0 0 0 3px rgba(255,107,0,0.08); }
+      .field-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(250,250,248,0.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; cursor: pointer; }
+      .field-select option { background: var(--bg2); }
+      .field-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+      .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-      /* Champs double */
-      .field-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
+      .chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+      .chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.25); color: var(--orange); border-radius: 100px; padding: 6px 14px; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s; animation: chipIn 0.2s ease both; }
+      @keyframes chipIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+      .chip:hover { background: rgba(255,107,0,0.2); }
+      .chip .chip-remove { font-size: 0.7rem; opacity: 0.6; }
 
-      /* ── CHIPS (compétences) ── */
-      .chips-wrap {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 12px;
-      }
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255, 107, 0, 0.1);
-        border: 1px solid rgba(255, 107, 0, 0.25);
-        color: var(--orange);
-        border-radius: 100px;
-        padding: 6px 14px;
-        font-size: 0.82rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s;
-        animation: chipIn 0.2s ease both;
-      }
-      @keyframes chipIn {
-        from {
-          opacity: 0;
-          transform: scale(0.8);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-      .chip:hover {
-        background: rgba(255, 107, 0, 0.2);
-      }
-      .chip .chip-remove {
-        font-size: 0.7rem;
-        opacity: 0.6;
-      }
+      .chips-input-wrap { display: flex; gap: 8px; }
+      .chips-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-md); padding: 12px 16px; color: var(--text); font-family: "DM Sans", sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+      .chips-input:focus { border-color: rgba(255,107,0,0.4); }
+      .chips-add { background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.25); color: var(--orange); border-radius: var(--r-md); padding: 12px 16px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: "DM Sans", sans-serif; transition: background 0.2s; }
+      .chips-add:hover { background: rgba(255,107,0,0.2); }
 
-      .chips-input-wrap {
-        display: flex;
-        gap: 8px;
-      }
-      .chips-input {
-        flex: 1;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: var(--r-md);
-        padding: 12px 16px;
-        color: var(--text);
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.9rem;
-        outline: none;
-        transition: border-color 0.2s;
-      }
-      .chips-input:focus {
-        border-color: rgba(255, 107, 0, 0.4);
-      }
-      .chips-add {
-        background: rgba(255, 107, 0, 0.1);
-        border: 1px solid rgba(255, 107, 0, 0.25);
-        color: var(--orange);
-        border-radius: var(--r-md);
-        padding: 12px 16px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        cursor: pointer;
-        white-space: nowrap;
-        font-family: "DM Sans", sans-serif;
-        transition: background 0.2s;
-      }
-      .chips-add:hover {
-        background: rgba(255, 107, 0, 0.2);
-      }
+      .suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+      .suggestion { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-muted); border-radius: 100px; padding: 4px 12px; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+      .suggestion:hover { border-color: rgba(255,107,0,0.3); color: var(--text); }
 
-      /* Suggestions rapides */
-      .suggestions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 10px;
-      }
-      .suggestion {
-        background: var(--glass);
-        border: 1px solid var(--glass-border);
-        color: var(--text-muted);
-        border-radius: 100px;
-        padding: 4px 12px;
-        font-size: 0.78rem;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .suggestion:hover {
-        border-color: rgba(255, 107, 0, 0.3);
-        color: var(--text);
-      }
+      .exp-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-lg); padding: 1.25rem; margin-bottom: 0.75rem; animation: chipIn 0.3s ease both; }
+      .exp-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+      .exp-item-title { font-weight: 600; font-size: 0.9rem; }
+      .exp-item-sub { font-size: 0.8rem; color: var(--text-muted); }
+      .exp-remove { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; padding: 4px; transition: color 0.2s; }
+      .exp-remove:hover { color: #ef4444; }
 
-      /* Expérience item */
-      .exp-item {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.07);
-        border-radius: var(--r-lg);
-        padding: 1.25rem;
-        margin-bottom: 0.75rem;
-        animation: chipIn 0.3s ease both;
-      }
-      .exp-item-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-      }
-      .exp-item-title {
-        font-weight: 600;
-        font-size: 0.9rem;
-      }
-      .exp-item-sub {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-      }
-      .exp-remove {
-        background: none;
-        border: none;
-        color: var(--text-dim);
-        cursor: pointer;
-        font-size: 1rem;
-        padding: 4px;
-        transition: color 0.2s;
-      }
-      .exp-remove:hover {
-        color: #ef4444;
-      }
+      .add-exp-btn { width: 100%; padding: 12px; background: var(--glass); border: 1px dashed rgba(255,255,255,0.15); border-radius: var(--r-md); color: var(--text-muted); font-family: "DM Sans", sans-serif; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+      .add-exp-btn:hover { border-color: rgba(255,107,0,0.3); color: var(--orange); }
 
-      .add-exp-btn {
-        width: 100%;
-        padding: 12px;
-        background: var(--glass);
-        border: 1px dashed rgba(255, 255, 255, 0.15);
-        border-radius: var(--r-md);
-        color: var(--text-muted);
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-      }
-      .add-exp-btn:hover {
-        border-color: rgba(255, 107, 0, 0.3);
-        color: var(--orange);
-      }
+      .exp-form { background: rgba(255,107,0,0.04); border: 1px solid rgba(255,107,0,0.15); border-radius: var(--r-lg); padding: 1.25rem; margin-bottom: 0.75rem; }
+      .exp-form-title { font-size: 0.85rem; font-weight: 600; color: var(--orange); margin-bottom: 1rem; }
 
-      /* Mini form ajout expérience */
-      .exp-form {
-        background: rgba(255, 107, 0, 0.04);
-        border: 1px solid rgba(255, 107, 0, 0.15);
-        border-radius: var(--r-lg);
-        padding: 1.25rem;
-        margin-bottom: 0.75rem;
-      }
-      .exp-form-title {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--orange);
-        margin-bottom: 1rem;
-      }
+      .objectif-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .objectif-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 1.25rem; cursor: pointer; transition: all 0.2s; text-align: center; }
+      .objectif-card:hover { border-color: rgba(255,107,0,0.3); background: rgba(255,107,0,0.04); }
+      .objectif-card.selected { border-color: var(--orange); background: rgba(255,107,0,0.08); }
+      .objectif-icon { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+      .objectif-label { font-weight: 600; font-size: 0.88rem; margin-bottom: 4px; }
+      .objectif-desc { font-size: 0.75rem; color: var(--text-muted); }
 
-      /* ── OBJECTIF CARDS ── */
-      .objectif-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-      .objectif-card {
-        background: var(--glass);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--r-lg);
-        padding: 1.25rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-align: center;
-      }
-      .objectif-card:hover {
-        border-color: rgba(255, 107, 0, 0.3);
-        background: rgba(255, 107, 0, 0.04);
-      }
-      .objectif-card.selected {
-        border-color: var(--orange);
-        background: rgba(255, 107, 0, 0.08);
-      }
-      .objectif-icon {
-        font-size: 1.8rem;
-        display: block;
-        margin-bottom: 8px;
-      }
-      .objectif-label {
-        font-weight: 600;
-        font-size: 0.88rem;
-        margin-bottom: 4px;
-      }
-      .objectif-desc {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-      }
+      .result-box { background: rgba(255,107,0,0.04); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1rem; }
+      .result-box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+      .result-box-label { font-family: "Syne", sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--orange); }
+      .result-text { font-size: 0.92rem; color: var(--text-muted); line-height: 1.8; font-weight: 300; white-space: pre-line; }
 
-      /* ── RÉSULTAT IA ── */
-      .result-box {
-        background: rgba(255, 107, 0, 0.04);
-        border: 1px solid rgba(255, 107, 0, 0.2);
-        border-radius: var(--r-lg);
-        padding: 1.5rem;
-        margin-bottom: 1rem;
+      .copy-btn { background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2); color: var(--orange); border-radius: var(--r-sm); padding: 6px 14px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: "DM Sans", sans-serif; }
+      .copy-btn:hover { background: rgba(255,107,0,0.2); }
+      .copy-btn.copied { background: rgba(34,197,94,0.1); color: #22c55e; border-color: rgba(34,197,94,0.3); }
+
+      .step-nav { display: flex; gap: 12px; margin-top: 2rem; }
+      .btn-next { flex: 1; background: var(--orange); color: #fff; border: none; border-radius: var(--r-md); padding: 16px; font-family: "DM Sans", sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; box-shadow: 0 0 24px rgba(255,107,0,0.3); display: flex; align-items: center; justify-content: center; gap: 8px; }
+      .btn-next:hover { background: var(--orange-dark); transform: translateY(-1px); }
+      .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+      .btn-prev { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-muted); border-radius: var(--r-md); padding: 16px 20px; font-family: "DM Sans", sans-serif; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
+      .btn-prev:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+
+      .ia-loading { text-align: center; padding: 2rem; }
+      .ia-orb { width: 60px; height: 60px; border-radius: 50%; background: conic-gradient(var(--orange), transparent); animation: spin 1s linear infinite; margin: 0 auto 1.5rem; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .ia-loading-title { font-family: "Syne", sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+      .ia-loading-sub { color: var(--text-muted); font-size: 0.88rem; }
+
+      .success-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); border-radius: 100px; padding: 6px 16px; font-size: 0.82rem; color: var(--success); margin-bottom: 1.5rem; }
+
+      .final-cta { display: flex; flex-direction: column; gap: 10px; margin-top: 1.5rem; }
+      .btn-cta-primary { background: var(--orange); color: #fff; border: none; border-radius: var(--r-md); padding: 16px; font-family: "DM Sans", sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; text-align: center; transition: background 0.2s; display: block; box-shadow: 0 0 24px rgba(255,107,0,0.3); }
+      .btn-cta-primary:hover { background: var(--orange-dark); }
+      .btn-cta-secondary { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-muted); border-radius: var(--r-md); padding: 14px; font-family: "DM Sans", sans-serif; font-size: 0.9rem; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; display: block; }
+      .btn-cta-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+      /* ══ ÉTAPE 6 — GUIDE LINKEDIN ══ */
+
+      /* Carte guide élargie */
+      #step6 { max-width: 640px; }
+
+      /* Progress guide */
+      .guide-progress-wrap { margin-bottom: 2rem; }
+      .guide-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+      .guide-progress-title { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
+      .guide-progress-count { font-family: "Syne", sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--success); }
+      .guide-progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+      .guide-progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(to right, #16a34a, var(--success)); transition: width 0.6s cubic-bezier(0.4,0,0.2,1); width: 0%; }
+
+      /* Steps du guide */
+      .guide-steps { display: flex; flex-direction: column; gap: 0; }
+
+      .guide-step { display: flex; gap: 16px; position: relative; padding-bottom: 1.5rem; }
+      .guide-step:last-child { padding-bottom: 0; }
+
+      .guide-step-left { display: flex; flex-direction: column; align-items: center; }
+      .guide-step-num {
+        width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+        background: rgba(255,107,0,0.15); border: 1px solid rgba(255,107,0,0.3);
+        color: var(--orange); font-family: "Syne", sans-serif; font-weight: 800; font-size: 0.85rem;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.3s; cursor: pointer;
       }
-      .result-box-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
+      .guide-step.done .guide-step-num { background: rgba(34,197,94,0.15); border-color: rgba(34,197,94,0.4); color: var(--success); }
+      .guide-step-line { width: 1px; flex: 1; margin-top: 6px; background: linear-gradient(to bottom, rgba(255,107,0,0.2), transparent); min-height: 20px; }
+      .guide-step:last-child .guide-step-line { display: none; }
+
+      .guide-step-content { flex: 1; padding-top: 4px; }
+      .guide-step-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+      .guide-step-title { font-weight: 700; font-size: 0.95rem; }
+      .guide-step.done .guide-step-title { color: var(--text-muted); text-decoration: line-through; }
+
+      .btn-done {
+        background: var(--glass); border: 1px solid var(--glass-border);
+        color: var(--text-dim); border-radius: 100px;
+        padding: 4px 14px; font-size: 0.75rem; font-weight: 600;
+        cursor: pointer; white-space: nowrap; font-family: "DM Sans", sans-serif;
+        transition: all 0.2s; flex-shrink: 0;
       }
-      .result-box-label {
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.88rem;
-        color: var(--orange);
+      .btn-done:hover { border-color: rgba(34,197,94,0.4); color: var(--success); }
+      .guide-step.done .btn-done { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: var(--success); }
+
+      .guide-step-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; }
+
+      /* Simulation UI LinkedIn */
+      .sim-ui {
+        margin-top: 8px; background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-sm);
+        padding: 8px 12px; font-size: 0.8rem; color: var(--text-dim);
+        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
       }
-      .result-text {
-        font-size: 0.92rem;
-        color: var(--text-muted);
-        line-height: 1.8;
-        font-weight: 300;
+      .sim-arrow { color: var(--text-dim); }
+      .sim-highlight { background: rgba(10,102,194,0.15); color: #5ba4e0; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+      .sim-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--orange-dark)); flex-shrink: 0; }
+
+      /* Texte généré inline dans le guide */
+      .guide-generated-text {
+        background: rgba(255,107,0,0.05); border: 1px solid rgba(255,107,0,0.15);
+        border-radius: var(--r-md); padding: 12px 14px; margin-top: 8px;
+        font-size: 0.83rem; color: var(--text-muted); line-height: 1.6;
         white-space: pre-line;
       }
-      .result-headline {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text);
-        line-height: 1.5;
-      }
+      .guide-generated-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+      .guide-generated-label { font-size: 0.72rem; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
 
-      .copy-btn {
-        background: rgba(255, 107, 0, 0.1);
-        border: 1px solid rgba(255, 107, 0, 0.2);
-        color: var(--orange);
-        border-radius: var(--r-sm);
-        padding: 6px 14px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        cursor: pointer;
-        white-space: nowrap;
+      /* Chips dans le guide */
+      .guide-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+      .guide-chip { background: rgba(255,107,0,0.08); border: 1px solid rgba(255,107,0,0.2); color: var(--orange); border-radius: 100px; padding: 4px 12px; font-size: 0.78rem; font-weight: 500; }
+
+      /* Photo conseils */
+      .photo-tips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+      .photo-tip { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-md); padding: 10px 12px; }
+      .photo-tip-icon { font-size: 1.2rem; margin-bottom: 4px; display: block; }
+      .photo-tip-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+      .photo-tip.good { border-color: rgba(34,197,94,0.2); background: rgba(34,197,94,0.04); }
+      .photo-tip.good .photo-tip-icon::after { content: " ✓"; font-size: 0.7rem; color: var(--success); }
+      .photo-tip.bad { border-color: rgba(239,68,68,0.2); background: rgba(239,68,68,0.04); }
+      .photo-tip.bad .photo-tip-icon::after { content: " ✗"; font-size: 0.7rem; color: #ef4444; }
+
+      /* Bannière suggestion IA */
+      .banner-suggestion {
+        background: linear-gradient(135deg, rgba(10,102,194,0.08), rgba(255,107,0,0.06));
+        border: 1px solid rgba(10,102,194,0.2); border-radius: var(--r-lg);
+        padding: 1rem 1.25rem; margin-top: 10px;
+      }
+      .banner-preview { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+      .banner-rect { width: 80px; height: 28px; border-radius: 4px; flex-shrink: 0; }
+      .banner-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+      .banner-ia-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2); border-radius: 100px; padding: 3px 10px; font-size: 0.72rem; color: var(--orange); font-weight: 600; margin-top: 6px; }
+
+      /* Radio sim Open to Work */
+      .sim-radio-group { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+      .sim-radio { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-sm); padding: 8px 12px; font-size: 0.8rem; }
+      .sim-radio.selected { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); color: var(--text); }
+      .sim-radio-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.2); }
+      .sim-radio.selected .sim-radio-dot { border-color: #22c55e; background: #22c55e; }
+      .sim-radio-bad .sim-radio-dot { border-color: #ef4444; }
+      .sim-radio-bad { opacity: 0.5; }
+      .sim-radio-label { flex: 1; }
+      .sim-radio-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; }
+      .sim-radio.selected .sim-radio-badge { background: rgba(34,197,94,0.15); color: #22c55e; }
+      .sim-radio-bad .sim-radio-badge { background: rgba(239,68,68,0.1); color: #ef4444; }
+
+      /* Connexions suggestion */
+      .connections-tip { background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.15); border-radius: var(--r-md); padding: 10px 14px; margin-top: 8px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+      .connections-tip strong { color: var(--success); }
+
+      /* Résultat final guide */
+      .guide-complete {
+        background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(255,107,0,0.05));
+        border: 1px solid rgba(34,197,94,0.25); border-radius: var(--r-lg);
+        padding: 1.5rem; text-align: center; margin-top: 2rem;
+        animation: stepIn 0.4s ease both;
+      }
+      .guide-complete-icon { font-size: 3rem; display: block; margin-bottom: 0.75rem; }
+      .guide-complete-title { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.3rem; margin-bottom: 0.5rem; }
+      .guide-complete-sub { color: var(--text-muted); font-size: 0.88rem; font-weight: 300; }
+
+      @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* ══ MODALE AUTH ══ */
+      .modal-overlay {
+        position: fixed; inset: 0; z-index: 1000;
+        background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+        display: flex; align-items: center; justify-content: center; padding: 1rem;
+        opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      }
+      .modal-overlay.open { opacity: 1; pointer-events: all; }
+      .modal-box {
+        background: var(--bg2); border: 1px solid rgba(255,107,0,0.2);
+        border-radius: var(--r-xl); padding: 2.5rem 2rem;
+        width: 100%; max-width: 420px; position: relative;
+        transform: translateY(20px); transition: transform 0.3s;
+      }
+      .modal-overlay.open .modal-box { transform: none; }
+      .modal-close {
+        position: absolute; top: 1rem; right: 1rem;
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%;
+        cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
         transition: background 0.2s;
-        font-family: "DM Sans", sans-serif;
       }
-      .copy-btn:hover {
-        background: rgba(255, 107, 0, 0.2);
+      .modal-close:hover { background: rgba(255,255,255,0.12); }
+      .modal-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.2rem; margin-bottom: 0.25rem; }
+      .modal-logo span { color: var(--orange); }
+      .modal-title { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.5rem; margin-bottom: 0.4rem; }
+      .modal-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+      .modal-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.75rem; }
+      .modal-tab {
+        flex: 1; padding: 0.6rem; border-radius: var(--r-sm);
+        background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+        color: var(--text-muted); font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
       }
-      .copy-btn.copied {
-        background: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
-        border-color: rgba(34, 197, 94, 0.3);
+      .modal-tab.active { background: rgba(255,107,0,0.12); border-color: rgba(255,107,0,0.3); color: var(--orange); }
+      .modal-field { margin-bottom: 1rem; }
+      .modal-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; display: block; font-weight: 500; }
+      .modal-input {
+        width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--r-sm); padding: 12px 14px; color: var(--text);
+        font-family: "DM Sans", sans-serif; font-size: 0.95rem; outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
       }
-
-      /* ── BOUTONS NAV ── */
-      .step-nav {
-        display: flex;
-        gap: 12px;
-        margin-top: 2rem;
+      .modal-input::placeholder { color: var(--text-dim); }
+      .modal-input:focus { border-color: rgba(255,107,0,0.4); box-shadow: 0 0 0 3px rgba(255,107,0,0.08); }
+      .modal-error {
+        background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+        border-radius: var(--r-sm); padding: 10px 14px; font-size: 0.82rem;
+        color: #ef4444; margin-bottom: 1rem; display: none;
       }
-      .btn-next {
-        flex: 1;
-        background: var(--orange);
-        color: #fff;
-        border: none;
-        border-radius: var(--r-md);
-        padding: 16px;
-        font-family: "DM Sans", sans-serif;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition:
-          background 0.2s,
-          transform 0.15s;
-        box-shadow: 0 0 24px rgba(255, 107, 0, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
+      .modal-error.show { display: block; }
+      .modal-submit {
+        width: 100%; background: var(--orange); color: #fff; border: none;
+        border-radius: var(--r-md); padding: 13px; font-size: 1rem; font-weight: 600;
+        font-family: "DM Sans", sans-serif; cursor: pointer;
+        box-shadow: 0 0 24px rgba(255,107,0,0.3);
+        transition: background 0.2s, transform 0.15s; margin-top: 0.5rem;
       }
-      .btn-next:hover {
-        background: var(--orange-dark);
-        transform: translateY(-1px);
-      }
-      .btn-next:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none;
-      }
-      .btn-prev {
-        background: var(--glass);
-        border: 1px solid var(--glass-border);
-        color: var(--text-muted);
-        border-radius: var(--r-md);
-        padding: 16px 20px;
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .btn-prev:hover {
-        background: rgba(255, 255, 255, 0.07);
-        color: var(--text);
-      }
-
-      /* ── LOADING IA ── */
-      .ia-loading {
-        text-align: center;
-        padding: 2rem;
-      }
-      .ia-orb {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: conic-gradient(var(--orange), transparent);
-        animation: spin 1s linear infinite;
-        margin: 0 auto 1.5rem;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .ia-loading-title {
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-      }
-      .ia-loading-sub {
-        color: var(--text-muted);
-        font-size: 0.88rem;
-      }
-
-      /* ── SUCCESS BADGE ── */
-      .success-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(34, 197, 94, 0.1);
-        border: 1px solid rgba(34, 197, 94, 0.25);
-        border-radius: 100px;
-        padding: 6px 16px;
-        font-size: 0.82rem;
-        color: var(--success);
-        margin-bottom: 1.5rem;
-      }
-
-      /* ── CTA FINAL ── */
-      .final-cta {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 1.5rem;
-      }
-      .btn-cta-primary {
-        background: var(--orange);
-        color: #fff;
-        border: none;
-        border-radius: var(--r-md);
-        padding: 16px;
-        font-family: "DM Sans", sans-serif;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        transition: background 0.2s;
-        display: block;
-        box-shadow: 0 0 24px rgba(255, 107, 0, 0.3);
-      }
-      .btn-cta-primary:hover {
-        background: var(--orange-dark);
-      }
-      .btn-cta-secondary {
-        background: var(--glass);
-        border: 1px solid var(--glass-border);
-        color: var(--text-muted);
-        border-radius: var(--r-md);
-        padding: 14px;
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.9rem;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        transition: all 0.2s;
-        display: block;
-      }
-      .btn-cta-secondary:hover {
-        color: var(--text);
-        border-color: rgba(255, 255, 255, 0.15);
-      }
+      .modal-submit:hover { background: var(--orange-dark); transform: translateY(-1px); }
+      .modal-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+      .modal-switch { text-align: center; margin-top: 1.25rem; font-size: 0.83rem; color: var(--text-dim); }
+      .modal-switch a { color: var(--orange); cursor: pointer; text-decoration: none; }
+      .modal-switch a:hover { text-decoration: underline; }
 
       @media (max-width: 600px) {
-        nav {
-          padding: 0 20px;
-        }
-        .step-card {
-          padding: 1.5rem;
-        }
-        .field-row {
-          grid-template-columns: 1fr;
-        }
-        .objectif-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(16px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        nav { padding: 0 20px; }
+        .step-card { padding: 1.5rem; }
+        .field-row { grid-template-columns: 1fr; }
+        .objectif-grid { grid-template-columns: 1fr; }
+        .photo-tips { grid-template-columns: 1fr; }
+        #step6 { max-width: 100%; }
       }
     </style>
   </head>
@@ -750,61 +366,47 @@
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <!-- NAV -->
     <nav>
       <a href="index.html" class="nav-logo">Link<span>2</span>Job</a>
       <a href="index.html" class="nav-back">← Retour à l'accueil</a>
     </nav>
 
     <div class="page">
-      <!-- Progress -->
       <div class="progress-wrap">
         <div class="progress-header">
           <span class="progress-label">Création de profil</span>
-          <span class="progress-step" id="progressLabel">Étape 1 / 5</span>
+          <span class="progress-step" id="progressLabel">Étape 1 / 6</span>
         </div>
         <div class="progress-bar">
-          <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+          <div class="progress-fill" id="progressFill" style="width: 16.6%"></div>
         </div>
       </div>
 
-      <!-- Dots -->
       <div class="step-dots" id="stepDots">
         <div class="step-dot active" data-step="1"></div>
         <div class="step-dot" data-step="2"></div>
         <div class="step-dot" data-step="3"></div>
         <div class="step-dot" data-step="4"></div>
         <div class="step-dot" data-step="5"></div>
+        <div class="step-dot" data-step="6"></div>
       </div>
 
-      <!-- Container cards -->
-      <div id="stepContainer" style="width: 100%; max-width: 560px">
+      <div id="stepContainer" style="width:100%;max-width:560px;">
+
         <!-- ═══ ÉTAPE 1 — QUI ES-TU ? ═══ -->
         <div class="step-card" id="step1">
           <span class="step-emoji">👋</span>
           <div class="step-title">Qui es-tu ?</div>
-          <div class="step-subtitle">
-            Quelques infos pour personnaliser ton profil LinkedIn.
-          </div>
+          <div class="step-subtitle">Quelques infos pour personnaliser ton profil LinkedIn.</div>
 
           <div class="field-row">
             <div class="field">
               <label class="field-label">Prénom *</label>
-              <input
-                type="text"
-                class="field-input"
-                id="f_prenom"
-                placeholder="Ex : Aminata, Lucas, Karim …"
-              />
+              <input type="text" class="field-input" id="f_prenom" placeholder="Ex : Aminata, Lucas, Karim …" />
             </div>
             <div class="field">
               <label class="field-label">Nom *</label>
-              <input
-                type="text"
-                class="field-input"
-                id="f_nom"
-                placeholder="Ex : Dupont, Gadji…"
-              />
+              <input type="text" class="field-input" id="f_nom" placeholder="Ex : Dupont, Gadji…" />
             </div>
           </div>
 
@@ -845,416 +447,468 @@
 
           <div class="field">
             <label class="field-label">Ville</label>
-            <input
-              type="text"
-              class="field-input"
-              id="f_ville"
-              placeholder="Ex : Paris, Lyon, Bordeaux…"
-            />
+            <input type="text" class="field-input" id="f_ville" placeholder="Ex : Paris, Lyon, Bordeaux…" />
           </div>
 
           <div class="step-nav">
-            <button class="btn-next" onclick="goNext(1)">
-              Continuer <span>→</span>
-            </button>
+            <button class="btn-next" onclick="goNext(1)">Continuer <span>→</span></button>
           </div>
         </div>
 
         <!-- ═══ ÉTAPE 2 — EXPÉRIENCES ═══ -->
-        <div class="step-card" id="step2" style="display: none">
+        <div class="step-card" id="step2" style="display:none">
           <span class="step-emoji">💼</span>
           <div class="step-title">Tes expériences</div>
-          <div class="step-subtitle">
-            Stages, jobs, projets perso — tout compte. Tu peux en ajouter
-            plusieurs.
-          </div>
+          <div class="step-subtitle">Stages, jobs, projets perso — tout compte. Tu peux en ajouter plusieurs.</div>
 
-          <!-- Liste des expériences ajoutées -->
           <div id="expList"></div>
 
-          <!-- Mini form ajout -->
           <div class="exp-form" id="expForm">
             <div class="exp-form-title">+ Nouvelle expérience</div>
             <div class="field">
               <label class="field-label">Intitulé du poste *</label>
-              <input
-                type="text"
-                class="field-input"
-                id="exp_poste"
-                placeholder="Ex : Développeur Frontend, Stagiaire Marketing…"
-              />
+              <input type="text" class="field-input" id="exp_poste" placeholder="Ex : Développeur Frontend, Stagiaire Marketing…" />
             </div>
             <div class="field-row">
               <div class="field">
                 <label class="field-label">Entreprise</label>
-                <input
-                  type="text"
-                  class="field-input"
-                  id="exp_entreprise"
-                  placeholder="Ex : Google, Startup XYZ…"
-                />
+                <input type="text" class="field-input" id="exp_entreprise" placeholder="Ex : Google, Startup XYZ…" />
               </div>
               <div class="field">
                 <label class="field-label">Durée</label>
-                <input
-                  type="text"
-                  class="field-input"
-                  id="exp_duree"
-                  placeholder="Ex : 6 mois, 2 ans…"
-                />
+                <input type="text" class="field-input" id="exp_duree" placeholder="Ex : 6 mois, 2 ans…" />
               </div>
             </div>
             <div class="field">
               <label class="field-label">Ce que tu as fait (optionnel)</label>
-              <textarea
-                class="field-textarea"
-                id="exp_desc"
-                placeholder="Ex : J'ai développé une API REST, géré une équipe de 3 personnes, augmenté les ventes de 20%…"
-                style="min-height: 80px"
-              ></textarea>
+              <textarea class="field-textarea" id="exp_desc" placeholder="Ex : J'ai développé une API REST, géré une équipe de 3 personnes, augmenté les ventes de 20%…" style="min-height:80px"></textarea>
             </div>
-            <button class="add-exp-btn" onclick="addExperience()">
-              ✚ Ajouter cette expérience
-            </button>
+            <button class="add-exp-btn" onclick="addExperience()">✚ Ajouter cette expérience</button>
           </div>
 
-          <div
-            id="noExpMsg"
-            style="
-              display: none;
-              text-align: center;
-              padding: 1rem;
-              color: var(--text-dim);
-              font-size: 0.88rem;
-            "
-          >
-            💡 Pas d'expérience ? Pas de souci — l'IA va créer ton profil à
-            partir de tes compétences et objectifs.
+          <div id="noExpMsg" style="display:none;text-align:center;padding:1rem;color:var(--text-dim);font-size:0.88rem;">
+            💡 Pas d'expérience ? Pas de souci — l'IA va créer ton profil à partir de tes compétences et objectifs.
           </div>
 
           <div class="step-nav">
             <button class="btn-prev" onclick="goPrev(2)">←</button>
-            <button class="btn-next" onclick="goNext(2)">
-              Continuer <span>→</span>
-            </button>
+            <button class="btn-next" onclick="goNext(2)">Continuer <span>→</span></button>
           </div>
         </div>
 
         <!-- ═══ ÉTAPE 3 — COMPÉTENCES ═══ -->
-        <div class="step-card" id="step3" style="display: none">
+        <div class="step-card" id="step3" style="display:none">
           <span class="step-emoji">🧠</span>
           <div class="step-title">Tes compétences</div>
-          <div class="step-subtitle">
-            Hard skills (techniques) et soft skills (humaines). Ajoute-en un
-            maximum !
-          </div>
+          <div class="step-subtitle">Hard skills (techniques) et soft skills (humaines). Ajoute-en un maximum !</div>
 
           <div class="field">
-            <label class="field-label"
-              >Hard Skills — compétences techniques</label
-            >
+            <label class="field-label">Hard Skills — compétences techniques</label>
             <div class="chips-wrap" id="hardChips"></div>
             <div class="chips-input-wrap">
-              <input
-                type="text"
-                class="chips-input"
-                id="hardInput"
-                placeholder="Ex : Python, Photoshop, Excel…"
-                onkeydown="if (event.key === 'Enter') addChip('hard');"
-              />
-              <button class="chips-add" onclick="addChip('hard')">
-                + Ajouter
-              </button>
+              <input type="text" class="chips-input" id="hardInput" placeholder="Ex : Python, Photoshop, Excel…" onkeydown="if(event.key==='Enter')addChip('hard');" />
+              <button class="chips-add" onclick="addChip('hard')">+ Ajouter</button>
             </div>
             <div class="suggestions" id="hardSuggestions"></div>
           </div>
 
-          <div class="field" style="margin-top: 1.5rem">
+          <div class="field" style="margin-top:1.5rem">
             <label class="field-label">Soft Skills — qualités humaines</label>
             <div class="chips-wrap" id="softChips"></div>
             <div class="chips-input-wrap">
-              <input
-                type="text"
-                class="chips-input"
-                id="softInput"
-                placeholder="Ex : Leadership, Créativité, Empathie…"
-                onkeydown="if (event.key === 'Enter') addChip('soft');"
-              />
-              <button class="chips-add" onclick="addChip('soft')">
-                + Ajouter
-              </button>
+              <input type="text" class="chips-input" id="softInput" placeholder="Ex : Leadership, Créativité, Empathie…" onkeydown="if(event.key==='Enter')addChip('soft');" />
+              <button class="chips-add" onclick="addChip('soft')">+ Ajouter</button>
             </div>
             <div class="suggestions" id="softSuggestions"></div>
           </div>
 
-          <div class="field" style="margin-top: 1.5rem">
+          <div class="field" style="margin-top:1.5rem">
             <label class="field-label">Langues</label>
-            <input
-              type="text"
-              class="field-input"
-              id="f_langues"
-              placeholder="Ex : Français (natif), Anglais (B2), Espagnol (notions)…"
-            />
+            <input type="text" class="field-input" id="f_langues" placeholder="Ex : Français (natif), Anglais (B2), Espagnol (notions)…" />
           </div>
 
           <div class="step-nav">
             <button class="btn-prev" onclick="goPrev(3)">←</button>
-            <button class="btn-next" onclick="goNext(3)">
-              Continuer <span>→</span>
-            </button>
+            <button class="btn-next" onclick="goNext(3)">Continuer <span>→</span></button>
           </div>
         </div>
 
         <!-- ═══ ÉTAPE 4 — OBJECTIF ═══ -->
-        <div class="step-card" id="step4" style="display: none">
+        <div class="step-card" id="step4" style="display:none">
           <span class="step-emoji">🎯</span>
           <div class="step-title">Ton objectif</div>
-          <div class="step-subtitle">
-            Qu'est-ce que tu cherches ? L'IA va optimiser ton profil en
-            conséquence.
-          </div>
+          <div class="step-subtitle">Qu'est-ce que tu cherches ? L'IA va optimiser ton profil en conséquence.</div>
 
           <div class="field">
             <label class="field-label">Type de contrat *</label>
             <div class="objectif-grid" id="contratGrid">
-              <div
-                class="objectif-card"
-                data-val="CDI"
-                onclick="selectObjectif('contrat', this)"
-              >
-                <span class="objectif-icon">💼</span>
-                <div class="objectif-label">CDI</div>
-                <div class="objectif-desc">Emploi stable long terme</div>
-              </div>
-              <div
-                class="objectif-card"
-                data-val="CDD"
-                onclick="selectObjectif('contrat', this)"
-              >
-                <span class="objectif-icon">📅</span>
-                <div class="objectif-label">CDD / Mission</div>
-                <div class="objectif-desc">Court ou moyen terme</div>
-              </div>
-              <div
-                class="objectif-card"
-                data-val="Stage"
-                onclick="selectObjectif('contrat', this)"
-              >
-                <span class="objectif-icon">🎓</span>
-                <div class="objectif-label">Stage</div>
-                <div class="objectif-desc">Découverte & apprentissage</div>
-              </div>
-              <div
-                class="objectif-card"
-                data-val="Alternance"
-                onclick="selectObjectif('contrat', this)"
-              >
-                <span class="objectif-icon">🔄</span>
-                <div class="objectif-label">Alternance</div>
-                <div class="objectif-desc">Études + travail</div>
-              </div>
-              <div
-                class="objectif-card"
-                data-val="Freelance"
-                onclick="selectObjectif('contrat', this)"
-              >
-                <span class="objectif-icon">🚀</span>
-                <div class="objectif-label">Freelance</div>
-                <div class="objectif-desc">Indépendant</div>
-              </div>
-              <div
-                class="objectif-card"
-                data-val="Premier emploi"
-                onclick="selectObjectif('contrat', this)"
-              >
-                <span class="objectif-icon">✨</span>
-                <div class="objectif-label">Premier emploi</div>
-                <div class="objectif-desc">Je démarre ma carrière</div>
-              </div>
+              <div class="objectif-card" data-val="CDI" onclick="selectObjectif('contrat',this)"><span class="objectif-icon">💼</span><div class="objectif-label">CDI</div><div class="objectif-desc">Emploi stable long terme</div></div>
+              <div class="objectif-card" data-val="CDD" onclick="selectObjectif('contrat',this)"><span class="objectif-icon">📅</span><div class="objectif-label">CDD / Mission</div><div class="objectif-desc">Court ou moyen terme</div></div>
+              <div class="objectif-card" data-val="Stage" onclick="selectObjectif('contrat',this)"><span class="objectif-icon">🎓</span><div class="objectif-label">Stage</div><div class="objectif-desc">Découverte & apprentissage</div></div>
+              <div class="objectif-card" data-val="Alternance" onclick="selectObjectif('contrat',this)"><span class="objectif-icon">🔄</span><div class="objectif-label">Alternance</div><div class="objectif-desc">Études + travail</div></div>
+              <div class="objectif-card" data-val="Freelance" onclick="selectObjectif('contrat',this)"><span class="objectif-icon">🚀</span><div class="objectif-label">Freelance</div><div class="objectif-desc">Indépendant</div></div>
+              <div class="objectif-card" data-val="Premier emploi" onclick="selectObjectif('contrat',this)"><span class="objectif-icon">✨</span><div class="objectif-label">Premier emploi</div><div class="objectif-desc">Je démarre ma carrière</div></div>
             </div>
           </div>
 
-          <div class="field" style="margin-top: 1.5rem">
+          <div class="field" style="margin-top:1.5rem">
             <label class="field-label">Poste visé</label>
-            <input
-              type="text"
-              class="field-input"
-              id="f_poste_vise"
-              placeholder="Ex : Développeur React, Chef de projet, Data Analyst…"
-            />
+            <input type="text" class="field-input" id="f_poste_vise" placeholder="Ex : Développeur React, Chef de projet, Data Analyst…" />
           </div>
 
           <div class="field">
             <label class="field-label">Infos supplémentaires (optionnel)</label>
-            <textarea
-              class="field-textarea"
-              id="f_infos_sup"
-              placeholder="Dis-nous tout ce qui pourrait aider l'IA : tes passions, tes valeurs, tes projets perso, ce qui te rend unique…"
-            ></textarea>
+            <textarea class="field-textarea" id="f_infos_sup" placeholder="Dis-nous tout ce qui pourrait aider l'IA : tes passions, tes valeurs, tes projets perso, ce qui te rend unique…"></textarea>
           </div>
 
           <div class="step-nav">
             <button class="btn-prev" onclick="goPrev(4)">←</button>
-            <button class="btn-next" onclick="generateProfile()">
-              🤖 Générer mon profil LinkedIn <span>✨</span>
-            </button>
+            <button class="btn-next" onclick="generateProfile()">🤖 Générer mon profil LinkedIn <span>✨</span></button>
           </div>
         </div>
 
         <!-- ═══ ÉTAPE 5 — RÉSULTAT IA ═══ -->
-        <div class="step-card" id="step5" style="display: none">
+        <div class="step-card" id="step5" style="display:none">
           <div id="iaLoadingWrap" class="ia-loading">
             <div class="ia-orb"></div>
             <div class="ia-loading-title">L'IA crée ton profil…</div>
-            <div class="ia-loading-sub">
-              Génération du titre et du résumé LinkedIn optimisés ✨
-            </div>
+            <div class="ia-loading-sub">Génération du titre et du résumé LinkedIn optimisés ✨</div>
           </div>
 
-          <div id="iaResult" style="display: none">
+          <div id="iaResult" style="display:none">
             <div class="success-badge">✅ Profil généré avec succès !</div>
+            <div class="step-title" style="margin-bottom:0.5rem">Ton profil LinkedIn</div>
+            <div class="step-subtitle">Copie ces textes directement dans ton LinkedIn.</div>
 
-            <div class="step-title" style="margin-bottom: 0.5rem">
-              Ton profil LinkedIn
-            </div>
-            <div class="step-subtitle">
-              Copie ces textes directement dans ton LinkedIn.
-            </div>
-
-            <!-- Titres -->
             <div class="result-box">
               <div class="result-box-header">
-                <div class="result-box-label">
-                  ✍️ Titre professionnel (3 options)
-                </div>
+                <div class="result-box-label">✍️ Titre professionnel (3 options)</div>
               </div>
-              <div
-                id="resultTitles"
-                style="display: flex; flex-direction: column; gap: 10px"
-              ></div>
+              <div id="resultTitles" style="display:flex;flex-direction:column;gap:10px;"></div>
             </div>
 
-            <!-- Résumé -->
             <div class="result-box">
               <div class="result-box-header">
                 <div class="result-box-label">📝 Résumé LinkedIn (About)</div>
-                <button
-                  class="copy-btn"
-                  id="copyAboutBtn"
-                  onclick="copyResult('about')"
-                >
-                  Copier
-                </button>
+                <button class="copy-btn" id="copyAboutBtn" onclick="copyResult('about')">Copier</button>
               </div>
               <div class="result-text" id="resultAbout"></div>
             </div>
 
-            <!-- Compétences suggérées -->
-            <div class="result-box" id="resultSkillsBox" style="display: none">
+            <div class="result-box" id="resultSkillsBox" style="display:none">
               <div class="result-box-header">
-                <div class="result-box-label">
-                  🏷️ Compétences à ajouter sur LinkedIn
-                </div>
+                <div class="result-box-label">🏷️ Compétences à ajouter sur LinkedIn</div>
               </div>
-              <div
-                class="chips-wrap"
-                id="resultSkills"
-                style="margin-bottom: 0"
-              ></div>
+              <div class="chips-wrap" id="resultSkills" style="margin-bottom:0"></div>
             </div>
 
             <div class="final-cta">
-              <a href="index.html" class="btn-cta-primary"
-                >🔍 Analyser mon profil LinkedIn maintenant →</a
-              >
-              <button class="btn-cta-secondary" onclick="resetForm()">
-                ↩ Recommencer
+              <button class="btn-cta-primary" onclick="goToGuide()">
+                🗺️ Guide moi sur LinkedIn maintenant →
               </button>
+              <button class="btn-cta-secondary" onclick="resetForm()">↩ Recommencer</button>
             </div>
           </div>
         </div>
-      </div>
-      <!-- /stepContainer -->
-    </div>
-    <!-- /page -->
+
+        <!-- ═══ ÉTAPE 6 — GUIDE LINKEDIN ═══ -->
+        <div class="step-card" id="step6" style="display:none;max-width:640px;">
+          <span class="step-emoji">🗺️</span>
+          <div class="step-title">Construis ton LinkedIn</div>
+          <div class="step-subtitle">Suis ce guide pas-à-pas — coche chaque étape quand c'est fait !</div>
+
+          <!-- Progress guide -->
+          <div class="guide-progress-wrap">
+            <div class="guide-progress-header">
+              <span class="guide-progress-title">Progression</span>
+              <span class="guide-progress-count" id="guideCount">0 / 8 étapes</span>
+            </div>
+            <div class="guide-progress-bar">
+              <div class="guide-progress-fill" id="guideProgressFill"></div>
+            </div>
+          </div>
+
+          <div class="guide-steps" id="guideSteps">
+
+            <!-- ÉTAPE G1 — Créer le compte -->
+            <div class="guide-step" id="gs1">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs1')">1</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">Crée ton compte LinkedIn</div>
+                  <button class="btn-done" onclick="toggleDone('gs1')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">Va sur <strong style="color:var(--text)">linkedin.com</strong> → clique sur "S'inscrire" → entre ton prénom, nom, email et un mot de passe.</div>
+                <div class="sim-ui">
+                  <span>linkedin.com</span>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">S'inscrire</span>
+                  <span class="sim-arrow">→</span>
+                  <span>Prénom · Nom · Email · Mot de passe</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ÉTAPE G2 — Titre -->
+            <div class="guide-step" id="gs2">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs2')">2</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">Ajoute ton titre professionnel</div>
+                  <button class="btn-done" onclick="toggleDone('gs2')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">Sur ton profil → clique sur ✏️ → modifie le champ "Titre" → colle l'un de tes titres générés ci-dessous :</div>
+                <div class="sim-ui">
+                  <div class="sim-avatar"></div>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">✏️ Modifier</span>
+                  <span class="sim-arrow">→</span>
+                  <span>Champ "Titre"</span>
+                </div>
+                <div class="guide-generated-text" id="guideTitre1" style="padding:8px;">
+                  <div class="guide-generated-header" style="margin-bottom:10px;">
+                    <span class="guide-generated-label">✍️ Tes 3 titres générés</span>
+                  </div>
+                  <div id="guideTitre1Content"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ÉTAPE G3 — Résumé -->
+            <div class="guide-step" id="gs3">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs3')">3</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">Ajoute ton résumé (About)</div>
+                  <button class="btn-done" onclick="toggleDone('gs3')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">Profil → "Ajouter une section" → "Résumé" → colle ton texte. ⚠️ Les 3 premières lignes sont visibles sans cliquer "voir plus" — elles font toute la différence !</div>
+                <div class="sim-ui">
+                  <span>Ton profil</span>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">+ Ajouter une section</span>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">Résumé</span>
+                </div>
+                <div class="guide-generated-text">
+                  <div class="guide-generated-header">
+                    <span class="guide-generated-label">📝 Ton résumé généré</span>
+                    <button class="copy-btn" id="copyGuideAbout" onclick="copyGuideText('guideAboutContent','copyGuideAbout')">Copier</button>
+                  </div>
+                  <span id="guideAboutContent" style="font-size:0.8rem;display:block;max-height:120px;overflow:hidden;">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ÉTAPE G4 — Compétences -->
+            <div class="guide-step" id="gs4">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs4')">4</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">Ajoute tes compétences</div>
+                  <button class="btn-done" onclick="toggleDone('gs4')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">Profil → "Ajouter une section" → "Compétences" → ajoute chaque compétence ci-dessous. LinkedIn suggère automatiquement pendant que tu tapes.</div>
+                <div class="sim-ui">
+                  <span>Ton profil</span>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">+ Ajouter une section</span>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">Compétences</span>
+                </div>
+                <div class="guide-chips" id="guideSkills"></div>
+              </div>
+            </div>
+
+            <!-- ÉTAPE G5 — Photo de profil -->
+            <div class="guide-step" id="gs5">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs5')">5</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">📸 Ta photo de profil</div>
+                  <button class="btn-done" onclick="toggleDone('gs5')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">Un profil avec photo reçoit <strong style="color:var(--text)">21x plus de vues</strong>. Profil → clique sur l'icône photo → upload ta photo. Voici les règles d'or :</div>
+                <div class="photo-tips">
+                  <div class="photo-tip good"><span class="photo-tip-icon">☀️</span><div class="photo-tip-text">Lumière naturelle face à une fenêtre</div></div>
+                  <div class="photo-tip good"><span class="photo-tip-icon">🎯</span><div class="photo-tip-text">Cadrage tête + épaules, fond neutre</div></div>
+                  <div class="photo-tip bad"><span class="photo-tip-icon">🤳</span><div class="photo-tip-text">Pas de selfie bras tendu ou filtre</div></div>
+                  <div class="photo-tip bad"><span class="photo-tip-icon">👥</span><div class="photo-tip-text">Pas de photo de groupe recadrée</div></div>
+                </div>
+                <!-- Suggestion IA photo -->
+                <div class="banner-suggestion" style="background:rgba(255,107,0,0.05);border-color:rgba(255,107,0,0.15);margin-top:10px;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                    <span style="font-size:1.1rem;">🤖</span>
+                    <span style="font-size:0.82rem;font-weight:600;color:var(--orange)">Conseil IA selon ton secteur</span>
+                  </div>
+                  <div class="guide-step-desc" id="photoIAAdvice" style="margin-bottom:0;">Chargement…</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ÉTAPE G6 — Bannière -->
+            <div class="guide-step" id="gs6">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs6')">6</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">🖼️ Ta bannière LinkedIn</div>
+                  <button class="btn-done" onclick="toggleDone('gs6')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">La grande image en haut de ton profil (1584×396px). 90% des gens laissent la bannière par défaut — c'est une occasion en or de te démarquer !</div>
+                <div class="banner-suggestion" id="bannerSuggestion">
+                  <div class="banner-preview">
+                    <div class="banner-rect" id="bannerPreviewRect" style="background:linear-gradient(135deg,#0c0c18,#1a1a2e);"></div>
+                    <div class="banner-text" id="bannerPreviewText">Chargement de la suggestion IA…</div>
+                  </div>
+                  <div style="font-size:0.78rem;color:var(--text-dim);margin-top:4px;">
+                    💡 Utilise <strong style="color:var(--text)">Canva.com</strong> (gratuit) → recherche "LinkedIn Banner" → adapte avec tes couleurs
+                  </div>
+                  <div style="font-size:0.75rem;color:var(--text-dim);margin-top:6px;font-style:italic;">🤖 Suggestion générée selon ton secteur par l'IA</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ÉTAPE G7 — Visibilité recruteurs -->
+            <div class="guide-step" id="gs7">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs7')">7</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">👁️ Visibilité recruteurs</div>
+                  <button class="btn-done" onclick="toggleDone('gs7')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">⚠️ Évite le badge "Open to Work" visible de tous — il peut donner une image de désespoir. Configure plutôt la visibilité "Recruteurs uniquement" :</div>
+                <div class="sim-ui" style="margin-bottom:8px;">
+                  <div class="sim-avatar"></div>
+                  <span class="sim-arrow">→</span>
+                  <span class="sim-highlight">Disponible pour</span>
+                  <span class="sim-arrow">→</span>
+                  <span>Trouver un emploi</span>
+                  <span class="sim-arrow">→</span>
+                  <span>Bas du formulaire</span>
+                </div>
+                <div class="sim-radio-group">
+                  <div class="sim-radio sim-radio-bad">
+                    <div class="sim-radio-dot"></div>
+                    <div class="sim-radio-label">Tous les membres LinkedIn</div>
+                    <span class="sim-radio-badge" style="background:rgba(239,68,68,0.1);color:#EF4444;">❌ Éviter</span>
+                  </div>
+                  <div class="sim-radio selected">
+                    <div class="sim-radio-dot"></div>
+                    <div class="sim-radio-label">Recruteurs uniquement</div>
+                    <span class="sim-radio-badge">✅ Recommandé</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ÉTAPE G8 — Premières connexions -->
+            <div class="guide-step" id="gs8">
+              <div class="guide-step-left">
+                <div class="guide-step-num" onclick="toggleDone('gs8')">8</div>
+                <div class="guide-step-line"></div>
+              </div>
+              <div class="guide-step-content">
+                <div class="guide-step-header">
+                  <div class="guide-step-title">🤝 Tes premières connexions</div>
+                  <button class="btn-done" onclick="toggleDone('gs8')">C'est fait ✓</button>
+                </div>
+                <div class="guide-step-desc">Un profil avec 0 connexion est invisible de l'algorithme. Commence par les personnes que tu connais déjà :</div>
+                <div class="connections-tip">
+                  <strong>Objectif : 50 connexions cette semaine</strong><br/>
+                  👨‍🏫 Profs et formateurs · 👫 Camarades de classe · 👨‍👩‍👦 Famille professionnelle · 🤝 Contacts de stages passés
+                </div>
+                <div class="sim-ui" style="margin-top:10px;flex-direction:column;align-items:flex-start;gap:8px;">
+                  <div style="font-size:0.82rem;font-weight:600;color:var(--text);">💡 Comment importer tes contacts Gmail en 4 clics :</div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <span class="sim-highlight">Mon réseau</span>
+                    <span class="sim-arrow">→</span>
+                    <span class="sim-highlight">Contacts</span>
+                    <span class="sim-arrow">→</span>
+                    <span class="sim-highlight">Synchroniser les contacts</span>
+                    <span class="sim-arrow">→</span>
+                    <span class="sim-highlight">Google</span>
+                    <span class="sim-arrow">→</span>
+                    <span>Autoriser ✅</span>
+                  </div>
+                  <div style="font-size:0.78rem;color:var(--text-dim);">LinkedIn trouve automatiquement tous tes contacts Gmail qui ont un profil et te propose de les ajouter en un clic.</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /guide-steps -->
+
+          <!-- Résultat final -->
+          <div class="guide-complete" id="guideComplete" style="display:none">
+            <span class="guide-complete-icon">🎉</span>
+            <div class="guide-complete-title">Ton profil LinkedIn est prêt !</div>
+            <div class="guide-complete-sub">Tu as tout configuré — les recruteurs peuvent maintenant te trouver. Continue à poster et interagir pour booster ta visibilité.</div>
+          </div>
+
+          <div class="final-cta" style="margin-top:2rem">
+            <a href="https://www.linkedin.com/in/" target="_blank" class="btn-cta-primary">🔗 Ouvrir mon LinkedIn →</a>
+            <button class="btn-cta-secondary" onclick="resetForm()">↩ Créer un autre profil</button>
+          </div>
+        </div>
+
+      </div><!-- /stepContainer -->
+    </div><!-- /page -->
 
     <script>
       const API_URL = "https://link2job-production.up.railway.app";
 
-      // ── STATE ──────────────────────────────────────────────────────
       let currentStep = 1;
-      const totalSteps = 5;
+      const totalSteps = 6;
       const experiences = [];
       const hardSkills = [];
       const softSkills = [];
       let selectedContrat = "";
+      let generatedData = null;
 
-      // Suggestions
-      const HARD_SUGGESTIONS = {
-        "Tech & Développement": [
-          "JavaScript",
-          "React",
-          "Python",
-          "Node.js",
-          "SQL",
-          "Git",
-          "Docker",
-        ],
-        "Data & IA": [
-          "Python",
-          "Machine Learning",
-          "SQL",
-          "Power BI",
-          "Tableau",
-          "TensorFlow",
-          "Pandas",
-        ],
-        "Marketing & Communication": [
-          "SEO",
-          "Google Ads",
-          "Meta Ads",
-          "Canva",
-          "HubSpot",
-          "Mailchimp",
-          "Analytics",
-        ],
-        "Design & Créatif": [
-          "Figma",
-          "Photoshop",
-          "Illustrator",
-          "After Effects",
-          "Sketch",
-          "InDesign",
-        ],
-        "Finance & Comptabilité": [
-          "Excel",
-          "Sage",
-          "QuickBooks",
-          "SAP",
-          "VBA",
-          "Bloomberg",
-        ],
-        default: [
-          "Excel",
-          "PowerPoint",
-          "Google Workspace",
-          "Slack",
-          "Notion",
-          "Trello",
-        ],
+      // Guide state
+      const guideStepsDone = new Set();
+      const GUIDE_TOTAL = 8;
+
+      // ── SUGGESTIONS PHOTO & BANNIÈRE PAR SECTEUR ──────────────────
+      const PHOTO_ADVICE = {
+        "Tech & Développement": "Pour la Tech : fond uni sombre ou gris clair, sourire décontracté, pas de cravate nécessaire. L'authenticité prime sur le formel.",
+        "Data & IA": "Pour Data/IA : ambiance sobre et analytique. Fond blanc ou gris, regard direct, tenue soignée mais pas guindée.",
+        "Marketing & Communication": "Pour le Marketing : tu peux te permettre plus de personnalité ! Couleurs vives en fond, sourire chaleureux, tenue qui reflète ta créativité.",
+        "Design & Créatif": "Pour le Design : montre ton style ! Fond coloré ou texturé, pose décontractée, laisse transparaître ta personnalité créative.",
+        "Finance & Comptabilité": "Pour la Finance : tenue formelle recommandée (costume/blazer), fond neutre, sourire professionnel. Soigne les détails.",
+        "Ressources Humaines": "Pour les RH : chaleur et accessibilité avant tout. Sourire naturel, tenue soignée, fond clair. Tu dois inspirer confiance.",
+        "Commerce & Ventes": "Pour le Commerce : énergie et confiance. Sourire large, regard dynamique, tenue pro mais accessible. Tu dois donner envie de travailler avec toi.",
+        default: "Règle universelle : fond neutre (blanc, gris ou bleu clair), sourire naturel, cadrage épaules-tête, bonne lumière naturelle."
       };
-      const SOFT_SUGGESTIONS = [
-        "Leadership",
-        "Travail en équipe",
-        "Créativité",
-        "Adaptabilité",
-        "Rigueur",
-        "Communication",
-        "Empathie",
-        "Organisation",
-        "Curiosité",
-        "Autonomie",
-      ];
+
+      const BANNER_SUGGESTIONS = {
+        "Tech & Développement": { colors: "linear-gradient(135deg,#0c0c18,#1a1a2e)", text: "Fond sombre avec lignes de code ou motif circuit imprimé. Texte : ton stack tech principal.", accent: "#ff6b00" },
+        "Data & IA": { colors: "linear-gradient(135deg,#0a0a1a,#0a2a4a)", text: "Visualisation de données abstraite (barres, graphes). Palette bleue/cyan avec quelques points orange.", accent: "#00b4d8" },
+        "Marketing & Communication": { colors: "linear-gradient(135deg,#ff6b00,#d95a00)", text: "Couleurs vives et accroche courte. Ex : 'Créer du contenu qui convertit'. Typo grande et bold.", accent: "#fafaf8" },
+        "Design & Créatif": { colors: "linear-gradient(135deg,#6366f1,#8b5cf6)", text: "Portfolio visuel ou motif géométrique coloré. Laisse parler ton style créatif.", accent: "#fafaf8" },
+        "Finance & Comptabilité": { colors: "linear-gradient(135deg,#0a2a4a,#0d3b6e)", text: "Sobre et professionnel. Bleu marine avec accents dorés. Ton titre + ton spécialité.", accent: "#d4af37" },
+        default: { colors: "linear-gradient(135deg,#0c0c18,#1a1a2e)", text: "Fond sombre avec ton prénom + ton secteur en grand. Simple, propre, mémorable.", accent: "#ff6b00" }
+      };
 
       // ── NAVIGATION ────────────────────────────────────────────────
       function goNext(from) {
@@ -1268,7 +922,6 @@
       }
 
       function showStep(n) {
-        // Exit animation
         const current = document.getElementById(`step${currentStep}`);
         current.classList.add("exit");
         setTimeout(() => {
@@ -1278,14 +931,20 @@
           updateProgress();
           const next = document.getElementById(`step${n}`);
           next.style.display = "block";
+          // Étape 6 : largeur élargie
+          if (n === 6) {
+            document.getElementById("stepContainer").style.maxWidth = "640px";
+          } else {
+            document.getElementById("stepContainer").style.maxWidth = "560px";
+          }
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }, 280);
       }
 
       function updateProgress() {
         const pct = (currentStep / totalSteps) * 100;
         document.getElementById("progressFill").style.width = pct + "%";
-        document.getElementById("progressLabel").textContent =
-          `Étape ${currentStep} / ${totalSteps}`;
+        document.getElementById("progressLabel").textContent = `Étape ${currentStep} / ${totalSteps}`;
         document.querySelectorAll(".step-dot").forEach((dot, i) => {
           dot.classList.remove("active", "done");
           if (i + 1 < currentStep) dot.classList.add("done");
@@ -1299,154 +958,103 @@
           const prenom = document.getElementById("f_prenom").value.trim();
           const secteur = document.getElementById("f_secteur").value;
           const niveau = document.getElementById("f_niveau").value;
-          if (!prenom || !secteur || !niveau) {
-            shake(document.getElementById("step1"));
-            return false;
-          }
+          if (!prenom || !secteur || !niveau) { shake(document.getElementById("step1")); return false; }
         }
         if (step === 4) {
-          if (!selectedContrat) {
-            shake(document.getElementById("contratGrid"));
-            return false;
-          }
+          if (!selectedContrat) { shake(document.getElementById("contratGrid")); return false; }
         }
         return true;
       }
 
       function shake(el) {
-        el.style.animation = "none";
         el.style.transform = "translateX(-8px)";
-        setTimeout(() => {
-          el.style.transform = "translateX(8px)";
-        }, 80);
-        setTimeout(() => {
-          el.style.transform = "translateX(-5px)";
-        }, 160);
-        setTimeout(() => {
-          el.style.transform = "translateX(0)";
-        }, 240);
+        setTimeout(() => { el.style.transform = "translateX(8px)"; }, 80);
+        setTimeout(() => { el.style.transform = "translateX(-5px)"; }, 160);
+        setTimeout(() => { el.style.transform = "translateX(0)"; }, 240);
       }
 
       // ── EXPÉRIENCES ───────────────────────────────────────────────
       function addExperience() {
         const poste = document.getElementById("exp_poste").value.trim();
         if (!poste) return;
-        const exp = {
+        experiences.push({
           poste,
           entreprise: document.getElementById("exp_entreprise").value.trim(),
           duree: document.getElementById("exp_duree").value.trim(),
           desc: document.getElementById("exp_desc").value.trim(),
-        };
-        experiences.push(exp);
+        });
         renderExperiences();
-        // Reset form
-        ["exp_poste", "exp_entreprise", "exp_duree", "exp_desc"].forEach(
-          (id) => (document.getElementById(id).value = ""),
-        );
+        ["exp_poste","exp_entreprise","exp_duree","exp_desc"].forEach(id => document.getElementById(id).value = "");
         document.getElementById("noExpMsg").style.display = "none";
       }
 
       function renderExperiences() {
-        const list = document.getElementById("expList");
-        list.innerHTML = experiences
-          .map(
-            (exp, i) => `
-      <div class="exp-item">
-        <div class="exp-item-header">
-          <div>
-            <div class="exp-item-title">${exp.poste}</div>
-            <div class="exp-item-sub">${[exp.entreprise, exp.duree].filter(Boolean).join(" · ")}</div>
-          </div>
-          <button class="exp-remove" onclick="removeExp(${i})">✕</button>
-        </div>
-        ${exp.desc ? `<div style="font-size:0.82rem;color:var(--text-dim);margin-top:4px;">${exp.desc.substring(0, 80)}${exp.desc.length > 80 ? "…" : ""}</div>` : ""}
-      </div>
-    `,
-          )
-          .join("");
+        document.getElementById("expList").innerHTML = experiences.map((exp, i) => `
+          <div class="exp-item">
+            <div class="exp-item-header">
+              <div><div class="exp-item-title">${exp.poste}</div><div class="exp-item-sub">${[exp.entreprise,exp.duree].filter(Boolean).join(" · ")}</div></div>
+              <button class="exp-remove" onclick="removeExp(${i})">✕</button>
+            </div>
+            ${exp.desc ? `<div style="font-size:0.82rem;color:var(--text-dim);margin-top:4px;">${exp.desc.substring(0,80)}${exp.desc.length>80?"…":""}</div>` : ""}
+          </div>`).join("");
       }
 
-      function removeExp(i) {
-        experiences.splice(i, 1);
-        renderExperiences();
-      }
+      function removeExp(i) { experiences.splice(i,1); renderExperiences(); }
 
       // ── CHIPS ─────────────────────────────────────────────────────
       function addChip(type) {
-        const input = document.getElementById(
-          type === "hard" ? "hardInput" : "softInput",
-        );
+        const input = document.getElementById(type==="hard"?"hardInput":"softInput");
         const val = input.value.trim();
         if (!val) return;
-        const arr = type === "hard" ? hardSkills : softSkills;
-        if (arr.includes(val)) {
-          input.value = "";
-          return;
-        }
+        const arr = type==="hard"?hardSkills:softSkills;
+        if (arr.includes(val)) { input.value=""; return; }
         arr.push(val);
         renderChips(type);
         input.value = "";
       }
 
       function addSuggestion(type, val) {
-        const arr = type === "hard" ? hardSkills : softSkills;
-        if (!arr.includes(val)) {
-          arr.push(val);
-          renderChips(type);
-        }
+        const arr = type==="hard"?hardSkills:softSkills;
+        if (!arr.includes(val)) { arr.push(val); renderChips(type); }
       }
 
       function removeChip(type, val) {
-        const arr = type === "hard" ? hardSkills : softSkills;
+        const arr = type==="hard"?hardSkills:softSkills;
         const idx = arr.indexOf(val);
-        if (idx > -1) arr.splice(idx, 1);
+        if (idx > -1) arr.splice(idx,1);
         renderChips(type);
       }
 
       function renderChips(type) {
-        const arr = type === "hard" ? hardSkills : softSkills;
-        const wrap = document.getElementById(
-          type === "hard" ? "hardChips" : "softChips",
-        );
-        wrap.innerHTML = arr
-          .map(
-            (v) => `
-      <div class="chip">
-        ${v}
-        <span class="chip-remove" onclick="removeChip('${type}', '${v}')">✕</span>
-      </div>
-    `,
-          )
-          .join("");
+        const arr = type==="hard"?hardSkills:softSkills;
+        const wrap = document.getElementById(type==="hard"?"hardChips":"softChips");
+        wrap.innerHTML = arr.map(v => `<div class="chip">${v}<span class="chip-remove" onclick="removeChip('${type}','${v}')">✕</span></div>`).join("");
       }
+
+      const HARD_SUGGESTIONS = {
+        "Tech & Développement": ["JavaScript","React","Python","Node.js","SQL","Git","Docker"],
+        "Data & IA": ["Python","Machine Learning","SQL","Power BI","Tableau","TensorFlow","Pandas"],
+        "Marketing & Communication": ["SEO","Google Ads","Meta Ads","Canva","HubSpot","Mailchimp","Analytics"],
+        "Design & Créatif": ["Figma","Photoshop","Illustrator","After Effects","Sketch","InDesign"],
+        "Finance & Comptabilité": ["Excel","Sage","QuickBooks","SAP","VBA","Bloomberg"],
+        default: ["Excel","PowerPoint","Google Workspace","Slack","Notion","Trello"],
+      };
+      const SOFT_SUGGESTIONS = ["Leadership","Travail en équipe","Créativité","Adaptabilité","Rigueur","Communication","Empathie","Organisation","Curiosité","Autonomie"];
 
       function loadSuggestions() {
         const secteur = document.getElementById("f_secteur").value;
-        const hardSugg =
-          HARD_SUGGESTIONS[secteur] || HARD_SUGGESTIONS["default"];
-        const hardEl = document.getElementById("hardSuggestions");
-        hardEl.innerHTML =
+        const hardSugg = HARD_SUGGESTIONS[secteur] || HARD_SUGGESTIONS["default"];
+        document.getElementById("hardSuggestions").innerHTML =
           '<span style="font-size:0.72rem;color:var(--text-dim);margin-right:4px;">Suggestions :</span>' +
-          hardSugg
-            .map(
-              (s) =>
-                `<span class="suggestion" onclick="addSuggestion('hard','${s}')">${s}</span>`,
-            )
-            .join("");
-        const softEl = document.getElementById("softSuggestions");
-        softEl.innerHTML =
+          hardSugg.map(s => `<span class="suggestion" onclick="addSuggestion('hard','${s}')">${s}</span>`).join("");
+        document.getElementById("softSuggestions").innerHTML =
           '<span style="font-size:0.72rem;color:var(--text-dim);margin-right:4px;">Suggestions :</span>' +
-          SOFT_SUGGESTIONS.map(
-            (s) =>
-              `<span class="suggestion" onclick="addSuggestion('soft','${s}')">${s}</span>`,
-          ).join("");
+          SOFT_SUGGESTIONS.map(s => `<span class="suggestion" onclick="addSuggestion('soft','${s}')">${s}</span>`).join("");
       }
 
       // ── OBJECTIF ──────────────────────────────────────────────────
       function selectObjectif(type, el) {
-        document
-          .querySelectorAll(`#contratGrid .objectif-card`)
-          .forEach((c) => c.classList.remove("selected"));
+        document.querySelectorAll(`#contratGrid .objectif-card`).forEach(c => c.classList.remove("selected"));
         el.classList.add("selected");
         selectedContrat = el.dataset.val;
       }
@@ -1454,7 +1062,6 @@
       // ── GÉNÉRATION IA ─────────────────────────────────────────────
       async function generateProfile() {
         if (!validateStep(4)) return;
-
         showStep(5);
 
         const payload = {
@@ -1475,58 +1082,17 @@
           const token = localStorage.getItem("l2j_token");
           const res = await fetch(`${API_URL}/api/create-profile`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
+            headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
             body: JSON.stringify(payload),
           });
-
           if (!res.ok) throw new Error("Erreur serveur");
           const data = await res.json();
+          generatedData = data;
           showResult(data);
-              } catch(e) {
-        // Remplace mockResult par un vrai message d'erreur
-        showToast('❌ Erreur — vérifie que le backend tourne.');
-        showStep(4); // Retour à l'étape 4
-      }
-      }
-
-      function mockResult(p) {
-        const niveauLabel =
-          {
-            lyceen: "Lycéen",
-            etudiant_bac2: "Étudiant Bac+2",
-            etudiant_bac5: "Étudiant Master",
-            junior: "Profil Junior",
-            confirme: "Professionnel Confirmé",
-            senior: "Expert Senior",
-            reconversion: "En Reconversion",
-          }[p.niveau] || p.niveau;
-
-        const expStr =
-          p.experiences.length > 0
-            ? `Fort de ${p.experiences.length} expérience(s) dont ${p.experiences[0].poste}${p.experiences[0].entreprise ? " chez " + p.experiences[0].entreprise : ""}, `
-            : "";
-
-        const skills = [...p.hard_skills, ...p.soft_skills]
-          .slice(0, 4)
-          .join(", ");
-
-        return {
-          headline_suggestions: [
-            `${p.poste_vise || p.secteur} | ${p.contrat} | ${p.ville || "France"} 🚀`,
-            `${niveauLabel} en ${p.secteur} — Cherche ${p.contrat}${p.poste_vise ? " · " + p.poste_vise : ""}`,
-            `🎯 ${p.poste_vise || p.secteur} · ${p.contrat} · ${skills || p.secteur}`,
-          ],
-          about_optimized: `${p.prenom ? p.prenom + ", " : ""}${niveauLabel} passionné(e) par ${p.secteur}, je suis à la recherche d'un ${p.contrat}${p.poste_vise ? " en tant que " + p.poste_vise : ""}.
-
-${expStr}j'ai développé des compétences solides en ${p.hard_skills.slice(0, 3).join(", ") || p.secteur}${p.soft_skills.length > 0 ? " ainsi que des qualités humaines comme " + p.soft_skills.slice(0, 2).join(" et ") : ""}.
-
-${p.infos_sup ? p.infos_sup + "\n\n" : ""}📍 ${p.ville || "Disponible en France"} | 💼 Disponible pour un ${p.contrat}
-📩 N'hésitez pas à me contacter !`,
-          skills_suggested: [...p.hard_skills, ...p.soft_skills],
-        };
+        } catch(e) {
+          showToast("❌ Erreur — vérifie ta connexion ou reconnecte-toi.");
+          showStep(4);
+        }
       }
 
       function showResult(data) {
@@ -1535,46 +1101,125 @@ ${p.infos_sup ? p.infos_sup + "\n\n" : ""}📍 ${p.ville || "Disponible en Franc
         resultEl.style.display = "block";
         resultEl.style.animation = "fadeUp 0.5s ease both";
 
-        // Titres
         const titlesEl = document.getElementById("resultTitles");
-        (data.headline_suggestions || []).forEach((h, i) => {
+        (data.headline_suggestions || []).forEach((h) => {
           const div = document.createElement("div");
-          div.style.cssText =
-            "display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 16px;";
-          div.innerHTML = `
-        <span style="font-size:0.9rem;flex:1;">${h}</span>
-        <button class="copy-btn" onclick="copyText(this,'${h.replace(/'/g, "\\'")}')">Copier</button>
-      `;
+          div.style.cssText = "display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 16px;";
+          div.innerHTML = `<span style="font-size:0.9rem;flex:1;">${h}</span><button class="copy-btn" onclick="copyText(this,'${h.replace(/'/g,"\\'")}')">Copier</button>`;
           titlesEl.appendChild(div);
         });
 
-        // Résumé
-        document.getElementById("resultAbout").textContent =
-          data.about_optimized || "";
+        document.getElementById("resultAbout").textContent = data.about_optimized || "";
 
-        // Compétences
         if (data.skills_suggested && data.skills_suggested.length > 0) {
           document.getElementById("resultSkillsBox").style.display = "block";
           const skEl = document.getElementById("resultSkills");
-          data.skills_suggested.forEach((s) => {
+          data.skills_suggested.forEach(s => {
             const chip = document.createElement("div");
-            chip.className = "chip";
-            chip.style.cursor = "default";
-            chip.textContent = s;
+            chip.className = "chip"; chip.style.cursor = "default"; chip.textContent = s;
             skEl.appendChild(chip);
           });
+        }
+      }
+
+      // ── GUIDE LINKEDIN ────────────────────────────────────────────
+      let pendingGuide = false;
+
+      function goToGuide() {
+        const token = localStorage.getItem("l2j_token");
+        if (!token) {
+          pendingGuide = true;
+          openAuthModal();
+          return;
+        }
+        populateGuide();
+        showStep(6);
+      }
+
+      function populateGuide() {
+        if (!generatedData) return;
+        const secteur = document.getElementById("f_secteur").value || "default";
+
+        // ── Les 3 titres dans le guide ──
+        const titres = generatedData.headline_suggestions || [];
+        const titresEl = document.getElementById("guideTitre1Content");
+        titresEl.innerHTML = "";
+        if (titres.length === 0) {
+          titresEl.innerHTML = '<span style="color:var(--text-dim)">—</span>';
+        } else {
+          titres.forEach((t, i) => {
+            const safeT = t.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+            titresEl.innerHTML += `
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+                background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+                border-radius:10px;padding:10px 14px;margin-bottom:6px;">
+                <div style="flex:1;">
+                  <div style="font-size:0.7rem;color:var(--orange);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;">Option ${i+1}</div>
+                  <span style="font-size:0.85rem;line-height:1.5;">${t}</span>
+                </div>
+                <button class="copy-btn" style="flex-shrink:0;margin-top:2px;" onclick="copyText(this,'${safeT}')">Copier</button>
+              </div>`;
+          });
+        }
+
+        // ── Résumé dans le guide ──
+        document.getElementById("guideAboutContent").textContent = generatedData.about_optimized || "—";
+
+        // ── Compétences dans le guide ──
+        const skillsEl = document.getElementById("guideSkills");
+        skillsEl.innerHTML = "";
+        (generatedData.skills_suggested || []).forEach(s => {
+          const chip = document.createElement("div");
+          chip.className = "guide-chip"; chip.textContent = s;
+          skillsEl.appendChild(chip);
+        });
+
+        // ── Conseil photo IA ──
+        document.getElementById("photoIAAdvice").textContent =
+          PHOTO_ADVICE[secteur] || PHOTO_ADVICE["default"];
+
+        // ── Suggestion bannière IA ──
+        const banner = BANNER_SUGGESTIONS[secteur] || BANNER_SUGGESTIONS["default"];
+        document.getElementById("bannerPreviewRect").style.background = banner.colors;
+        document.getElementById("bannerPreviewText").innerHTML =
+          `💡 ${banner.text}<br>
+           <span style="font-size:0.75rem;color:var(--orange);margin-top:4px;display:block;">
+             Couleurs suggérées pour : <strong>${secteur !== "default" ? secteur : "ton secteur"}</strong>
+           </span>`;
+      }
+
+      function toggleDone(stepId) {
+        const el = document.getElementById(stepId);
+        if (guideStepsDone.has(stepId)) {
+          guideStepsDone.delete(stepId);
+          el.classList.remove("done");
+        } else {
+          guideStepsDone.add(stepId);
+          el.classList.add("done");
+        }
+        updateGuideProgress();
+      }
+
+      function updateGuideProgress() {
+        const count = guideStepsDone.size;
+        const pct = (count / GUIDE_TOTAL) * 100;
+        document.getElementById("guideCount").textContent = `${count} / ${GUIDE_TOTAL} étapes`;
+        document.getElementById("guideProgressFill").style.width = pct + "%";
+
+        // Afficher le message de complétion si tout est fait
+        if (count === GUIDE_TOTAL) {
+          document.getElementById("guideComplete").style.display = "block";
+          document.getElementById("guideComplete").scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          document.getElementById("guideComplete").style.display = "none";
         }
       }
 
       // ── COPY ──────────────────────────────────────────────────────
       function copyText(btn, text) {
         navigator.clipboard.writeText(text).then(() => {
-          btn.textContent = "✓ Copié !";
-          btn.classList.add("copied");
-          setTimeout(() => {
-            btn.textContent = "Copier";
-            btn.classList.remove("copied");
-          }, 2000);
+          btn.textContent = "✓ Copié !"; btn.classList.add("copied");
+          setTimeout(() => { btn.textContent = "Copier"; btn.classList.remove("copied"); }, 2000);
         });
       }
 
@@ -1585,23 +1230,27 @@ ${p.infos_sup ? p.infos_sup + "\n\n" : ""}📍 ${p.ville || "Disponible en Franc
         }
       }
 
+      function copyGuideText(contentId, btnId) {
+        const text = document.getElementById(contentId).textContent;
+        const btn = document.getElementById(btnId);
+        copyText(btn, text);
+      }
+
+      // ── TOAST ─────────────────────────────────────────────────────
+      function showToast(msg) {
+        const t = document.createElement("div");
+        t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(255,107,0,0.3);color:var(--orange);padding:12px 20px;border-radius:12px;font-size:0.85rem;z-index:9999;animation:fadeUp 0.3s ease";
+        t.textContent = msg; document.body.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+      }
+
       // ── RESET ─────────────────────────────────────────────────────
       function resetForm() {
-        experiences.length = 0;
-        hardSkills.length = 0;
-        softSkills.length = 0;
-        selectedContrat = "";
-        [
-          "f_prenom",
-          "f_secteur",
-          "f_niveau",
-          "f_ville",
-          "f_poste_vise",
-          "f_infos_sup",
-          "f_langues",
-        ].forEach((id) => {
-          const el = document.getElementById(id);
-          if (el) el.value = "";
+        experiences.length = 0; hardSkills.length = 0; softSkills.length = 0;
+        selectedContrat = ""; generatedData = null;
+        guideStepsDone.clear();
+        ["f_prenom","f_secteur","f_niveau","f_ville","f_poste_vise","f_infos_sup","f_langues"].forEach(id => {
+          const el = document.getElementById(id); if (el) el.value = "";
         });
         document.getElementById("expList").innerHTML = "";
         document.getElementById("hardChips").innerHTML = "";
@@ -1612,25 +1261,176 @@ ${p.infos_sup ? p.infos_sup + "\n\n" : ""}📍 ${p.ville || "Disponible en Franc
         document.getElementById("resultSkillsBox").style.display = "none";
         document.getElementById("iaLoadingWrap").style.display = "block";
         document.getElementById("iaResult").style.display = "none";
-        document
-          .querySelectorAll(".objectif-card")
-          .forEach((c) => c.classList.remove("selected"));
+        document.querySelectorAll(".objectif-card").forEach(c => c.classList.remove("selected"));
+        document.querySelectorAll(".guide-step").forEach(s => s.classList.remove("done"));
+        document.getElementById("guideComplete").style.display = "none";
+        updateGuideProgress();
         showStep(1);
       }
 
-      // Affiche le message "pas d'exp" si on clique sur Continuer sans rien ajouter
-      document
-        .getElementById("step2")
-        .querySelector(".btn-next")
-        .addEventListener(
-          "click",
-          function () {
-            if (experiences.length === 0) {
-              document.getElementById("noExpMsg").style.display = "block";
-            }
-          },
-          { capture: true },
-        );
+      // Affiche le message "pas d'exp"
+      document.getElementById("step2").querySelector(".btn-next").addEventListener("click", function() {
+        if (experiences.length === 0) document.getElementById("noExpMsg").style.display = "block";
+      }, { capture: true });
+
+      // ══ AUTH ══════════════════════════════════════════════════════
+      let currentUser = null;
+      let authMode = "register";
+
+      // Init auth au chargement
+      document.addEventListener("DOMContentLoaded", () => {
+        const saved = localStorage.getItem("l2j_user");
+        const token = localStorage.getItem("l2j_token");
+        if (saved && token) {
+          currentUser = JSON.parse(saved);
+        }
+      });
+
+      function openAuthModal() {
+        switchTab("register");
+        document.getElementById("authModal").classList.add("open");
+      }
+
+      function closeAuthModal() {
+        document.getElementById("authModal").classList.remove("open");
+        clearModalError();
+        pendingGuide = false;
+      }
+
+      function switchTab(mode) {
+        authMode = mode;
+        const isRegister = mode === "register";
+        document.getElementById("tabRegister").classList.toggle("active", isRegister);
+        document.getElementById("tabLogin").classList.toggle("active", !isRegister);
+        document.getElementById("fieldName").style.display = isRegister ? "block" : "none";
+        document.getElementById("modalTitle").textContent = isRegister ? "Créer un compte" : "Se connecter";
+        document.getElementById("modalSub").textContent = isRegister
+          ? "Gratuit · Accède au guide complet 🗺️"
+          : "Bon retour sur Link2Job 👋";
+        document.getElementById("modalSubmit").textContent = isRegister
+          ? "Créer mon compte et voir le guide →"
+          : "Se connecter →";
+        document.getElementById("modalSwitch").innerHTML = isRegister
+          ? "Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>"
+          : "Pas encore de compte ? <a onclick=\"switchTab('register')\">Créer un compte</a>";
+        clearModalError();
+      }
+
+      function showModalError(msg) {
+        const el = document.getElementById("modalError");
+        el.textContent = msg; el.classList.add("show");
+      }
+
+      function clearModalError() {
+        const el = document.getElementById("modalError");
+        el.textContent = ""; el.classList.remove("show");
+      }
+
+      async function submitAuth() {
+        const email = document.getElementById("inputEmail").value.trim();
+        const password = document.getElementById("inputPassword").value;
+        const name = document.getElementById("inputName").value.trim();
+        const btn = document.getElementById("modalSubmit");
+
+        if (!email || !password) { showModalError("Email et mot de passe requis."); return; }
+        if (authMode === "register" && password.length < 8) {
+          showModalError("Le mot de passe doit faire au moins 8 caractères."); return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Chargement…";
+        clearModalError();
+
+        try {
+          let res, data;
+          if (authMode === "register") {
+            res = await fetch(`${API_URL}/api/auth/register`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password, full_name: name || null }),
+            });
+          } else {
+            const form = new FormData();
+            form.append("username", email);
+            form.append("password", password);
+            res = await fetch(`${API_URL}/api/auth/login`, { method: "POST", body: form });
+          }
+
+          data = await res.json();
+
+          if (!res.ok) {
+            showModalError(data.detail || "Une erreur est survenue.");
+            btn.disabled = false;
+            btn.textContent = authMode === "register" ? "Créer mon compte et voir le guide →" : "Se connecter →";
+            return;
+          }
+
+          // Connexion réussie
+          localStorage.setItem("l2j_token", data.access_token);
+          localStorage.setItem("l2j_user", JSON.stringify(data.user));
+          currentUser = data.user;
+          closeAuthModal();
+          showToast(`Bienvenue ${data.user.full_name || data.user.email} ! 🎉`);
+
+          // Rediriger vers le guide si c'était l'action en attente
+          if (pendingGuide) {
+            pendingGuide = false;
+            populateGuide();
+            showStep(6);
+          }
+
+        } catch(err) {
+          showModalError("Erreur réseau — vérifie ta connexion.");
+          btn.disabled = false;
+          btn.textContent = authMode === "register" ? "Créer mon compte et voir le guide →" : "Se connecter →";
+        }
+      }
+
+      // Fermer la modale en cliquant à l'extérieur ou Escape
+      document.getElementById("authModal")?.addEventListener("click", function(e) {
+        if (e.target === this) closeAuthModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeAuthModal();
+      });
     </script>
+
+    <!-- ══ MODALE AUTH ══ -->
+    <div class="modal-overlay" id="authModal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeAuthModal()">✕</button>
+        <div class="modal-logo">Link<span>2</span>Job</div>
+        <div class="modal-title" id="modalTitle">Créer un compte</div>
+        <div class="modal-sub" id="modalSub">Gratuit · Accède au guide complet 🗺️</div>
+
+        <div class="modal-tabs">
+          <button class="modal-tab active" id="tabRegister" onclick="switchTab('register')">Inscription</button>
+          <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Connexion</button>
+        </div>
+
+        <div id="modalError" class="modal-error"></div>
+
+        <div class="modal-field" id="fieldName">
+          <label class="modal-label">Prénom et nom</label>
+          <input type="text" class="modal-input" id="inputName" placeholder="Raymond Gadji" />
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Email</label>
+          <input type="email" class="modal-input" id="inputEmail" placeholder="toi@email.com" />
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Mot de passe</label>
+          <input type="password" class="modal-input" id="inputPassword" placeholder="8 caractères minimum" />
+        </div>
+
+        <button class="modal-submit" id="modalSubmit" onclick="submitAuth()">
+          Créer mon compte et voir le guide →
+        </button>
+
+        <div class="modal-switch" id="modalSwitch">
+          Déjà un compte ? <a onclick="switchTab('login')">Se connecter</a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

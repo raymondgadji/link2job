@@ -173,31 +173,43 @@ Response: {
 - feat: backend POST /api/create-profile branché sur Claude Sonnet ✅
 - fix: add sqlalchemy and psycopg2 to requirements ✅
 - fix: add argon2-cffi for password hashing ✅
-- feat: déploiement Railway prod + fix argon2-cffi + API_URL production ✅ (dernier)
+- feat: déploiement Railway prod + fix argon2-cffi + API_URL production ✅
+- fix: mock parser désactivé + fix HTML hero CTAs structure ✅
+- feat: étape 6 guide LinkedIn + modale auth intégrée ✅
+- fix: guide 3 titres + bannière IA secteur + badge UX + import Gmail ✅ (dernier)
+
+### Session 6 — 5 Avril 2026
+- ✅ DNS Ionos configuré : CNAME www + TXT railway-verify + redirection 301 link2job.fr → www
+- ✅ Frontend déployé sur Vercel — link2job.vercel.app live
+- ✅ www.link2job.fr → Vercel — Valid Configuration ✅ — SSL ✅
+- ✅ Mock parser LinkedIn désactivé → retourne None → force formulaire guidé
+- ✅ index.html : les 2 CTAs hero pointent vers create-profile.html
+- ✅ create-profile.html : étape 6 "Guide LinkedIn" 8 étapes interactives avec checkboxes
+- ✅ Modale auth intégrée dans create-profile.html (register/login avant accès guide)
+- ✅ Guide étape 2 : 3 titres avec boutons Copier individuels (Option 1/2/3)
+- ✅ Bannière IA : suggestion par secteur avec couleurs + texte + label correct
+- ✅ Badge "Suggestion IA" → texte décoratif (fix UX — plus de fausse apparence bouton)
+- ✅ Étape G8 connexions : guide import Gmail pas-à-pas avec simulation UI
 
 ---
 
-## 🚨 À FAIRE EN SESSION 6 (priorités)
+## 🚨 À FAIRE EN SESSION 7 (priorités)
 
-### 1. LinkedIn Parser réel ← PRIORITÉ ABSOLUE
-Le mock parser génère des données aléatoires — l'IA analyse un profil imaginaire.
-Options à explorer :
-- **Formulaire saisie guidée** (100% légal, déjà en cours avec create-profile.html)
-- **Scraper maison** avec Playwright headless (risque CGU LinkedIn)
-- **API tierce** : RapidAPI LinkedIn scraper, Apify
-
-### 2. Pointer link2job.fr vers Railway
-- Sur Ionos : ajouter un CNAME `link2job.fr` → `link2job-production.up.railway.app`
-- Sur Railway : ajouter le custom domain dans Settings → Networking
-
-### 3. Frontend en prod (Vercel ou Netlify)
-Déployer le frontend sur Vercel/Netlify pour que link2job.fr soit accessible sans localhost.
-
-### 4. Générateur de Posts LinkedIn
+### 1. Générateur de Posts LinkedIn ← PRIORITÉ V2
 Implémenter la feature documentée dans "💡 IDÉES PRODUIT" ci-dessus.
 - Page `generate-post.html`
 - Endpoint `POST /api/generate-post`
 - Fonction `generate_linkedin_post()` dans `ai_agent.py`
+
+### 2. Export rapport PDF
+Générer un PDF du profil LinkedIn créé (titre + résumé + compétences).
+- Librairie : `weasyprint` ou `reportlab` côté backend
+- Endpoint : `POST /api/export-profile-pdf`
+- Plan Candidat uniquement
+
+### 3. Améliorations guide LinkedIn (étape 6)
+- Persistance localStorage : reprendre où on en était si on ferme et revient
+- Lien direct depuis dashboard vers le guide de son dernier profil créé
 
 ---
 
@@ -214,15 +226,15 @@ backend/
 ├── .env                 ← Toutes les clés (jamais commiter)
 ├── requirements.txt     ← sqlalchemy + psycopg2-binary + argon2-cffi ✅
 └── utils/
-    ├── linkedin_parser.py  ← MOCK actif (priorité session 6)
+    ├── linkedin_parser.py  ← DÉSACTIVÉ — retourne None → formulaire guidé ✅
     ├── scorer.py
     └── ai_agent.py         ← analyze_profile() + create_profile_from_scratch() ✅
 
 frontend/
-├── index.html           ← Landing + formulaire + résultats + modal auth + Stripe
+├── index.html           ← Landing + 2 CTAs → create-profile.html + modal auth + Stripe
 ├── dashboard.html       ← Dashboard progression SVG + historique
-├── create-profile.html  ← Formulaire guidé 5 étapes + résultat IA réel ✅
-└── generate-post.html   ← À CRÉER — Générateur de posts LinkedIn
+├── create-profile.html  ← Formulaire 6 étapes + guide LinkedIn 8 étapes ✅
+└── generate-post.html   ← À CRÉER session 7 — Générateur de posts LinkedIn
 ```
 
 ### Endpoints backend actifs (PROD)
@@ -293,21 +305,100 @@ Border radius :  sm=8px md=14px lg=22px xl=32px
 
 ---
 
+## 🧭 FEATURE À IMPLÉMENTER — Guide LinkedIn Post-Génération
+
+### Contexte
+Premier marché = Gen Z, souvent sans profil LinkedIn.
+Après génération IA, l'utilisateur ne sait pas quoi faire des textes.
+Valeur ajoutée = les guider ENTIÈREMENT de A à Z sur LinkedIn.
+
+### UI — Style identique au guide "Visibilité recruteurs" (déjà dans index.html)
+Même composant : numéros cerclés + ligne verticale + simulation UI LinkedIn.
+Le guide "Visibilité recruteurs" (guide-step, guide-step-num, sim-ui, sim-radio...) est le modèle exact à réutiliser.
+
+### Étapes du guide (affiché après les résultats dans create-profile.html)
+
+**Étape 1 — Créer ton compte LinkedIn**
+→ Va sur linkedin.com/signup
+→ Simulation : formulaire LinkedIn (prénom, nom, email, mot de passe)
+
+**Étape 2 — Remplis ton titre professionnel**
+→ Profil → "Ajouter un titre"
+→ Copie-colle le Titre #1 généré (bouton Copier inline)
+→ Simulation UI : champ titre LinkedIn avec le texte pré-rempli
+
+**Étape 3 — Remplis ton résumé (About)**
+→ Profil → "Ajouter une section" → "Résumé"
+→ Copie-colle le résumé généré
+→ ⚠️ Les 3 premières lignes sont visibles sans cliquer "voir plus" — soigne-les
+
+**Étape 4 — Ajoute tes compétences**
+→ Profil → "Ajouter une section" → "Compétences"
+→ Ajoute les chips générées une par une
+→ Simulation : liste des compétences suggérées avec checkbox interactive
+
+**Étape 5 — Ta photo de profil** ← IMPORTANTE Gen Z
+→ Photo carrée, fond neutre (blanc, gris, bleu clair)
+→ Sourire naturel, cadrage épaules-tête
+→ Pas de selfie bras tendu, pas de filtre, pas de photo de groupe
+→ 💡 Astuce : prends-la en lumière naturelle face à une fenêtre
+
+**Étape 6 — Ta bannière LinkedIn** ← DIFFÉRENCIANT
+→ C'est la grande image en haut du profil (1584 x 396px)
+→ La plupart laissent la bannière par défaut = profil fade et invisible
+→ Suggestions selon le secteur :
+   - Tech/Data : fond sombre avec code ou circuit
+   - Marketing : couleurs vives, accroche courte
+   - Finance : sobre, bleu marine
+→ 💡 Canva gratuit : templates "LinkedIn Banner"
+→ Future feature : génération automatique de bannière par IA selon le profil
+
+**Étape 7 — Visibilité recruteurs** ← déjà buildé dans index.html !
+→ Réutiliser exactement le guide "Open to Work" existant
+→ Sélectionner "Recruteurs uniquement" et pas "Tous les membres LinkedIn"
+
+**Étape 8 — Envoie 3 demandes de connexion**
+→ Commence par tes profs, camarades de classe, famille pro
+→ Un profil avec 0 connexion est invisible de l'algorithme LinkedIn
+→ Objectif : 50 connexions dans la première semaine
+
+### Composant à créer
+- Section supplémentaire dans `create-profile.html` après l'étape 5 résultats IA
+- OU page dédiée `frontend/guide-linkedin.html` avec lien depuis les résultats
+- Même style CSS que le guide visibilité (guide-step, guide-step-num, sim-ui...)
+- Boutons "Copier" inline pour chaque texte généré à l'étape correspondante
+- Progress bar : "Tu as complété X/8 étapes de ton profil LinkedIn"
+- Chaque étape se coche quand l'utilisateur clique "C'est fait ✓"
+- Persistance de l'état via localStorage (l'utilisateur peut reprendre plus tard)
+
+### Pourquoi c'est la killer feature
+- La Gen Z veut être guidée, pas juste informée — elle abandonne si c'est flou
+- Aucun concurrent ne fait ça — ils donnent les textes et basta
+- Taux de complétion = métrique clé → utilisateur qui complète = utilisateur qui revient
+- Chaque étape complétée = micro-victoire = engagement émotionnel fort
+- La bannière personnalisée = WOW effect = partage organique spontané
+- Ce guide = argument de vente direct pour le plan Candidat (accès guide complet)
+
+### Priorité
+Session 7 ou 8 — après le Générateur de Posts LinkedIn (session 6/7)
+
+---
+
 ## 🗺️ Feuille de route
 
-### V1 — "Le Profil Parfait" ← ON EST ICI
+### V1 — "Le Profil Parfait" ← SESSION 6 TERMINÉE ✅
 - [x] Landing page complète
 - [x] Analyse IA Claude Sonnet — score + recommandations + textes
 - [x] Auth register/login JWT + 3 analyses gratuites
 - [x] Dashboard progression SVG + historique
 - [x] Stripe checkout + webhook ✅
-- [x] create-profile.html — formulaire 5 étapes ✅
+- [x] create-profile.html — formulaire 6 étapes + guide LinkedIn ✅
 - [x] Backend POST /api/create-profile Claude Sonnet ✅
 - [x] Déploiement Railway production ✅
-- [ ] LinkedIn parser réel ← SESSION 6
-- [ ] Pointer link2job.fr → Railway
-- [ ] Frontend sur Vercel/Netlify
-- [ ] Export rapport PDF
+- [x] LinkedIn parser mock désactivé → formulaire guidé ✅
+- [x] www.link2job.fr → Vercel ✅
+- [x] link2job.fr → redirection → www.link2job.fr ✅
+- [ ] Export rapport PDF ← SESSION 7
 
 ### V2 — "La Présence LinkedIn" ← NOUVELLE VISION
 - [ ] **Générateur de posts LinkedIn** ← Feature prioritaire V2
@@ -354,14 +445,18 @@ Ne jamais baisser le prix affiché.
 
 ## 🧠 Décisions produit importantes
 
-- **LinkedIn parser = MOCK** → à remplacer session 6 (priorité absolue)
-- **L'IA analyse des données mock** → recommandations décalées vs vrai profil
+- **LinkedIn parser = DÉSACTIVÉ** → retourne None → redirige vers create-profile.html (formulaire guidé)
+- **Proxycurl / scraping LinkedIn = NON** → LinkedIn a gagné en justice contre les scrapers
 - **3 analyses gratuites** = inscription obligatoire (capture email + anti-abus)
 - **Générateur posts** = même logique que cv-ats-ready.fr — automatiser ce que les gens font manuellement sur ChatGPT
 - **Posts LinkedIn** = pas de prompt à écrire, juste l'idée brute → 3 versions générées
 - **Dashboard = produit payant** — progression dans le temps justifie l'abo
 - **Stripe CLI** = obligatoire en dev pour les webhooks locaux
 - **En prod** : webhook Stripe configuré sur Railway ✅
-- **link2job.fr** acheté chez Ionos — à pointer vers Railway session 6
-- **Frontend** = en local (localhost:5500) — à déployer sur Vercel session 6
+- **link2job.fr** → redirection Ionos 301 → www.link2job.fr → Vercel ✅
+- **Frontend** = Vercel (www.link2job.fr) ✅
+- **Backend** = Railway prod (link2job-production.up.railway.app) ✅
 - **Railway projet** : link2job / ID : a1cdcce4-545c-4abc-8d48-9169272d3489
+- **Guide LinkedIn** = étape 6 dans create-profile.html — 8 étapes interactives avec checkboxes
+- **Auth avant guide** = modale register/login s'ouvre au clic "Guide moi" si non connecté
+- **Badge décoratif** = ne jamais mettre un élément visuellement cliquable sans action réelle
