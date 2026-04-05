@@ -1994,42 +1994,55 @@
         Tu te connectes une fois. Link2Job analyse ton profil LinkedIn,
         l'optimise, et candidate pour toi — avec ton accord à chaque étape.
       </p>
-      <p class="hero-sub" style="margin-top: -0.5rem; font-size: 0.95rem">
-  Pas encore de profil LinkedIn ?
-  <a href="create-profile.html" style="color: var(--orange); font-weight: 500; text-decoration: none; border-bottom: 2px solid var(--orange); padding-bottom: 1px;">On te le crée de zéro. ✨</a>
-</p>
+      <!-- HERO CTAs -->
+      <div class="analyze-form-wrap" id="analyzeFormWrap" style="animation: fadeUp 0.6s 0.3s ease both;">
+        <div style="display:flex; flex-direction:column; gap:12px; width:100%;">
+          
+          <!-- CTA principal -->
+          <a href="create-profile.html" style="
+            display:flex; align-items:center; justify-content:space-between;
+            background: var(--orange);
+            border-radius: var(--r-xl);
+            padding: 22px 32px;
+            text-decoration: none;
+            box-shadow: 0 0 40px rgba(255,107,0,0.35);
+            transition: background 0.2s, transform 0.15s;
+          " onmouseover="this.style.background='var(--orange-dark)';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.background='var(--orange)';this.style.transform='translateY(0)'">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:white;margin-bottom:4px;">
+                ✨ Créer mon profil LinkedIn
+              </div>
+              <div style="font-size:0.82rem;color:rgba(255,255,255,0.75);">
+                Guidé par l'IA · 5 minutes · Résultat immédiat
+              </div>
+            </div>
+            <span style="color:white;font-size:1.5rem;">→</span>
+          </a>
 
-      <!-- FORMULAIRE ANALYSE -->
-      <div class="analyze-form-wrap" id="analyzeFormWrap">
-        <div class="analyze-form-box">
-          <div class="form-label-row">
-            <span class="form-label-icon">🔗</span>
-            <span class="form-label-text">Colle ton URL LinkedIn publique</span>
+          <!-- CTA secondaire -->
+          <div style="
+            display:flex; align-items:center; justify-content:space-between;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--r-xl);
+            padding: 22px 32px;
+            cursor:pointer;
+            transition: border-color 0.2s, transform 0.15s;
+          " onclick="openAuthModal(event)"
+             onmouseover="this.style.borderColor='rgba(255,107,0,0.3)';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='var(--glass-border)';this.style.transform='translateY(0)'">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--text);margin-bottom:4px;">
+                🔍 J'ai déjà un profil LinkedIn
+              </div>
+              <div style="font-size:0.82rem;color:var(--text-muted);">
+                <span id="formNoteAuth">Connecte-toi pour analyser et optimiser ton profil</span>
+              </div>
+            </div>
+            <span style="color:var(--text-muted);font-size:1.5rem;">→</span>
           </div>
-          <div class="form-input-row">
-            <input
-              type="url"
-              id="linkedinUrl"
-              class="linkedin-input"
-              placeholder="https://www.linkedin.com/in/ton-nom/"
-              autocomplete="off"
-              spellcheck="false"
-            />
-            <button
-              class="analyze-btn"
-              id="analyzeBtn"
-              onclick="analyzeProfile()"
-            >
-              <span class="btn-label">Analyser mon profil</span>
-              <span class="btn-arrow">→</span>
-            </button>
-          </div>
-          <div class="form-note">
-            🔒 URL publique ·
-            <span id="formNoteAuth"
-              >Connecte-toi pour sauvegarder tes résultats</span
-            >
-          </div>
+
         </div>
       </div>
 
