@@ -61,7 +61,10 @@ async def analyze_profile_route(
 
     profile_data = await parse_linkedin_profile(body.linkedin_url)
     if not profile_data:
-        raise HTTPException(status_code=422, detail="Profil LinkedIn introuvable ou non public.")
+        raise HTTPException(
+            status_code=422,
+            detail="L'analyse directe depuis URL est temporairement désactivée. Utilise le formulaire guidé pour créer ton profil LinkedIn optimisé. 👉 create-profile.html"
+        )
 
     score_details = compute_score(profile_data)
     ai_result = await analyze_profile(profile_data, score_details)
