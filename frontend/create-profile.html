@@ -952,6 +952,8 @@
             document.getElementById("stepContainer").style.maxWidth = "560px";
           }
           window.scrollTo({ top: 0, behavior: "smooth" });
+          // Pousse un état dans l'historique → le bouton ← du navigateur revient à l'étape précédente
+          history.pushState({ step: n }, "", window.location.pathname);
         }, 280);
       }
 
@@ -1414,6 +1416,37 @@
       });
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeAuthModal();
+      });
+
+      // ── BOUTON RETOUR NAVIGATEUR ──────────────────────────────────
+      // Initialise l'historique à l'étape 1 au chargement
+      history.replaceState({ step: 1 }, "", window.location.pathname);
+
+      // Intercepte le bouton ← du navigateur → revient à l'étape précédente
+      window.addEventListener("popstate", (e) => {
+        const targetStep = e.state?.step;
+        if (targetStep && targetStep >= 1 && targetStep < currentStep) {
+          // Revenir en arrière dans le formulaire sans quitter la page
+          const current = document.getElementById(`step${currentStep}`);
+          current.classList.add("exit");
+          setTimeout(() => {
+            current.style.display = "none";
+            current.classList.remove("exit");
+            currentStep = targetStep;
+            updateProgress();
+            const prev = document.getElementById(`step${targetStep}`);
+            prev.style.display = "block";
+            if (targetStep === 6) {
+              document.getElementById("stepContainer").style.maxWidth = "640px";
+            } else {
+              document.getElementById("stepContainer").style.maxWidth = "560px";
+            }
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }, 280);
+        } else if (!targetStep || targetStep <= 1) {
+          // Si on est à l'étape 1, laisser le navigateur revenir normalement
+          // (vers index.html) — comportement attendu
+        }
       });
     </script>
 
