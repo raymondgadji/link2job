@@ -211,3 +211,120 @@ def _fallback_create_profile(data: dict) -> dict:
         ),
         "skills_suggested": skills[:10]
     }
+
+
+async def generate_linkedin_post(data: dict) -> dict:
+    """
+    Génère 3 versions d'un post LinkedIn optimisé depuis une idée brute.
+    Retourne 3 posts : inspirant, expert, authentique.
+    """
+    idee = data.get("idee", "")
+    secteur = data.get("secteur", "")
+    poste = data.get("poste", "")
+    ton_demande = data.get("ton", "tous")  # inspirant | expert | authentique | tous
+
+    user_prompt = f"""
+Tu dois générer 3 posts LinkedIn optimisés pour l'algorithme à partir d'une idée brute.
+
+IDÉE BRUTE DE L'UTILISATEUR :
+"{idee}"
+
+CONTEXTE :
+- Secteur : {secteur or "Non précisé"}
+- Poste visé : {poste or "Non précisé"}
+- Ton demandé : {ton_demande}
+
+RÈGLES ABSOLUES pour chaque post :
+1. Hook percutant en PREMIÈRE LIGNE (max 2 lignes) — c'est ce qui s'affiche avant "voir plus"
+2. Structure narrative : situation → action → résultat ou enseignement
+3. Longueur : 1200-1500 caractères EXACTEMENT (compter espaces inclus)
+4. 5 à 8 hashtags pertinents et sectoriels à la fin
+5. 1 call-to-action final (question ouverte ou invitation à commenter)
+6. Emojis stratégiques : 3-5 max, bien placés, jamais en excès
+7. Pas de "Je suis ravi(e) de partager..." — direct et authentique
+8. Ton adapté Gen Z : humain, sans jargon corporate inutile
+
+DÉFINITIONS DES TONS :
+- "inspirant" : storytelling émotionnel, parcours, leçon de vie, accroche forte qui donne envie de lire
+- "expert" : ton crédible, données chiffrées, analyse, valeur ajoutée concrète, positionne comme référence
+- "authentique" : ton humain, vulnérable si nécessaire, accessible, Gen Z friendly, parle vrai
+
+Réponds UNIQUEMENT en JSON valide, aucun texte avant/après :
+{{
+  "posts": [
+    {{
+      "ton": "inspirant",
+      "contenu": "Post complet ici avec les hashtags intégrés à la fin...",
+      "hashtags": ["#hashtag1", "#hashtag2"],
+      "chars": 1350,
+      "hook": "Première ligne du post"
+    }},
+    {{
+      "ton": "expert",
+      "contenu": "Post complet ici avec les hashtags intégrés à la fin...",
+      "hashtags": ["#hashtag1", "#hashtag2"],
+      "chars": 1280,
+      "hook": "Première ligne du post"
+    }},
+    {{
+      "ton": "authentique",
+      "contenu": "Post complet ici avec les hashtags intégrés à la fin...",
+      "hashtags": ["#hashtag1", "#hashtag2"],
+      "chars": 1420,
+      "hook": "Première ligne du post"
+    }}
+  ]
+}}
+"""
+
+    try:
+        message = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=2500,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user_prompt}],
+        )
+        raw = message.content[0].text.strip()
+        if raw.startswith("```"):
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        raw = raw.strip()
+        return json.loads(raw)
+
+    except json.JSONDecodeError as e:
+        print(f"[ai_agent] generate_post JSON invalide : {e}")
+        return _fallback_generate_post(data)
+    except Exception as e:
+        print(f"[ai_agent] generate_post erreur : {e}")
+        return _fallback_generate_post(data)
+
+
+def _fallback_generate_post(data: dict) -> dict:
+    """Réponse de secours si l'API échoue."""
+    idee = data.get("idee", "mon expérience")
+    return {
+        "posts": [
+            {
+                "ton": "inspirant",
+                "contenu": f"💡 {idee}\n\nCette expérience m'a appris quelque chose d'essentiel...\n\nEt vous, qu'est-ce qui vous a le plus surpris dans votre parcours ?\n\n#LinkedIn #Carrière #Expérience",
+                "hashtags": ["#LinkedIn", "#Carrière", "#Expérience"],
+                "chars": 180,
+                "hook": f"💡 {idee}"
+            },
+            {
+                "ton": "expert",
+                "contenu": f"📊 {idee}\n\nVoici ce que les données nous apprennent...\n\nQuelle est votre expérience sur ce sujet ?\n\n#LinkedIn #Expertise #Insights",
+                "hashtags": ["#LinkedIn", "#Expertise", "#Insights"],
+                "chars": 170,
+                "hook": f"📊 {idee}"
+            },
+            {
+                "ton": "authentique",
+                "contenu": f"Soyons honnêtes : {idee}\n\nC'est pas toujours facile, mais c'est ce qui nous fait grandir.\n\nTu vis la même chose ? Dis-moi en commentaire 👇\n\n#LinkedIn #Authenticité #Croissance",
+                "hashtags": ["#LinkedIn", "#Authenticité", "#Croissance"],
+                "chars": 200,
+                "hook": f"Soyons honnêtes : {idee}"
+            }
+        ]
+    }
