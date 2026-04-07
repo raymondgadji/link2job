@@ -288,6 +288,46 @@
 
       @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
+      /* ══ STORIES SWIPE MOBILE — Étape 5 résultats ══ */
+      .result-stories-wrap { display: none; }
+
+      @media (max-width: 768px) {
+        /* Sur mobile : résultats en stories swipables */
+        .result-stories-wrap { display: block; margin-bottom: 1rem; }
+        .result-stories-track {
+          display: flex; gap: 12px;
+          overflow-x: auto; scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch; scrollbar-width: none;
+          padding: 4px 4px 12px;
+        }
+        .result-stories-track::-webkit-scrollbar { display: none; }
+        .result-story-card {
+          flex: 0 0 88vw; max-width: 360px; scroll-snap-align: center;
+          border-radius: var(--r-xl); padding: 1.5rem;
+          position: relative; overflow: hidden;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+        }
+        .result-story-card.card-titres { border-color: rgba(255,107,0,0.25); background: rgba(255,107,0,0.04); }
+        .result-story-card.card-resume { border-color: rgba(10,102,194,0.25); background: rgba(10,102,194,0.04); }
+        .result-story-card.card-skills { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.04); }
+        /* Barre de progression style stories */
+        .result-story-progress { position: absolute; top: 0; left: 0; right: 0; height: 3px; display: flex; gap: 3px; padding: 0 4px; }
+        .result-story-seg { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.15); }
+        .result-story-seg.done { background: var(--orange); }
+        .result-story-seg.active { background: var(--orange); opacity: 0.7; }
+        /* Dots navigation */
+        .result-stories-dots { display: flex; gap: 6px; justify-content: center; margin-top: 4px; margin-bottom: 12px; }
+        .result-story-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.3s; }
+        .result-story-dot.active { background: var(--orange); width: 20px; border-radius: 3px; }
+        /* Cacher les result-box sur mobile */
+        .result-box-desktop { display: none; }
+      }
+      @media (min-width: 769px) {
+        .result-stories-wrap { display: none !important; }
+        .result-box-desktop { display: block; }
+      }
+
       /* ══ MODALE AUTH ══ */
       .modal-overlay {
         position: fixed; inset: 0; z-index: 1000;
@@ -580,14 +620,70 @@
             <div class="step-title" style="margin-bottom:0.5rem">Ton profil LinkedIn</div>
             <div class="step-subtitle">Copie ces textes directement dans ton LinkedIn.</div>
 
-            <div class="result-box">
+            <!-- ── MOBILE : Stories swipe style Instagram ── -->
+            <div class="result-stories-wrap" id="resultStoriesWrap">
+              <div class="result-stories-track" id="resultStoriesTrack">
+
+                <!-- Card 1 — Titres -->
+                <div class="result-story-card card-titres">
+                  <div class="result-story-progress">
+                    <div class="result-story-seg done"></div>
+                    <div class="result-story-seg active"></div>
+                    <div class="result-story-seg"></div>
+                  </div>
+                  <div style="margin-top:0.75rem;">
+                    <div class="result-box-label" style="margin-bottom:0.75rem;">✍️ Tes 3 titres <span style="font-size:0.7rem;color:var(--text-dim);">1/3</span></div>
+                    <div id="resultTitlesMobile" style="display:flex;flex-direction:column;gap:8px;"></div>
+                  </div>
+                </div>
+
+                <!-- Card 2 — Résumé -->
+                <div class="result-story-card card-resume">
+                  <div class="result-story-progress">
+                    <div class="result-story-seg done"></div>
+                    <div class="result-story-seg done"></div>
+                    <div class="result-story-seg active"></div>
+                  </div>
+                  <div style="margin-top:0.75rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                      <div class="result-box-label">📝 Ton résumé <span style="font-size:0.7rem;color:var(--text-dim);">2/3</span></div>
+                      <button class="copy-btn" id="copyAboutMobile" onclick="copyResult('about')">Copier</button>
+                    </div>
+                    <div class="result-text" id="resultAboutMobile" style="font-size:0.82rem;max-height:280px;overflow-y:auto;"></div>
+                  </div>
+                </div>
+
+                <!-- Card 3 — Compétences -->
+                <div class="result-story-card card-skills">
+                  <div class="result-story-progress">
+                    <div class="result-story-seg done"></div>
+                    <div class="result-story-seg done"></div>
+                    <div class="result-story-seg done"></div>
+                  </div>
+                  <div style="margin-top:0.75rem;">
+                    <div class="result-box-label" style="margin-bottom:0.75rem;">🏷️ Compétences <span style="font-size:0.7rem;color:var(--text-dim);">3/3</span></div>
+                    <div class="chips-wrap" id="resultSkillsMobile" style="margin-bottom:0"></div>
+                  </div>
+                </div>
+
+              </div>
+              <!-- Dots navigation -->
+              <div class="result-stories-dots">
+                <div class="result-story-dot active"></div>
+                <div class="result-story-dot"></div>
+                <div class="result-story-dot"></div>
+              </div>
+            </div>
+
+            <!-- ── DESKTOP : Affichage classique ── -->
+            <div class="result-box result-box-desktop">
               <div class="result-box-header">
                 <div class="result-box-label">✍️ Titre professionnel (3 options)</div>
               </div>
               <div id="resultTitles" style="display:flex;flex-direction:column;gap:10px;"></div>
             </div>
 
-            <div class="result-box">
+            <div class="result-box result-box-desktop">
               <div class="result-box-header">
                 <div class="result-box-label">📝 Résumé LinkedIn (About)</div>
                 <button class="copy-btn" id="copyAboutBtn" onclick="copyResult('about')">Copier</button>
@@ -595,7 +691,7 @@
               <div class="result-text" id="resultAbout"></div>
             </div>
 
-            <div class="result-box" id="resultSkillsBox" style="display:none">
+            <div class="result-box result-box-desktop" id="resultSkillsBox" style="display:none">
               <div class="result-box-header">
                 <div class="result-box-label">🏷️ Compétences à ajouter sur LinkedIn</div>
               </div>
@@ -1125,24 +1221,73 @@
         resultEl.style.display = "block";
         resultEl.style.animation = "fadeUp 0.5s ease both";
 
+        const headlines = data.headline_suggestions || [];
+        const about = data.about_optimized || "";
+        const skills = data.skills_suggested || [];
+
+        // ── DESKTOP : result-box classiques ──
         const titlesEl = document.getElementById("resultTitles");
-        (data.headline_suggestions || []).forEach((h) => {
+        headlines.forEach((h) => {
           const div = document.createElement("div");
           div.style.cssText = "display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 16px;";
           div.innerHTML = `<span style="font-size:0.9rem;flex:1;">${h}</span><button class="copy-btn" onclick="copyText(this,'${h.replace(/'/g,"\\'")}')">Copier</button>`;
           titlesEl.appendChild(div);
         });
 
-        document.getElementById("resultAbout").textContent = data.about_optimized || "";
+        document.getElementById("resultAbout").textContent = about;
 
-        if (data.skills_suggested && data.skills_suggested.length > 0) {
+        if (skills.length > 0) {
           document.getElementById("resultSkillsBox").style.display = "block";
           const skEl = document.getElementById("resultSkills");
-          data.skills_suggested.forEach(s => {
+          skills.forEach(s => {
             const chip = document.createElement("div");
             chip.className = "chip"; chip.style.cursor = "default"; chip.textContent = s;
             skEl.appendChild(chip);
           });
+        }
+
+        // ── MOBILE : Stories swipe ──
+        // Card 1 — Titres
+        const titlesMobile = document.getElementById("resultTitlesMobile");
+        if (titlesMobile) {
+          headlines.forEach((h) => {
+            const div = document.createElement("div");
+            div.style.cssText = "display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;margin-bottom:6px;";
+            div.innerHTML = `<span style="font-size:0.82rem;flex:1;line-height:1.5;">${h}</span><button class="copy-btn" style="flex-shrink:0;" onclick="copyText(this,'${h.replace(/'/g,"\\'")}')">Copier</button>`;
+            titlesMobile.appendChild(div);
+          });
+        }
+
+        // Card 2 — Résumé
+        const aboutMobile = document.getElementById("resultAboutMobile");
+        if (aboutMobile) aboutMobile.textContent = about;
+
+        // Card 3 — Compétences
+        const skillsMobile = document.getElementById("resultSkillsMobile");
+        if (skillsMobile && skills.length > 0) {
+          skills.forEach(s => {
+            const chip = document.createElement("div");
+            chip.className = "chip"; chip.style.cursor = "default"; chip.textContent = s;
+            skillsMobile.appendChild(chip);
+          });
+        }
+
+        // Sync dots avec le scroll des stories
+        const track = document.getElementById("resultStoriesTrack");
+        const dots = document.querySelectorAll(".result-story-dot");
+        if (track && dots.length) {
+          track.addEventListener("scroll", () => {
+            const cards = track.querySelectorAll(".result-story-card");
+            const trackRect = track.getBoundingClientRect();
+            let activeIdx = 0;
+            cards.forEach((card, i) => {
+              const rect = card.getBoundingClientRect();
+              const center = rect.left + rect.width / 2;
+              const trackCenter = trackRect.left + trackRect.width / 2;
+              if (Math.abs(center - trackCenter) < rect.width / 2) activeIdx = i;
+            });
+            dots.forEach((d, i) => d.classList.toggle("active", i === activeIdx));
+          }, { passive: true });
         }
       }
 
