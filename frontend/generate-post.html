@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link2Job — Génère ton post LinkedIn en 5 secondes ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --orange: #ff6b00; --orange-dark: #d95a00;
+        --bg: #0c0c18; --bg2: #111124; --bg3: #1a1a2e;
+        --text: #fafaf8; --text-muted: rgba(250,250,248,0.5); --text-dim: rgba(250,250,248,0.25);
+        --success: #22c55e; --linkedin: #0a66c2;
+        --glass: rgba(255,255,255,0.04); --glass-border: rgba(255,255,255,0.08);
+        --r-sm: 8px; --r-md: 14px; --r-lg: 22px; --r-xl: 32px;
+
+        /* Tons couleurs */
+        --inspirant: #f59e0b;
+        --expert: #0a66c2;
+        --authentique: #22c55e;
+      }
+
+      html { scroll-behavior: smooth; }
+      body { background: var(--bg); color: var(--text); font-family: "DM Sans", sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+      body::before {
+        content: ""; position: fixed; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+        pointer-events: none; z-index: 0; opacity: 0.6;
+      }
+
+      .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+      .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,107,0,0.1) 0%, transparent 70%); top: -150px; right: -100px; animation: orbFloat 14s ease-in-out infinite alternate; }
+      .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(10,102,194,0.08) 0%, transparent 70%); bottom: 0; left: -80px; animation: orbFloat 18s ease-in-out infinite alternate-reverse; }
+      @keyframes orbFloat { from { transform: translate(0,0); } to { transform: translate(20px,-30px); } }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+        padding: 0 40px; height: 64px;
+        display: flex; align-items: center; justify-content: space-between;
+        background: rgba(12,12,24,0.85); backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .nav-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--text); text-decoration: none; }
+      .nav-logo span { color: var(--orange); }
+      .nav-back { color: var(--text-muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+      .nav-back:hover { color: var(--text); }
+
+      /* ── PAGE ── */
+      .page { position: relative; z-index: 1; min-height: 100vh; padding: 100px 24px 60px; max-width: 760px; margin: 0 auto; }
+
+      /* ── HERO SECTION ── */
+      .hero-label {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(255,107,0,0.08); border: 1px solid rgba(255,107,0,0.2);
+        border-radius: 100px; padding: 5px 14px; font-size: 0.78rem;
+        color: var(--orange); font-weight: 600; margin-bottom: 20px;
+        animation: fadeUp 0.5s ease both;
+      }
+      .hero-title {
+        font-family: "Syne", sans-serif; font-weight: 800;
+        font-size: clamp(1.8rem, 5vw, 2.8rem); letter-spacing: -0.03em;
+        line-height: 1.1; margin-bottom: 12px;
+        animation: fadeUp 0.5s 0.05s ease both;
+      }
+      .hero-title span { color: var(--orange); }
+      .hero-sub {
+        color: var(--text-muted); font-size: 1rem; font-weight: 300;
+        line-height: 1.7; margin-bottom: 40px; max-width: 500px;
+        animation: fadeUp 0.5s 0.1s ease both;
+      }
+
+      /* ── FORM CARD ── */
+      .form-card {
+        background: var(--glass); border: 1px solid var(--glass-border);
+        border-radius: var(--r-xl); padding: 2rem;
+        animation: fadeUp 0.5s 0.15s ease both;
+        margin-bottom: 2rem;
+      }
+
+      .form-section { margin-bottom: 1.5rem; }
+      .form-section:last-child { margin-bottom: 0; }
+
+      .form-label {
+        display: block; font-size: 0.8rem; font-weight: 600;
+        color: var(--text-muted); text-transform: uppercase;
+        letter-spacing: 0.1em; margin-bottom: 10px;
+      }
+
+      /* Zone de texte idée */
+      .idea-input {
+        width: 100%; background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--r-md); padding: 16px 18px;
+        color: var(--text); font-family: "DM Sans", sans-serif;
+        font-size: 1rem; line-height: 1.6; outline: none;
+        resize: none; min-height: 110px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .idea-input::placeholder { color: var(--text-dim); }
+      .idea-input:focus { border-color: rgba(255,107,0,0.5); box-shadow: 0 0 0 3px rgba(255,107,0,0.08); }
+
+      .char-hint { font-size: 0.75rem; color: var(--text-dim); margin-top: 6px; text-align: right; }
+
+      /* Options row */
+      .options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+      .field-select {
+        width: 100%; background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--r-md); padding: 12px 16px;
+        color: var(--text); font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem; outline: none; cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(250,250,248,0.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 14px center;
+        transition: border-color 0.2s;
+      }
+      .field-select option { background: var(--bg2); }
+      .field-select:focus { border-color: rgba(255,107,0,0.4); outline: none; }
+
+      /* Tons chips */
+      .tons-wrap { display: flex; gap: 8px; flex-wrap: wrap; }
+      .ton-chip {
+        display: flex; align-items: center; gap: 6px;
+        background: var(--glass); border: 1px solid var(--glass-border);
+        border-radius: 100px; padding: 8px 16px;
+        font-size: 0.85rem; font-weight: 500; cursor: pointer;
+        transition: all 0.2s; color: var(--text-muted);
+        -webkit-tap-highlight-color: transparent;
+      }
+      .ton-chip:hover { border-color: rgba(255,107,0,0.3); color: var(--text); }
+      .ton-chip.active { color: var(--text); }
+      .ton-chip[data-ton="tous"].active { background: rgba(255,107,0,0.1); border-color: rgba(255,107,0,0.3); color: var(--orange); }
+      .ton-chip[data-ton="inspirant"].active { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--inspirant); }
+      .ton-chip[data-ton="expert"].active { background: rgba(10,102,194,0.1); border-color: rgba(10,102,194,0.3); color: var(--expert); }
+      .ton-chip[data-ton="authentique"].active { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: var(--authentique); }
+
+      /* Bouton générer */
+      .generate-btn {
+        width: 100%; background: var(--orange); color: #fff;
+        border: none; border-radius: var(--r-md); padding: 16px;
+        font-family: "DM Sans", sans-serif; font-size: 1rem; font-weight: 700;
+        cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        box-shadow: 0 0 30px rgba(255,107,0,0.3);
+        margin-top: 1.5rem; -webkit-tap-highlight-color: transparent;
+      }
+      .generate-btn:hover { background: var(--orange-dark); transform: translateY(-1px); box-shadow: 0 0 48px rgba(255,107,0,0.45); }
+      .generate-btn:active { transform: scale(0.98); }
+      .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+      .btn-icon { font-size: 1.2rem; }
+
+      /* ── LOADING ── */
+      .loading-wrap {
+        display: none; text-align: center; padding: 3rem 2rem;
+        background: var(--glass); border: 1px solid var(--glass-border);
+        border-radius: var(--r-xl); margin-bottom: 2rem;
+        animation: fadeUp 0.4s ease both;
+      }
+      .loading-wrap.visible { display: block; }
+      .loading-orb-wrap { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+      .loading-orb {
+        width: 56px; height: 56px; border-radius: 50%;
+        background: conic-gradient(var(--orange), rgba(255,107,0,0.1));
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .loading-title { font-family: "Syne", sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+      .loading-sub { color: var(--text-muted); font-size: 0.88rem; }
+      .loading-steps { display: flex; flex-direction: column; gap: 6px; margin-top: 1.25rem; align-items: center; }
+      .lstep { font-size: 0.82rem; color: var(--text-dim); transition: color 0.3s; }
+      .lstep.active { color: var(--orange); font-weight: 500; }
+      .lstep.done { color: var(--success); }
+
+      /* ── RÉSULTATS ── */
+      .results-wrap { display: none; }
+      .results-wrap.visible { display: block; animation: fadeUp 0.5s ease both; }
+
+      .results-header {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 12px; margin-bottom: 1.5rem;
+      }
+      .results-title { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.3rem; }
+      .regenerate-btn {
+        display: flex; align-items: center; gap: 6px;
+        background: var(--glass); border: 1px solid var(--glass-border);
+        color: var(--text-muted); border-radius: var(--r-md);
+        padding: 8px 16px; font-size: 0.85rem; font-weight: 500;
+        cursor: pointer; font-family: "DM Sans", sans-serif;
+        transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+      }
+      .regenerate-btn:hover { border-color: rgba(255,107,0,0.3); color: var(--text); }
+
+      /* Cards posts */
+      .posts-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+      .post-card {
+        background: var(--glass); border: 1px solid var(--glass-border);
+        border-radius: var(--r-xl); overflow: hidden;
+        transition: border-color 0.3s, transform 0.2s;
+        animation: fadeUp 0.5s ease both;
+      }
+      .post-card:hover { transform: translateY(-2px); }
+
+      .post-card.ton-inspirant { border-color: rgba(245,158,11,0.2); }
+      .post-card.ton-inspirant:hover { border-color: rgba(245,158,11,0.4); }
+      .post-card.ton-expert { border-color: rgba(10,102,194,0.2); }
+      .post-card.ton-expert:hover { border-color: rgba(10,102,194,0.4); }
+      .post-card.ton-authentique { border-color: rgba(34,197,94,0.2); }
+      .post-card.ton-authentique:hover { border-color: rgba(34,197,94,0.4); }
+
+      .post-card-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 1.25rem 1.5rem; gap: 12px;
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .post-ton-badge {
+        display: flex; align-items: center; gap: 8px;
+        font-family: "Syne", sans-serif; font-weight: 700; font-size: 0.9rem;
+      }
+      .post-ton-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+      .ton-inspirant .post-ton-dot { background: var(--inspirant); box-shadow: 0 0 8px var(--inspirant); }
+      .ton-expert .post-ton-dot { background: var(--expert); box-shadow: 0 0 8px var(--expert); }
+      .ton-authentique .post-ton-dot { background: var(--authentique); box-shadow: 0 0 8px var(--authentique); }
+      .ton-inspirant .post-ton-label { color: var(--inspirant); }
+      .ton-expert .post-ton-label { color: var(--expert); }
+      .ton-authentique .post-ton-label { color: var(--authentique); }
+
+      .post-header-right { display: flex; align-items: center; gap: 10px; }
+      .post-chars {
+        font-size: 0.72rem; color: var(--text-dim);
+        background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 100px; padding: 3px 10px;
+      }
+
+      /* Hook preview */
+      .post-hook {
+        padding: 1rem 1.5rem 0;
+        font-size: 0.9rem; font-weight: 600; color: var(--text);
+        line-height: 1.5;
+      }
+
+      /* Contenu complet — expandable */
+      .post-body { padding: 0.75rem 1.5rem 1.5rem; position: relative; }
+      .post-content {
+        font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;
+        white-space: pre-line; font-weight: 300;
+        max-height: 120px; overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+        position: relative;
+      }
+      .post-content::after {
+        content: ""; position: absolute; bottom: 0; left: 0; right: 0;
+        height: 60px;
+        background: linear-gradient(to bottom, transparent, rgba(12,12,24,0.95));
+        transition: opacity 0.3s;
+      }
+      .post-content.expanded { max-height: 2000px; }
+      .post-content.expanded::after { opacity: 0; }
+
+      .post-footer {
+        padding: 0.75rem 1.5rem 1.25rem;
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        flex-wrap: wrap;
+        border-top: 1px solid var(--glass-border);
+      }
+
+      .expand-btn {
+        background: none; border: none; color: var(--orange);
+        font-size: 0.8rem; font-weight: 600; cursor: pointer;
+        font-family: "DM Sans", sans-serif; padding: 0;
+        display: flex; align-items: center; gap: 4px;
+        transition: opacity 0.2s;
+      }
+      .expand-btn:hover { opacity: 0.8; }
+
+      .post-hashtags { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+      .hashtag {
+        font-size: 0.72rem; color: var(--text-dim);
+        background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 100px; padding: 2px 8px;
+      }
+
+      .copy-btn {
+        display: flex; align-items: center; gap: 6px;
+        background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2);
+        color: var(--orange); border-radius: var(--r-sm);
+        padding: 8px 16px; font-size: 0.82rem; font-weight: 600;
+        cursor: pointer; white-space: nowrap;
+        font-family: "DM Sans", sans-serif;
+        transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
+      }
+      .copy-btn:hover { background: rgba(255,107,0,0.2); }
+      .copy-btn.copied { background: rgba(34,197,94,0.1); color: var(--success); border-color: rgba(34,197,94,0.3); }
+
+      /* ── TIPS ── */
+      .tips-card {
+        background: rgba(10,102,194,0.05); border: 1px solid rgba(10,102,194,0.15);
+        border-radius: var(--r-lg); padding: 1.25rem 1.5rem;
+        margin-top: 1.5rem; animation: fadeUp 0.5s 0.3s ease both;
+      }
+      .tips-title { font-size: 0.82rem; font-weight: 600; color: #5ba4e0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
+      .tips-list { display: flex; flex-direction: column; gap: 6px; }
+      .tip-item { font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 8px; line-height: 1.5; }
+      .tip-dot { color: #5ba4e0; flex-shrink: 0; margin-top: 2px; }
+
+      /* ── CTA BAS ── */
+      .bottom-cta {
+        margin-top: 2rem; padding: 1.5rem;
+        background: rgba(255,107,0,0.04); border: 1px solid rgba(255,107,0,0.15);
+        border-radius: var(--r-lg); text-align: center;
+        animation: fadeUp 0.5s 0.35s ease both;
+      }
+      .bottom-cta p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem; }
+      .bottom-cta a {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--orange); color: white; text-decoration: none;
+        border-radius: var(--r-md); padding: 12px 24px;
+        font-size: 0.9rem; font-weight: 600; font-family: "DM Sans", sans-serif;
+        transition: background 0.2s, transform 0.15s;
+      }
+      .bottom-cta a:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+      /* ── MODAL AUTH ── */
+      .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+      .modal-overlay.open { opacity: 1; pointer-events: all; }
+      .modal-box { background: var(--bg2); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--r-xl); padding: 2.5rem 2rem; width: 100%; max-width: 420px; position: relative; transform: translateY(20px); transition: transform 0.3s; }
+      .modal-overlay.open .modal-box { transform: none; }
+      .modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+      .modal-close:hover { background: rgba(255,255,255,0.12); }
+      .modal-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.2rem; margin-bottom: 0.25rem; }
+      .modal-logo span { color: var(--orange); }
+      .modal-title { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.5rem; margin-bottom: 0.4rem; }
+      .modal-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+      .modal-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.75rem; }
+      .modal-tab { flex: 1; padding: 0.6rem; border-radius: var(--r-sm); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-family: "DM Sans", sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+      .modal-tab.active { background: rgba(255,107,0,0.12); border-color: rgba(255,107,0,0.3); color: var(--orange); }
+      .modal-field { margin-bottom: 1rem; }
+      .modal-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; display: block; font-weight: 500; }
+      .modal-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-sm); padding: 12px 14px; color: var(--text); font-family: "DM Sans", sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+      .modal-input::placeholder { color: var(--text-dim); }
+      .modal-input:focus { border-color: rgba(255,107,0,0.4); box-shadow: 0 0 0 3px rgba(255,107,0,0.08); }
+      .modal-error { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: var(--r-sm); padding: 10px 14px; font-size: 0.82rem; color: #ef4444; margin-bottom: 1rem; display: none; }
+      .modal-error.show { display: block; }
+      .modal-submit { width: 100%; background: var(--orange); color: #fff; border: none; border-radius: var(--r-md); padding: 13px; font-size: 1rem; font-weight: 600; font-family: "DM Sans", sans-serif; cursor: pointer; box-shadow: 0 0 24px rgba(255,107,0,0.3); transition: background 0.2s, transform 0.15s; margin-top: 0.5rem; }
+      .modal-submit:hover { background: var(--orange-dark); transform: translateY(-1px); }
+      .modal-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+      .modal-switch { text-align: center; margin-top: 1.25rem; font-size: 0.83rem; color: var(--text-dim); }
+      .modal-switch a { color: var(--orange); cursor: pointer; text-decoration: none; }
+
+      /* ── ANIMATIONS ── */
+      @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 600px) {
+        nav { padding: 0 20px; }
+        .page { padding: 88px 16px 60px; }
+        .form-card { padding: 1.25rem; }
+        .options-row { grid-template-columns: 1fr; }
+        .post-card-header { flex-direction: column; align-items: flex-start; }
+        .post-footer { flex-direction: column; align-items: flex-start; }
+        .copy-btn { width: 100%; justify-content: center; }
+        .results-header { flex-direction: column; align-items: flex-start; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <nav>
+      <a href="index.html" class="nav-logo">Link<span>2</span>Job</a>
+      <a href="index.html" class="nav-back">← Retour à l'accueil</a>
+    </nav>
+
+    <div class="page">
+
+      <!-- HERO -->
+      <div class="hero-label">✍️ Générateur de posts LinkedIn</div>
+      <h1 class="hero-title">Ton idée brute.<br />Un post <span>LinkedIn parfait.</span></h1>
+      <p class="hero-sub">Écris juste ton idée en 2-3 lignes — l'IA génère 3 versions optimisées pour l'algorithme LinkedIn en 5 secondes.</p>
+
+      <!-- FORM CARD -->
+      <div class="form-card">
+
+        <!-- Idée -->
+        <div class="form-section">
+          <label class="form-label">💡 Ton idée en 2-3 lignes</label>
+          <textarea
+            class="idea-input"
+            id="ideaInput"
+            placeholder="Ex : J'ai décroché mon premier CDI après 3 mois de galère. Je veux partager ce que j'ai appris..."
+            maxlength="500"
+            oninput="updateCharCount(this)"
+          ></textarea>
+          <div class="char-hint"><span id="charCount">0</span> / 500 caractères</div>
+        </div>
+
+        <!-- Ton -->
+        <div class="form-section">
+          <label class="form-label">🎭 Ton du post</label>
+          <div class="tons-wrap">
+            <button class="ton-chip active" data-ton="tous" onclick="selectTon('tous')">✨ Les 3 tons</button>
+            <button class="ton-chip" data-ton="inspirant" onclick="selectTon('inspirant')">🔥 Inspirant</button>
+            <button class="ton-chip" data-ton="expert" onclick="selectTon('expert')">🎯 Expert</button>
+            <button class="ton-chip" data-ton="authentique" onclick="selectTon('authentique')">💚 Authentique</button>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="form-section">
+          <label class="form-label">⚙️ Contexte (optionnel)</label>
+          <div class="options-row">
+            <select class="field-select" id="secteurSelect">
+              <option value="">Ton secteur…</option>
+              <option>Tech & Développement</option>
+              <option>Data & IA</option>
+              <option>Marketing & Communication</option>
+              <option>Design & Créatif</option>
+              <option>Finance & Comptabilité</option>
+              <option>Ressources Humaines</option>
+              <option>Commerce & Ventes</option>
+              <option>Juridique & Droit</option>
+              <option>Santé & Médical</option>
+              <option>Éducation & Formation</option>
+              <option>Logistique & Supply Chain</option>
+              <option>Ingénierie & Industrie</option>
+              <option>Entrepreneuriat & Startup</option>
+            </select>
+            <input
+              type="text" class="field-select" id="posteInput"
+              placeholder="Ton poste visé…"
+              style="appearance:auto;background-image:none;"
+            />
+          </div>
+        </div>
+
+        <!-- Bouton -->
+        <button class="generate-btn" id="generateBtn" onclick="generatePosts()">
+          <span class="btn-icon">✨</span>
+          Générer mes posts LinkedIn
+        </button>
+
+      </div><!-- /form-card -->
+
+      <!-- TIPS -->
+      <div class="tips-card">
+        <div class="tips-title">💡 Les secrets d'un post LinkedIn qui performe</div>
+        <div class="tips-list">
+          <div class="tip-item"><span class="tip-dot">→</span><span>Le <strong>hook</strong> (1ère ligne) = 80% du reach. Elle doit donner envie de cliquer "voir plus"</span></div>
+          <div class="tip-item"><span class="tip-dot">→</span><span><strong>1200-1500 caractères</strong> = longueur optimale pour l'algorithme LinkedIn</span></div>
+          <div class="tip-item"><span class="tip-dot">→</span><span><strong>5-8 hashtags</strong> max — sectoriels et pertinents, jamais génériques</span></div>
+          <div class="tip-item"><span class="tip-dot">→</span><span>Terminer par une <strong>question ouverte</strong> pour générer des commentaires</span></div>
+        </div>
+      </div>
+
+      <!-- LOADING -->
+      <div class="loading-wrap" id="loadingWrap">
+        <div class="loading-orb-wrap"><div class="loading-orb"></div></div>
+        <div class="loading-title">L'IA rédige tes posts…</div>
+        <div class="loading-sub">Optimisation pour l'algorithme LinkedIn en cours ✨</div>
+        <div class="loading-steps">
+          <div class="lstep" id="ls1">🎯 Analyse de ton idée</div>
+          <div class="lstep" id="ls2">✍️ Rédaction des 3 versions</div>
+          <div class="lstep" id="ls3">🔥 Optimisation des hooks</div>
+          <div class="lstep" id="ls4">🏷️ Sélection des hashtags</div>
+        </div>
+      </div>
+
+      <!-- RÉSULTATS -->
+      <div class="results-wrap" id="resultsWrap">
+        <div class="results-header">
+          <div class="results-title">✅ Tes posts générés</div>
+          <button class="regenerate-btn" onclick="generatePosts()">
+            🔄 Regénérer
+          </button>
+        </div>
+
+        <div class="posts-list" id="postsList"></div>
+
+        <!-- CTA bas -->
+        <div class="bottom-cta">
+          <p>Tu n'as pas encore de profil LinkedIn optimisé ? L'IA peut tout créer pour toi en 5 minutes.</p>
+          <a href="create-profile.html">✨ Créer mon profil LinkedIn →</a>
+        </div>
+
+      </div><!-- /results-wrap -->
+
+    </div><!-- /page -->
+
+    <!-- MODAL AUTH -->
+    <div class="modal-overlay" id="authModal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeAuthModal()">✕</button>
+        <div class="modal-logo">Link<span>2</span>Job</div>
+        <div class="modal-title" id="modalTitle">Créer un compte</div>
+        <div class="modal-sub" id="modalSub">Gratuit · 3 posts générés/mois</div>
+        <div class="modal-tabs">
+          <button class="modal-tab active" id="tabRegister" onclick="switchTab('register')">Inscription</button>
+          <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Connexion</button>
+        </div>
+        <div id="modalError" class="modal-error"></div>
+        <div class="modal-field" id="fieldName">
+          <label class="modal-label">Prénom et nom</label>
+          <input type="text" class="modal-input" id="inputName" placeholder="Raymond Gadji" />
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Email</label>
+          <input type="email" class="modal-input" id="inputEmail" placeholder="toi@email.com" />
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Mot de passe</label>
+          <input type="password" class="modal-input" id="inputPassword" placeholder="8 caractères minimum" />
+        </div>
+        <button class="modal-submit" id="modalSubmit" onclick="submitAuth()">Créer mon compte gratuit →</button>
+        <div class="modal-switch" id="modalSwitch">
+          Déjà un compte ? <a onclick="switchTab('login')">Se connecter</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_URL = "https://link2job-production.up.railway.app";
+      let selectedTon = "tous";
+      let currentUser = null;
+      let authMode = "register";
+      let pendingGenerate = false;
+      let lastIdee = "";
+      let lastSecteur = "";
+      let lastPoste = "";
+
+      // ── INIT AUTH ──
+      document.addEventListener("DOMContentLoaded", () => {
+        const saved = localStorage.getItem("l2j_user");
+        const token = localStorage.getItem("l2j_token");
+        if (saved && token) currentUser = JSON.parse(saved);
+
+        // Auto-remplir secteur depuis profil si dispo
+        if (currentUser && currentUser.secteur) {
+          document.getElementById("secteurSelect").value = currentUser.secteur;
+        }
+      });
+
+      // ── CHAR COUNT ──
+      function updateCharCount(el) {
+        document.getElementById("charCount").textContent = el.value.length;
+      }
+
+      // ── TON SELECTION ──
+      function selectTon(ton) {
+        selectedTon = ton;
+        document.querySelectorAll(".ton-chip").forEach(c => c.classList.remove("active"));
+        document.querySelector(`[data-ton="${ton}"]`).classList.add("active");
+      }
+
+      // ── GENERATE ──
+      async function generatePosts() {
+        const idee = document.getElementById("ideaInput").value.trim();
+        if (!idee || idee.length < 10) {
+          shakeInput();
+          return;
+        }
+
+        // Auth check
+        if (!currentUser) {
+          pendingGenerate = true;
+          openAuthModal();
+          return;
+        }
+
+        lastIdee = idee;
+        lastSecteur = document.getElementById("secteurSelect").value;
+        lastPoste = document.getElementById("posteInput").value.trim();
+
+        // UI state
+        document.getElementById("generateBtn").disabled = true;
+        document.getElementById("loadingWrap").classList.add("visible");
+        document.getElementById("resultsWrap").classList.remove("visible");
+        animateLoadingSteps();
+
+        try {
+          const token = localStorage.getItem("l2j_token");
+          const res = await fetch(`${API_URL}/api/generate-post`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({
+              idee,
+              ton: selectedTon,
+              secteur: lastSecteur,
+              poste: lastPoste,
+            }),
+          });
+
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.detail || "Erreur serveur");
+          }
+
+          const data = await res.json();
+          showResults(data);
+
+        } catch(e) {
+          document.getElementById("loadingWrap").classList.remove("visible");
+          document.getElementById("generateBtn").disabled = false;
+          showToast("❌ " + (e.message || "Erreur — réessaie dans quelques instants."));
+        }
+      }
+
+      // ── SHOW RESULTS ──
+      function showResults(data) {
+        document.getElementById("loadingWrap").classList.remove("visible");
+        document.getElementById("generateBtn").disabled = false;
+
+        const posts = data.posts || [];
+        const list = document.getElementById("postsList");
+        list.innerHTML = "";
+
+        const tonMeta = {
+          inspirant: { label: "Inspirant", emoji: "🔥", delay: 0 },
+          expert: { label: "Expert", emoji: "🎯", delay: 0.08 },
+          authentique: { label: "Authentique", emoji: "💚", delay: 0.16 },
+        };
+
+        posts.forEach((post, i) => {
+          const meta = tonMeta[post.ton] || { label: post.ton, emoji: "✨", delay: i * 0.08 };
+          const card = document.createElement("div");
+          card.className = `post-card ton-${post.ton}`;
+          card.style.animationDelay = `${meta.delay}s`;
+
+          const hashtags = (post.hashtags || []).slice(0, 6)
+            .map(h => `<span class="hashtag">${h}</span>`).join("");
+
+          const safeContent = (post.contenu || "").replace(/'/g, "\\'");
+
+          card.innerHTML = `
+            <div class="post-card-header">
+              <div class="post-ton-badge">
+                <div class="post-ton-dot"></div>
+                <span class="post-ton-label">${meta.emoji} ${meta.label}</span>
+              </div>
+              <div class="post-header-right">
+                <span class="post-chars">${post.chars || post.contenu?.length || 0} car.</span>
+              </div>
+            </div>
+            <div class="post-hook">${post.hook || ""}</div>
+            <div class="post-body">
+              <div class="post-content" id="content-${i}">${post.contenu || ""}</div>
+            </div>
+            <div class="post-footer">
+              <button class="expand-btn" onclick="toggleExpand(${i}, this)">Voir le post complet ↓</button>
+              <div class="post-hashtags">${hashtags}</div>
+              <button class="copy-btn" onclick="copyPost(this, ${i})">📋 Copier</button>
+            </div>
+          `;
+
+          // Stocker le contenu pour le copy
+          card.dataset.content = post.contenu || "";
+          list.appendChild(card);
+        });
+
+        document.getElementById("resultsWrap").classList.add("visible");
+        document.getElementById("resultsWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      // ── EXPAND/COLLAPSE ──
+      function toggleExpand(i, btn) {
+        const content = document.getElementById(`content-${i}`);
+        const isExpanded = content.classList.contains("expanded");
+        content.classList.toggle("expanded");
+        btn.textContent = isExpanded ? "Voir le post complet ↓" : "Réduire ↑";
+      }
+
+      // ── COPY ──
+      function copyPost(btn, i) {
+        const card = btn.closest(".post-card");
+        const text = card.dataset.content;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = "✅ Copié !";
+          btn.classList.add("copied");
+          setTimeout(() => { btn.textContent = "📋 Copier"; btn.classList.remove("copied"); }, 2500);
+        });
+      }
+
+      // ── HELPERS ──
+      function shakeInput() {
+        const el = document.getElementById("ideaInput");
+        el.style.borderColor = "#ef4444";
+        el.placeholder = "Écris ton idée d'abord ! (min. 10 caractères)";
+        el.focus();
+        setTimeout(() => {
+          el.style.borderColor = "";
+          el.placeholder = "Ex : J'ai décroché mon premier CDI après 3 mois de galère. Je veux partager ce que j'ai appris...";
+        }, 2500);
+      }
+
+      function animateLoadingSteps() {
+        const steps = ["ls1","ls2","ls3","ls4"];
+        let i = 0;
+        steps.forEach(id => document.getElementById(id).className = "lstep");
+        const iv = setInterval(() => {
+          if (i > 0) document.getElementById(steps[i-1]).className = "lstep done";
+          if (i < steps.length) { document.getElementById(steps[i]).className = "lstep active"; i++; }
+          else clearInterval(iv);
+        }, 800);
+      }
+
+      function showToast(msg) {
+        const t = document.createElement("div");
+        t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(239,68,68,0.3);color:#ef4444;padding:12px 20px;border-radius:12px;font-size:0.85rem;z-index:9999;animation:fadeUp 0.3s ease;white-space:nowrap;";
+        t.textContent = msg; document.body.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+      }
+
+      // ── AUTH ──
+      function openAuthModal() {
+        switchTab("register");
+        document.getElementById("authModal").classList.add("open");
+      }
+
+      function closeAuthModal() {
+        document.getElementById("authModal").classList.remove("open");
+        clearModalError();
+        pendingGenerate = false;
+      }
+
+      function switchTab(mode) {
+        authMode = mode;
+        const isRegister = mode === "register";
+        document.getElementById("tabRegister").classList.toggle("active", isRegister);
+        document.getElementById("tabLogin").classList.toggle("active", !isRegister);
+        document.getElementById("fieldName").style.display = isRegister ? "block" : "none";
+        document.getElementById("modalTitle").textContent = isRegister ? "Créer un compte" : "Se connecter";
+        document.getElementById("modalSub").textContent = isRegister ? "Gratuit · 3 posts générés/mois" : "Bon retour sur Link2Job 👋";
+        document.getElementById("modalSubmit").textContent = isRegister ? "Créer mon compte gratuit →" : "Se connecter →";
+        document.getElementById("modalSwitch").innerHTML = isRegister
+          ? "Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>"
+          : "Pas encore de compte ? <a onclick=\"switchTab('register')\">Créer un compte</a>";
+        clearModalError();
+      }
+
+      function showModalError(msg) { const el = document.getElementById("modalError"); el.textContent = msg; el.classList.add("show"); }
+      function clearModalError() { const el = document.getElementById("modalError"); el.textContent = ""; el.classList.remove("show"); }
+
+      async function submitAuth() {
+        const email = document.getElementById("inputEmail").value.trim();
+        const password = document.getElementById("inputPassword").value;
+        const name = document.getElementById("inputName").value.trim();
+        const btn = document.getElementById("modalSubmit");
+        if (!email || !password) { showModalError("Email et mot de passe requis."); return; }
+        if (authMode === "register" && password.length < 8) { showModalError("Le mot de passe doit faire au moins 8 caractères."); return; }
+        btn.disabled = true; btn.textContent = "Chargement…"; clearModalError();
+        try {
+          let res, data;
+          if (authMode === "register") {
+            res = await fetch(`${API_URL}/api/auth/register`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password, full_name: name || null }) });
+          } else {
+            const form = new FormData(); form.append("username", email); form.append("password", password);
+            res = await fetch(`${API_URL}/api/auth/login`, { method: "POST", body: form });
+          }
+          data = await res.json();
+          if (!res.ok) { showModalError(data.detail || "Une erreur est survenue."); btn.disabled = false; btn.textContent = authMode === "register" ? "Créer mon compte gratuit →" : "Se connecter →"; return; }
+          localStorage.setItem("l2j_token", data.access_token);
+          localStorage.setItem("l2j_user", JSON.stringify(data.user));
+          currentUser = data.user;
+          closeAuthModal();
+          showToast(`Bienvenue ${data.user.full_name || data.user.email} ! 🎉`);
+          if (pendingGenerate) { pendingGenerate = false; generatePosts(); }
+        } catch(err) {
+          showModalError("Erreur réseau — vérifie ta connexion.");
+          btn.disabled = false; btn.textContent = authMode === "register" ? "Créer mon compte gratuit →" : "Se connecter →";
+        }
+      }
+
+      document.getElementById("authModal")?.addEventListener("click", function(e) { if (e.target === this) closeAuthModal(); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") closeAuthModal(); });
+
+      // Enter dans la textarea = pas de génération (laisser les sauts de ligne)
+      document.getElementById("ideaInput")?.addEventListener("keydown", e => {
+        if (e.key === "Enter" && e.ctrlKey) generatePosts();
+      });
+    </script>
+  </body>
+</html>
