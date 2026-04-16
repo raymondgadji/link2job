@@ -28,14 +28,16 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
 
-    id            = Column(Integer, primary_key=True, index=True)
-    email         = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    full_name     = Column(String, nullable=True)
-    is_active     = Column(Boolean, default=True)
-    plan          = Column(String, default="free")      # free | candidat | pro
-    analyses_used = Column(Integer, default=0)          # compteur analyses gratuites
-    created_at    = Column(DateTime, default=datetime.utcnow)
+    id               = Column(Integer, primary_key=True, index=True)
+    email            = Column(String, unique=True, index=True, nullable=False)
+    hashed_password  = Column(String, nullable=False)
+    full_name        = Column(String, nullable=True)
+    is_active        = Column(Boolean, default=True)
+    plan             = Column(String, default="free")      # free | candidat | pro
+    analyses_used    = Column(Integer, default=0)          # compteur analyses gratuites
+    posts_used       = Column(Integer, default=0)          # compteur posts ce mois-ci
+    posts_reset_date = Column(DateTime, default=datetime.utcnow)  # date du dernier reset
+    created_at       = Column(DateTime, default=datetime.utcnow)
 
 
 class Analysis(Base):
@@ -54,6 +56,19 @@ class Analysis(Base):
 def init_db():
     """Crée toutes les tables si elles n'existent pas."""
     Base.metadata.create_all(bind=engine)
+
+    # Migration douce : ajoute les colonnes si elles n'existent pas (SQLite + PostgreSQL)
+    from sqlalchemy import text, inspect
+    inspector = inspect(engine)
+    columns = [col["name"] for col in inspector.get_columns("users")]
+
+    with engine.connect() as conn:
+        if "posts_used" not in columns:
+            conn.execute(text("ALTER TABLE users ADD COLUMN posts_used INTEGER DEFAULT 0"))
+            conn.commit()
+        if "posts_reset_date" not in columns:
+            conn.execute(text("ALTER TABLE users ADD COLUMN posts_reset_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP"))
+            conn.commit()
 
 
 # ── DEPENDENCY ──────────────────────────────────────────────────────
