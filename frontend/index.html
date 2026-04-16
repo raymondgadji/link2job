@@ -44,11 +44,22 @@
       }
       .nav-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
       .nav-logo span { color: var(--orange); }
-      .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
-      .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+      .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; }
+      .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
       .nav-links a:hover { color: var(--text); }
-      .nav-cta { background: var(--orange) !important; color: white !important; padding: 10px 22px; border-radius: var(--r-md); font-weight: 500 !important; transition: background 0.2s, transform 0.15s !important; }
+      .nav-cta { background: var(--orange) !important; color: white !important; padding: 8px 18px; border-radius: var(--r-md); font-weight: 500 !important; transition: background 0.2s, transform 0.15s !important; }
       .nav-cta:hover { background: var(--orange-dark) !important; transform: translateY(-1px); }
+
+      /* Menu hamburger mobile */
+      .nav-mobile-btns { display: none; align-items: center; gap: 8px; }
+      .nav-mobile-post {
+        display: flex; align-items: center; gap: 5px;
+        background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.25);
+        border-radius: var(--r-md); padding: 7px 12px;
+        color: var(--orange); font-size: 0.78rem; font-weight: 600;
+        text-decoration: none; transition: all 0.2s;
+      }
+      .nav-mobile-post:hover { background: rgba(255,107,0,0.2); }
 
       /* ── HERO ── */
       .hero {
@@ -405,6 +416,7 @@
       @media (max-width: 900px) {
         nav { padding: 0 20px; }
         .nav-links { display: none; }
+        .nav-mobile-btns { display: flex; }
         .steps { grid-template-columns: 1fr; }
         .steps::before { display: none; }
         .step { border-radius: var(--r-md) !important; }
@@ -497,15 +509,24 @@
     <!-- NAV -->
     <nav>
       <a href="#" class="nav-logo">Link<span>2</span>Job</a>
+
+      <!-- Desktop nav -->
       <ul class="nav-links">
         <li><a href="#how">Comment ça marche</a></li>
         <li><a href="#features">Fonctionnalités</a></li>
         <li><a href="#pricing">Tarifs</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="generate-post.html" style="display:flex;align-items:center;gap:6px;background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.2);border-radius:var(--r-md);padding:7px 14px;color:var(--orange) !important;font-weight:600;font-size:0.82rem;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,107,0,0.15)'" onmouseout="this.style.background='rgba(255,107,0,0.08)'">✍️ Générer un post</a></li>
         <li id="navAuthZone">
           <a href="#" class="nav-cta" onclick="openAuthModal(event)">Commencer gratuitement</a>
         </li>
       </ul>
+
+      <!-- Mobile nav — 2 boutons visibles -->
+      <div class="nav-mobile-btns">
+        <a href="generate-post.html" class="nav-mobile-post">✍️ Posts</a>
+        <a href="create-profile.html" style="background:var(--orange);color:white;border-radius:var(--r-md);padding:7px 14px;font-size:0.78rem;font-weight:600;text-decoration:none;transition:background 0.2s;">✨ Profil</a>
+      </div>
     </nav>
 
     <!-- HERO -->
