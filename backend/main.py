@@ -5,7 +5,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 import json
 
-from database import get_db, init_db, Analysis, User
+from database import get_db, init_db, Analysis, Post, User
 from auth import router as auth_router, get_current_user, require_user, _analyses_remaining, _posts_remaining, _check_and_reset_posts, FREE_ANALYSES_LIMIT, FREE_POSTS_LIMIT
 from stripe_router import router as stripe_router
 from utils.linkedin_parser import parse_linkedin_profile
@@ -198,9 +198,49 @@ async def generate_post_route(
         db.commit()
         db.refresh(current_user)
 
+    # Sauvegarder en DB pour l'historique
+    post_record = Post(
+        user_id=current_user.id,
+        idee=body.idee[:200] if body.idee else "",
+        ton=body.ton or "tous",
+        secteur=body.secteur or "",
+        contenu=json.dumps(result.get("posts", [])),
+    )
+    db.add(post_record)
+    db.commit()
+
     # Quota restant dans la réponse
     result["posts_remaining"] = _posts_remaining(current_user)
     result["posts_used"] = current_user.posts_used or 0
     result["is_unlimited"] = current_user.plan != "free"
 
     return result
+
+
+@app.get("/api/my-posts")
+def my_posts(
+    current_user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    """Retourne l'historique des posts générés par l'utilisateur."""
+    posts = (
+        db.query(Post)
+        .filter(Post.user_id == current_user.id)
+        .order_by(Post.created_at.desc())
+        .limit(20)
+        .all()
+    )
+    return {
+        "posts": [
+            {
+                "id": p.id,
+                "idee": p.idee,
+                "ton": p.ton,
+                "secteur": p.secteur,
+                "contenu": json.loads(p.contenu) if p.contenu else [],
+                "created_at": p.created_at.isoformat(),
+            }
+            for p in posts
+        ],
+        "total": len(posts),
+    }

@@ -51,6 +51,18 @@ class Analysis(Base):
     created_at     = Column(DateTime, default=datetime.utcnow)
 
 
+class Post(Base):
+    __tablename__ = "posts"
+
+    id         = Column(Integer, primary_key=True, index=True)
+    user_id    = Column(Integer, nullable=False, index=True)
+    idee       = Column(String, nullable=True)        # L'idée brute de l'utilisateur
+    ton        = Column(String, nullable=True)         # tous | inspirant | expert | authentique
+    secteur    = Column(String, nullable=True)
+    contenu    = Column(String, nullable=True)         # JSON stringifié des 3 posts
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 # ── INIT DB ─────────────────────────────────────────────────────────
 
 def init_db():
