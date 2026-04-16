@@ -165,11 +165,8 @@
       .btn-cta-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
 
       /* ══ ÉTAPE 6 — GUIDE LINKEDIN ══ */
-
-      /* Carte guide élargie */
       #step6 { max-width: 640px; }
 
-      /* Progress guide */
       .guide-progress-wrap { margin-bottom: 2rem; }
       .guide-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
       .guide-progress-title { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
@@ -177,7 +174,6 @@
       .guide-progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
       .guide-progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(to right, #16a34a, var(--success)); transition: width 0.6s cubic-bezier(0.4,0,0.2,1); width: 0%; }
 
-      /* Steps du guide */
       .guide-steps { display: flex; flex-direction: column; gap: 0; }
 
       .guide-step { display: flex; gap: 16px; position: relative; padding-bottom: 1.5rem; }
@@ -212,7 +208,6 @@
 
       .guide-step-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; }
 
-      /* Simulation UI LinkedIn */
       .sim-ui {
         margin-top: 8px; background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-sm);
@@ -223,7 +218,6 @@
       .sim-highlight { background: rgba(10,102,194,0.15); color: #5ba4e0; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
       .sim-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--orange-dark)); flex-shrink: 0; }
 
-      /* Texte généré inline dans le guide */
       .guide-generated-text {
         background: rgba(255,107,0,0.05); border: 1px solid rgba(255,107,0,0.15);
         border-radius: var(--r-md); padding: 12px 14px; margin-top: 8px;
@@ -233,11 +227,9 @@
       .guide-generated-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
       .guide-generated-label { font-size: 0.72rem; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
 
-      /* Chips dans le guide */
       .guide-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
       .guide-chip { background: rgba(255,107,0,0.08); border: 1px solid rgba(255,107,0,0.2); color: var(--orange); border-radius: 100px; padding: 4px 12px; font-size: 0.78rem; font-weight: 500; }
 
-      /* Photo conseils */
       .photo-tips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
       .photo-tip { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-md); padding: 10px 12px; }
       .photo-tip-icon { font-size: 1.2rem; margin-bottom: 4px; display: block; }
@@ -247,7 +239,6 @@
       .photo-tip.bad { border-color: rgba(239,68,68,0.2); background: rgba(239,68,68,0.04); }
       .photo-tip.bad .photo-tip-icon::after { content: " ✗"; font-size: 0.7rem; color: #ef4444; }
 
-      /* Bannière suggestion IA */
       .banner-suggestion {
         background: linear-gradient(135deg, rgba(10,102,194,0.08), rgba(255,107,0,0.06));
         border: 1px solid rgba(10,102,194,0.2); border-radius: var(--r-lg);
@@ -258,7 +249,6 @@
       .banner-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
       .banner-ia-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2); border-radius: 100px; padding: 3px 10px; font-size: 0.72rem; color: var(--orange); font-weight: 600; margin-top: 6px; }
 
-      /* Radio sim Open to Work */
       .sim-radio-group { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
       .sim-radio { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-sm); padding: 8px 12px; font-size: 0.8rem; }
       .sim-radio.selected { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); color: var(--text); }
@@ -271,11 +261,9 @@
       .sim-radio.selected .sim-radio-badge { background: rgba(34,197,94,0.15); color: #22c55e; }
       .sim-radio-bad .sim-radio-badge { background: rgba(239,68,68,0.1); color: #ef4444; }
 
-      /* Connexions suggestion */
       .connections-tip { background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.15); border-radius: var(--r-md); padding: 10px 14px; margin-top: 8px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
       .connections-tip strong { color: var(--success); }
 
-      /* Résultat final guide */
       .guide-complete {
         background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(255,107,0,0.05));
         border: 1px solid rgba(34,197,94,0.25); border-radius: var(--r-lg);
@@ -288,11 +276,10 @@
 
       @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-      /* ══ STORIES SWIPE MOBILE — Étape 5 résultats ══ */
+      /* ══ STORIES SWIPE MOBILE ══ */
       .result-stories-wrap { display: none; }
 
       @media (max-width: 768px) {
-        /* Sur mobile : résultats en stories swipables */
         .result-stories-wrap { display: block; margin-bottom: 1rem; }
         .result-stories-track {
           display: flex; gap: 12px;
@@ -311,16 +298,13 @@
         .result-story-card.card-titres { border-color: rgba(255,107,0,0.25); background: rgba(255,107,0,0.04); }
         .result-story-card.card-resume { border-color: rgba(10,102,194,0.25); background: rgba(10,102,194,0.04); }
         .result-story-card.card-skills { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.04); }
-        /* Barre de progression style stories */
         .result-story-progress { position: absolute; top: 0; left: 0; right: 0; height: 3px; display: flex; gap: 3px; padding: 0 4px; }
         .result-story-seg { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.15); }
         .result-story-seg.done { background: var(--orange); }
         .result-story-seg.active { background: var(--orange); opacity: 0.7; }
-        /* Dots navigation */
         .result-stories-dots { display: flex; gap: 6px; justify-content: center; margin-top: 4px; margin-bottom: 12px; }
         .result-story-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.3s; }
         .result-story-dot.active { background: var(--orange); width: 20px; border-radius: 3px; }
-        /* Cacher les result-box sur mobile */
         .result-box-desktop { display: none; }
       }
       @media (min-width: 769px) {
@@ -467,6 +451,8 @@
               <option>Éducation & Formation</option>
               <option>Logistique & Supply Chain</option>
               <option>Ingénierie & Industrie</option>
+              <option>Cybersécurité</option>
+              <option>Responsable Réseaux Sociaux</option>
               <option>Entrepreneuriat & Startup</option>
               <option>Autre</option>
             </select>
@@ -717,7 +703,6 @@
           <div class="step-title">Construis ton LinkedIn</div>
           <div class="step-subtitle">Suis ce guide pas-à-pas — coche chaque étape quand c'est fait !</div>
 
-          <!-- Progress guide -->
           <div class="guide-progress-wrap">
             <div class="guide-progress-header">
               <span class="guide-progress-title">Progression</span>
@@ -730,7 +715,6 @@
 
           <div class="guide-steps" id="guideSteps">
 
-            <!-- ÉTAPE G1 — Créer le compte -->
             <div class="guide-step" id="gs1">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs1')">1</div>
@@ -752,7 +736,6 @@
               </div>
             </div>
 
-            <!-- ÉTAPE G2 — Titre -->
             <div class="guide-step" id="gs2">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs2')">2</div>
@@ -780,7 +763,6 @@
               </div>
             </div>
 
-            <!-- ÉTAPE G3 — Résumé -->
             <div class="guide-step" id="gs3">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs3')">3</div>
@@ -809,7 +791,6 @@
               </div>
             </div>
 
-            <!-- ÉTAPE G4 — Compétences -->
             <div class="guide-step" id="gs4">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs4')">4</div>
@@ -832,7 +813,6 @@
               </div>
             </div>
 
-            <!-- ÉTAPE G5 — Photo de profil -->
             <div class="guide-step" id="gs5">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs5')">5</div>
@@ -850,7 +830,6 @@
                   <div class="photo-tip bad"><span class="photo-tip-icon">🤳</span><div class="photo-tip-text">Pas de selfie bras tendu ou filtre</div></div>
                   <div class="photo-tip bad"><span class="photo-tip-icon">👥</span><div class="photo-tip-text">Pas de photo de groupe recadrée</div></div>
                 </div>
-                <!-- Suggestion IA photo -->
                 <div class="banner-suggestion" style="background:rgba(255,107,0,0.05);border-color:rgba(255,107,0,0.15);margin-top:10px;">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
                     <span style="font-size:1.1rem;">🤖</span>
@@ -861,7 +840,6 @@
               </div>
             </div>
 
-            <!-- ÉTAPE G6 — Bannière -->
             <div class="guide-step" id="gs6">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs6')">6</div>
@@ -886,7 +864,6 @@
               </div>
             </div>
 
-            <!-- ÉTAPE G7 — Visibilité recruteurs -->
             <div class="guide-step" id="gs7">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs7')">7</div>
@@ -922,7 +899,6 @@
               </div>
             </div>
 
-            <!-- ÉTAPE G8 — Premières connexions -->
             <div class="guide-step" id="gs8">
               <div class="guide-step-left">
                 <div class="guide-step-num" onclick="toggleDone('gs8')">8</div>
@@ -958,7 +934,6 @@
 
           </div><!-- /guide-steps -->
 
-          <!-- Résultat final -->
           <div class="guide-complete" id="guideComplete" style="display:none">
             <span class="guide-complete-icon">🎉</span>
             <div class="guide-complete-title">Ton profil LinkedIn est prêt !</div>
@@ -985,7 +960,6 @@
       let selectedContrat = "";
       let generatedData = null;
 
-      // Guide state
       const guideStepsDone = new Set();
       const GUIDE_TOTAL = 8;
 
@@ -1003,6 +977,8 @@
         "Éducation & Formation": "Pour l'Éducation : chaleur et pédagogie. Sourire engageant, fond neutre ou légèrement coloré, tenue décontractée-professionnelle. Tu dois inspirer la confiance.",
         "Logistique & Supply Chain": "Pour la Logistique : fond neutre, tenue professionnelle sobre. Regard sérieux et organisé. Montre que tu es fiable et rigoureux.",
         "Ingénierie & Industrie": "Pour l'Ingénierie : fond blanc ou gris, tenue sobre (chemise ou polo), regard déterminé. Sérieux et compétence sont les mots-clés.",
+        "Cybersécurité": "Pour la Cybersécurité : fond neutre sombre ou gris, tenue sobre (pas de costume obligatoire), regard sérieux et déterminé. L'image de sérieux et de discrétion est clé.",
+        "Responsable Réseaux Sociaux": "Pour les Réseaux Sociaux : montre ta personnalité ! Photo dynamique, sourire chaleureux, fond coloré ou contexte créatif. Tu dois donner envie de te suivre.",
         "Entrepreneuriat & Startup": "Pour l'Entrepreneuriat : sois toi-même ! Photo décontractée mais soignée, fond original si tu veux, sourire ambitieux. Tu dois donner envie de rejoindre ton aventure.",
         default: "Règle universelle : fond neutre (blanc, gris ou bleu clair), sourire naturel, cadrage épaules-tête, bonne lumière naturelle."
       };
@@ -1020,6 +996,8 @@
         "Éducation & Formation": { colors: "linear-gradient(135deg,#1a2a4a,#0a3a6a)", text: "Bleu éducatif avec livre ouvert ou ampoule. Accroche : 'Former les talents de demain'. Chaleureux et accessible.", accent: "#60a5fa" },
         "Logistique & Supply Chain": { colors: "linear-gradient(135deg,#1a2a1a,#0a3a2a)", text: "Vert logistique sobre, flèches ou carte routière stylisée. Accroche : 'Optimiser chaque maillon de la chaîne'.", accent: "#4ade80" },
         "Ingénierie & Industrie": { colors: "linear-gradient(135deg,#1a1a2a,#2a2a3a)", text: "Gris acier industriel, engrenages ou schéma technique en fond. Palette métal et orange. Sobre et solide.", accent: "#fb923c" },
+        "Cybersécurité": { colors: "linear-gradient(135deg,#0a0a0a,#0a1a0a)", text: "Fond sombre type terminal, motif code ou shield/cadenas. Accroche : 'Protéger les systèmes, sécuriser les données'. Palette vert matrix / noir.", accent: "#22c55e" },
+        "Responsable Réseaux Sociaux": { colors: "linear-gradient(135deg,#7c3aed,#db2777)", text: "Dégradé violet/rose dynamique, icônes réseaux sociaux stylisées. Accroche courte et punchy. Typo bold, énergie et créativité.", accent: "#fafaf8" },
         "Entrepreneuriat & Startup": { colors: "linear-gradient(135deg,#ff6b00,#7c3aed)", text: "Dégradé audacieux orange/violet. Accroche percutante : ton pitch en 5 mots. Typo large, fond dynamique.", accent: "#fafaf8" },
         default: { colors: "linear-gradient(135deg,#0c0c18,#1a1a2e)", text: "Fond sombre avec ton prénom + ton secteur en grand. Simple, propre, mémorable.", accent: "#ff6b00" }
       };
@@ -1045,14 +1023,12 @@
           updateProgress();
           const next = document.getElementById(`step${n}`);
           next.style.display = "block";
-          // Étape 6 : largeur élargie
           if (n === 6) {
             document.getElementById("stepContainer").style.maxWidth = "640px";
           } else {
             document.getElementById("stepContainer").style.maxWidth = "560px";
           }
           window.scrollTo({ top: 0, behavior: "smooth" });
-          // Pousse un état dans l'historique → le bouton ← du navigateur revient à l'étape précédente
           history.pushState({ step: n }, "", window.location.pathname);
         }, 280);
       }
@@ -1160,6 +1136,8 @@
         "Éducation & Formation": ["Pédagogie","Moodle","PowerPoint","Canva","Gestion de classe","Suite Office","Ingénierie pédagogique"],
         "Logistique & Supply Chain": ["SAP","WMS","Excel","Gestion des stocks","ERP","Lean Management","Transport multimodal"],
         "Ingénierie & Industrie": ["AutoCAD","SolidWorks","MATLAB","Gestion de projet","ISO 9001","CAO","AMDEC"],
+        "Cybersécurité": ["Pentest","SIEM","Pare-feu","ISO 27001","RGPD","Kali Linux","Wireshark","Active Directory","VPN","SOC"],
+        "Responsable Réseaux Sociaux": ["Meta Business Suite","Hootsuite","Canva","TikTok Ads","Instagram","LinkedIn","Analytics","Copywriting","Buffer","A/B Testing"],
         "Entrepreneuriat & Startup": ["Notion","Trello","Pitch","Canva","Google Analytics","Stripe","No-code"],
         default: ["Excel","PowerPoint","Google Workspace","Slack","Notion","Trello"],
       };
@@ -1229,7 +1207,7 @@
         const about = data.about_optimized || "";
         const skills = data.skills_suggested || [];
 
-        // ── DESKTOP : result-box classiques ──
+        // ── DESKTOP ──
         const titlesEl = document.getElementById("resultTitles");
         headlines.forEach((h) => {
           const div = document.createElement("div");
@@ -1250,8 +1228,7 @@
           });
         }
 
-        // ── MOBILE : Stories swipe ──
-        // Card 1 — Titres
+        // ── MOBILE ──
         const titlesMobile = document.getElementById("resultTitlesMobile");
         if (titlesMobile) {
           headlines.forEach((h) => {
@@ -1262,11 +1239,9 @@
           });
         }
 
-        // Card 2 — Résumé
         const aboutMobile = document.getElementById("resultAboutMobile");
         if (aboutMobile) aboutMobile.textContent = about;
 
-        // Card 3 — Compétences
         const skillsMobile = document.getElementById("resultSkillsMobile");
         if (skillsMobile && skills.length > 0) {
           skills.forEach(s => {
@@ -1276,7 +1251,6 @@
           });
         }
 
-        // Sync dots avec le scroll des stories
         const track = document.getElementById("resultStoriesTrack");
         const dots = document.querySelectorAll(".result-story-dot");
         if (track && dots.length) {
@@ -1313,7 +1287,6 @@
         if (!generatedData) return;
         const secteur = document.getElementById("f_secteur").value || "default";
 
-        // ── Les 3 titres dans le guide ──
         const titres = generatedData.headline_suggestions || [];
         const titresEl = document.getElementById("guideTitre1Content");
         titresEl.innerHTML = "";
@@ -1335,10 +1308,8 @@
           });
         }
 
-        // ── Résumé dans le guide ──
         document.getElementById("guideAboutContent").textContent = generatedData.about_optimized || "—";
 
-        // ── Compétences dans le guide ──
         const skillsEl = document.getElementById("guideSkills");
         skillsEl.innerHTML = "";
         (generatedData.skills_suggested || []).forEach(s => {
@@ -1347,11 +1318,9 @@
           skillsEl.appendChild(chip);
         });
 
-        // ── Conseil photo IA ──
         document.getElementById("photoIAAdvice").textContent =
           PHOTO_ADVICE[secteur] || PHOTO_ADVICE["default"];
 
-        // ── Suggestion bannière IA ──
         const banner = BANNER_SUGGESTIONS[secteur] || BANNER_SUGGESTIONS["default"];
         document.getElementById("bannerPreviewRect").style.background = banner.colors;
         document.getElementById("bannerPreviewText").innerHTML =
@@ -1378,8 +1347,6 @@
         const pct = (count / GUIDE_TOTAL) * 100;
         document.getElementById("guideCount").textContent = `${count} / ${GUIDE_TOTAL} étapes`;
         document.getElementById("guideProgressFill").style.width = pct + "%";
-
-        // Afficher le message de complétion si tout est fait
         if (count === GUIDE_TOTAL) {
           document.getElementById("guideComplete").style.display = "block";
           document.getElementById("guideComplete").scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1441,7 +1408,6 @@
         showStep(1);
       }
 
-      // Affiche le message "pas d'exp"
       document.getElementById("step2").querySelector(".btn-next").addEventListener("click", function() {
         if (experiences.length === 0) document.getElementById("noExpMsg").style.display = "block";
       }, { capture: true });
@@ -1450,7 +1416,6 @@
       let currentUser = null;
       let authMode = "register";
 
-      // Init auth au chargement
       document.addEventListener("DOMContentLoaded", () => {
         const saved = localStorage.getItem("l2j_user");
         const token = localStorage.getItem("l2j_token");
@@ -1538,14 +1503,12 @@
             return;
           }
 
-          // Connexion réussie
           localStorage.setItem("l2j_token", data.access_token);
           localStorage.setItem("l2j_user", JSON.stringify(data.user));
           currentUser = data.user;
           closeAuthModal();
           showToast(`Bienvenue ${data.user.full_name || data.user.email} ! 🎉`);
 
-          // Rediriger vers le guide si c'était l'action en attente
           if (pendingGuide) {
             pendingGuide = false;
             populateGuide();
@@ -1559,7 +1522,6 @@
         }
       }
 
-      // Fermer la modale en cliquant à l'extérieur ou Escape
       document.getElementById("authModal")?.addEventListener("click", function(e) {
         if (e.target === this) closeAuthModal();
       });
@@ -1568,14 +1530,11 @@
       });
 
       // ── BOUTON RETOUR NAVIGATEUR ──────────────────────────────────
-      // Initialise l'historique à l'étape 1 au chargement
       history.replaceState({ step: 1 }, "", window.location.pathname);
 
-      // Intercepte le bouton ← du navigateur → revient à l'étape précédente
       window.addEventListener("popstate", (e) => {
         const targetStep = e.state?.step;
         if (targetStep && targetStep >= 1 && targetStep < currentStep) {
-          // Revenir en arrière dans le formulaire sans quitter la page
           const current = document.getElementById(`step${currentStep}`);
           current.classList.add("exit");
           setTimeout(() => {
@@ -1592,9 +1551,6 @@
             }
             window.scrollTo({ top: 0, behavior: "smooth" });
           }, 280);
-        } else if (!targetStep || targetStep <= 1) {
-          // Si on est à l'étape 1, laisser le navigateur revenir normalement
-          // (vers index.html) — comportement attendu
         }
       });
     </script>
