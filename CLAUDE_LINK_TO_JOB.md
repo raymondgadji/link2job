@@ -37,6 +37,39 @@ Démocratiser l'accès à l'emploi pour tous — du lycéen de 16 ans qui cherch
 
 ## 💡 IDÉES PRODUIT À IMPLÉMENTER
 
+### 🔥 Skill 1 — Trend Research ← SESSION 11/12
+
+**Insight :** Zeyneb MADI a multiplié ses followers x10 avec ce système. L'idée : au lieu que l'utilisateur cherche quoi écrire, on lui propose directement 5 sujets chauds dans son secteur cette semaine.
+
+**Ce que ça change dans generate-post.html :**
+Avant même que l'utilisateur tape quoi que ce soit, une section **"💡 Idées tendance cette semaine"** affiche 5 sujets chauds dans son secteur. Il clique → ça pré-remplit la zone de texte → il génère. Zéro friction, zéro page blanche.
+
+**Flow utilisateur :**
+```
+1. L'utilisateur arrive sur /generate-post
+2. NOUVEAU : Section "Tendances cette semaine en [son secteur]"
+   → 5 sujets proposés sous forme de chips cliquables
+   Ex (Tech) : "Le débat sur Cursor vs Copilot" / "Les layoffs Amazon 2026" / "React 19 — ce qui change"
+3. Il clique sur un sujet → pré-remplit la zone "Ton idée"
+4. Flow normal : ton → générer → copier
+```
+
+**Stack technique :**
+- Backend : `GET /api/trending-topics?secteur=Tech` 
+- Appel web search (Brave Search API ou Tavily) sur Reddit/X/LinkedIn des 7 derniers jours
+- Claude résume et formate en 5 sujets actionnables pour le secteur
+- Cache 24h en DB pour ne pas surcharger l'API search
+- Fallback : sujets statiques par secteur si l'API search est down
+
+**Fichiers à modifier :**
+- `backend/utils/ai_agent.py` → nouvelle fonction `get_trending_topics(secteur)`
+- `backend/main.py` → endpoint `GET /api/trending-topics`
+- `frontend/generate-post.html` → section tendances avant la zone de texte
+
+**Priorité :** Session 11 ou 12 — après quota posts dashboard (session 10)
+
+---
+
 ### 📱 Vision Gen Z / Mobile First
 UX mobile à améliorer sur ce qu'on a déjà :
 - **Bouton plein écran** "Analyser mon profil →" qui ouvre un bottom sheet natif sur mobile
@@ -162,249 +195,136 @@ Response: {
 - ✅ Test end-to-end en prod : register ✅ · analyse ✅ · IA ✅
 - ✅ `/api/health` → `{"status":"ok","version":"0.2.0"}` ✅
 
-### Commits GitHub
-- e9398b2 — initial project structure
-- 58637c1 — MVP V1 fonctionnel
-- 381fb4c — frontend connecté au backend
-- 50b67cc — guide visibilité recruteurs
-- ddaceab — auth modal complet
-- 8d787da — dashboard progression
-- feat: nouvelle tagline hero + page create-profile.html ✅
-- feat: backend POST /api/create-profile branché sur Claude Sonnet ✅
-- fix: add sqlalchemy and psycopg2 to requirements ✅
-- fix: add argon2-cffi for password hashing ✅
-- feat: déploiement Railway prod + fix argon2-cffi + API_URL production ✅
-- fix: mock parser désactivé + fix HTML hero CTAs structure ✅
-- feat: étape 6 guide LinkedIn + modale auth intégrée ✅
-- fix: guide 3 titres + bannière IA secteur + badge UX + import Gmail ✅ (dernier)
+### Session 8 — 16 Avril 2026
+- ✅ `generate-post.html` — page frontend générateur de posts LinkedIn V2
+  - Zone de texte idée libre + compteur caractères
+  - Sélection ton : Les 3 / 🔥 Inspirant / 🎯 Expert / 💚 Authentique
+  - Contexte optionnel : secteur + poste
+  - Loading animé 4 étapes
+  - 3 cards résultats avec hook visible + expand "Voir le post complet"
+  - Bouton Copier sur chaque card + bouton Regénérer
+- ✅ Navigation complète entre toutes les pages (index, create-profile, generate-post, dashboard)
+- ✅ Dashboard : 2 quick-access cards en haut (Créer profil + Générer post)
+- ✅ Backend `POST /api/generate-post` — 3 posts (inspirant/expert/authentique) ✅
+- ✅ Quota posts : 3 gratuits/mois, reset le 1er du mois, illimité plan Candidat
+- ✅ `generate-post.html` connecté à la nav de toutes les pages
 
-### Session 6 — 5 Avril 2026
-- ✅ DNS Ionos configuré : CNAME www + TXT railway-verify + redirection 301 link2job.fr → www
-- ✅ Frontend déployé sur Vercel — link2job.vercel.app live
-- ✅ www.link2job.fr → Vercel — Valid Configuration ✅ — SSL ✅
-- ✅ Mock parser LinkedIn désactivé → retourne None → force formulaire guidé
-- ✅ index.html : les 2 CTAs hero pointent vers create-profile.html
-- ✅ create-profile.html : étape 6 "Guide LinkedIn" 8 étapes interactives avec checkboxes
-- ✅ Modale auth intégrée dans create-profile.html (register/login avant accès guide)
-- ✅ Guide étape 2 : 3 titres avec boutons Copier individuels (Option 1/2/3)
-- ✅ Bannière IA : suggestion par secteur avec couleurs + texte + label correct
-- ✅ Badge "Suggestion IA" → texte décoratif (fix UX — plus de fausse apparence bouton)
-- ✅ Étape G8 connexions : guide import Gmail pas-à-pas avec simulation UI
-
----
-
-## 🚨 À FAIRE EN SESSION 7 (priorités)
-
-### 1. Générateur de Posts LinkedIn ← PRIORITÉ V2
-Implémenter la feature documentée dans "💡 IDÉES PRODUIT" ci-dessus.
-- Page `generate-post.html`
-- Endpoint `POST /api/generate-post`
-- Fonction `generate_linkedin_post()` dans `ai_agent.py`
-
-### 2. Export rapport PDF
-Générer un PDF du profil LinkedIn créé (titre + résumé + compétences).
-- Librairie : `weasyprint` ou `reportlab` côté backend
-- Endpoint : `POST /api/export-profile-pdf`
-- Plan Candidat uniquement
-
-### 3. Améliorations guide LinkedIn (étape 6)
-- Persistance localStorage : reprendre où on en était si on ferme et revient
-- Lien direct depuis dashboard vers le guide de son dernier profil créé
+### Session 9 — 18 Avril 2026
+- ✅ **Historique posts dans le dashboard**
+  - Modèle `Post` dans `database.py` (id, user_id, idee, ton, secteur, contenu JSON, created_at)
+  - Migration douce : colonnes `posts_used` et `posts_reset_date` ajoutées si absentes
+  - Sauvegarde automatique dans `/api/generate-post` après chaque génération
+  - Endpoint `GET /api/my-posts` — retourne les 20 derniers posts
+  - `dashboard.html` — `renderPosts()` : idée tronquée + pill ton coloré + date + hook + bouton Copier
+- ✅ **Warning VS Code ligne 121** — `-webkit-line-clamp` : warning cosmétique ignoré (pas une erreur)
+- ✅ **2 nouveaux secteurs** dans `create-profile.html` :
+  - **Cybersécurité** : skills (Pentest, SIEM, Kali Linux, ISO 27001, SOC…) + conseil photo + bannière vert matrix
+  - **Responsable Réseaux Sociaux** : skills (Meta Business Suite, Hootsuite, TikTok Ads…) + conseil photo + bannière violet/rose
+  - 4 zones mises à jour : `<select>`, `HARD_SUGGESTIONS`, `PHOTO_ADVICE`, `BANNER_SUGGESTIONS`
+  - `ai_agent.py` : **aucune modification nécessaire** (secteur passé en texte libre dans le prompt)
+- ✅ **Commits session 9** :
+  ```
+  feat: historique posts dans dashboard + endpoint /api/my-posts
+  feat: ajout secteurs Cybersécurité et Responsable Réseaux Sociaux
+  ```
 
 ---
 
-## 🏗️ Architecture technique
+## 🗂️ Architecture technique
 
+### Stack
+```
+Frontend  : HTML/CSS/JS vanilla — Vercel (www.link2job.fr)
+Backend   : FastAPI Python — Railway (link2job-production.up.railway.app)
+DB dev    : SQLite (fichier local link2job.db)
+DB prod   : PostgreSQL Railway
+Auth      : JWT (python-jose) + argon2 hashing
+IA        : Claude Sonnet 4 (claude-sonnet-4-20250514) via Anthropic SDK
+Paiement  : Stripe (checkout + webhook)
+```
+
+### Fichiers clés
 ```
 backend/
-├── main.py              ← FastAPI
-├── auth.py              ← Register/login/me + JWT + argon2
-├── database.py          ← SQLAlchemy — User + Analysis models
-├── stripe_router.py     ← Stripe checkout + webhook + status
-├── Procfile             ← web: uvicorn main:app --host 0.0.0.0 --port $PORT
-├── railway.json         ← Config Railway
-├── .env                 ← Toutes les clés (jamais commiter)
-├── requirements.txt     ← sqlalchemy + psycopg2-binary + argon2-cffi ✅
-└── utils/
-    ├── linkedin_parser.py  ← DÉSACTIVÉ — retourne None → formulaire guidé ✅
-    ├── scorer.py
-    └── ai_agent.py         ← analyze_profile() + create_profile_from_scratch() ✅
+  main.py           → FastAPI app, tous les endpoints
+  database.py       → modèles SQLAlchemy (User, Analysis, Post)
+  auth.py           → JWT, register/login, quotas freemium
+  stripe_router.py  → checkout, webhook, subscription-status
+  utils/
+    ai_agent.py     → analyze_profile() + create_profile_from_scratch() + generate_linkedin_post()
+    scorer.py       → compute_score() — score LinkedIn 0-100
+    linkedin_parser.py → désactivé (retourne None → redirect create-profile)
 
 frontend/
-├── index.html           ← Landing + 2 CTAs → create-profile.html + modal auth + Stripe
-├── dashboard.html       ← Dashboard progression SVG + historique
-├── create-profile.html  ← Formulaire 6 étapes + guide LinkedIn 8 étapes ✅
-└── generate-post.html   ← À CRÉER session 7 — Générateur de posts LinkedIn
+  index.html          → Landing page + hero analyse + résultats IA
+  create-profile.html → Formulaire 6 étapes + guide LinkedIn 8 étapes
+  generate-post.html  → Générateur posts LinkedIn 3 tons
+  dashboard.html      → Dashboard progression + historique analyses + historique posts
 ```
 
-### Endpoints backend actifs (PROD)
+### Endpoints API
 ```
-GET  /api/health                     ✅
-POST /api/auth/register              ✅
-POST /api/auth/login                 ✅
-GET  /api/auth/me                    ✅
-POST /api/analyze-profile            ✅ (mock parser)
-GET  /api/my-analyses                ✅
-POST /api/stripe/create-checkout     ✅
-POST /api/stripe/webhook             ✅ (clé prod configurée)
-GET  /api/stripe/subscription-status ✅
-POST /api/create-profile             ✅ Claude Sonnet réel
-POST /api/generate-post              ← À CRÉER session 6
-```
-
-### Variables Railway (prod)
-```
-DATABASE_URL           = ${{Postgres.DATABASE_URL}}
-ANTHROPIC_API_KEY      = sk-ant-...
-SECRET_KEY             = L2J#xK9mP2qL8nR4vT6wY1uI3oE5aS7d
-STRIPE_SECRET_KEY      = sk_test_...
-STRIPE_PRICE_ID        = price_1...
-STRIPE_WEBHOOK_SECRET  = whsec_... (clé prod Stripe ✅)
+GET  /api/health                → {"status":"ok","version":"0.4.0"}
+POST /api/auth/register         → inscription JWT
+POST /api/auth/login            → connexion JWT
+GET  /api/auth/me               → profil utilisateur courant
+POST /api/analyze-profile       → analyse URL LinkedIn (désactivée → 422)
+POST /api/create-profile        → génération profil IA depuis formulaire
+POST /api/generate-post         → génération 3 posts LinkedIn IA
+GET  /api/my-analyses           → historique analyses de l'utilisateur
+GET  /api/my-posts              → historique posts générés (20 derniers)
+POST /api/stripe/create-checkout → session Stripe
+POST /api/stripe/webhook        → événements Stripe
+GET  /api/stripe/subscription-status → statut abonnement
 ```
 
-### ⚠️ Setup dev local (3 terminaux)
-```powershell
-# Terminal 1 — Backend local
-cd C:\Projects\link_to_job\backend
-python -m uvicorn main:app --reload
-
-# Terminal 2 — Frontend local
-cd C:\Projects\link_to_job\frontend
-python -m http.server 5500
-
-# Terminal 3 — Stripe CLI (dev uniquement)
-stripe listen --forward-to localhost:8000/api/stripe/webhook
+### Modèles DB
+```python
+User     : id, email, hashed_password, full_name, is_active, plan,
+           analyses_used, posts_used, posts_reset_date, created_at
+Analysis : id, user_id, linkedin_url, score_before, score_details (JSON), created_at
+Post     : id, user_id, idee, ton, secteur, contenu (JSON), created_at
 ```
 
-### URLs importantes
+### Quotas freemium
 ```
-PROD backend  : https://link2job-production.up.railway.app
-PROD health   : https://link2job-production.up.railway.app/api/health
-DEV frontend  : http://localhost:5500/index.html
-DEV dashboard : http://localhost:5500/dashboard.html
-DEV profil    : http://localhost:5500/create-profile.html
+Analyses : 3 gratuites → illimitées plan Candidat+
+Posts    : 3/mois gratuits, reset le 1er du mois → illimités plan Candidat+
 ```
-
-**⚠️ Le frontend pointe sur Railway prod — plus besoin du backend local pour tester**
-
----
-
-## 🎨 Charte graphique
-
-```
-Primaire :       #FF6B00 (orange vif)
-Primaire foncé : #D95A00
-Fond sombre :    #0C0C18 / #1A1A2E
-Succès :         #22C55E
-Erreur :         #EF4444
-Accent bleu :    #0A66C2 (LinkedIn)
-Typo titres :    Syne 800
-Typo corps :     DM Sans
-Border radius :  sm=8px md=14px lg=22px xl=32px
-```
-
----
-
-## 🧭 FEATURE À IMPLÉMENTER — Guide LinkedIn Post-Génération
-
-### Contexte
-Premier marché = Gen Z, souvent sans profil LinkedIn.
-Après génération IA, l'utilisateur ne sait pas quoi faire des textes.
-Valeur ajoutée = les guider ENTIÈREMENT de A à Z sur LinkedIn.
-
-### UI — Style identique au guide "Visibilité recruteurs" (déjà dans index.html)
-Même composant : numéros cerclés + ligne verticale + simulation UI LinkedIn.
-Le guide "Visibilité recruteurs" (guide-step, guide-step-num, sim-ui, sim-radio...) est le modèle exact à réutiliser.
-
-### Étapes du guide (affiché après les résultats dans create-profile.html)
-
-**Étape 1 — Créer ton compte LinkedIn**
-→ Va sur linkedin.com/signup
-→ Simulation : formulaire LinkedIn (prénom, nom, email, mot de passe)
-
-**Étape 2 — Remplis ton titre professionnel**
-→ Profil → "Ajouter un titre"
-→ Copie-colle le Titre #1 généré (bouton Copier inline)
-→ Simulation UI : champ titre LinkedIn avec le texte pré-rempli
-
-**Étape 3 — Remplis ton résumé (About)**
-→ Profil → "Ajouter une section" → "Résumé"
-→ Copie-colle le résumé généré
-→ ⚠️ Les 3 premières lignes sont visibles sans cliquer "voir plus" — soigne-les
-
-**Étape 4 — Ajoute tes compétences**
-→ Profil → "Ajouter une section" → "Compétences"
-→ Ajoute les chips générées une par une
-→ Simulation : liste des compétences suggérées avec checkbox interactive
-
-**Étape 5 — Ta photo de profil** ← IMPORTANTE Gen Z
-→ Photo carrée, fond neutre (blanc, gris, bleu clair)
-→ Sourire naturel, cadrage épaules-tête
-→ Pas de selfie bras tendu, pas de filtre, pas de photo de groupe
-→ 💡 Astuce : prends-la en lumière naturelle face à une fenêtre
-
-**Étape 6 — Ta bannière LinkedIn** ← DIFFÉRENCIANT
-→ C'est la grande image en haut du profil (1584 x 396px)
-→ La plupart laissent la bannière par défaut = profil fade et invisible
-→ Suggestions selon le secteur :
-   - Tech/Data : fond sombre avec code ou circuit
-   - Marketing : couleurs vives, accroche courte
-   - Finance : sobre, bleu marine
-→ 💡 Canva gratuit : templates "LinkedIn Banner"
-→ Future feature : génération automatique de bannière par IA selon le profil
-
-**Étape 7 — Visibilité recruteurs** ← déjà buildé dans index.html !
-→ Réutiliser exactement le guide "Open to Work" existant
-→ Sélectionner "Recruteurs uniquement" et pas "Tous les membres LinkedIn"
-
-**Étape 8 — Envoie 3 demandes de connexion**
-→ Commence par tes profs, camarades de classe, famille pro
-→ Un profil avec 0 connexion est invisible de l'algorithme LinkedIn
-→ Objectif : 50 connexions dans la première semaine
-
-### Composant à créer
-- Section supplémentaire dans `create-profile.html` après l'étape 5 résultats IA
-- OU page dédiée `frontend/guide-linkedin.html` avec lien depuis les résultats
-- Même style CSS que le guide visibilité (guide-step, guide-step-num, sim-ui...)
-- Boutons "Copier" inline pour chaque texte généré à l'étape correspondante
-- Progress bar : "Tu as complété X/8 étapes de ton profil LinkedIn"
-- Chaque étape se coche quand l'utilisateur clique "C'est fait ✓"
-- Persistance de l'état via localStorage (l'utilisateur peut reprendre plus tard)
-
-### Pourquoi c'est la killer feature
-- La Gen Z veut être guidée, pas juste informée — elle abandonne si c'est flou
-- Aucun concurrent ne fait ça — ils donnent les textes et basta
-- Taux de complétion = métrique clé → utilisateur qui complète = utilisateur qui revient
-- Chaque étape complétée = micro-victoire = engagement émotionnel fort
-- La bannière personnalisée = WOW effect = partage organique spontané
-- Ce guide = argument de vente direct pour le plan Candidat (accès guide complet)
-
-### Priorité
-Session 7 ou 8 — après le Générateur de Posts LinkedIn (session 6/7)
 
 ---
 
 ## 🗺️ Feuille de route
 
-### V1 — "Le Profil Parfait" ← SESSION 6 TERMINÉE ✅
+### V1 — "Le Profil Parfait" ✅ TERMINÉE — 8 Avril 2026
 - [x] Landing page complète
 - [x] Analyse IA Claude Sonnet — score + recommandations + textes
 - [x] Auth register/login JWT + 3 analyses gratuites
 - [x] Dashboard progression SVG + historique
 - [x] Stripe checkout + webhook ✅
-- [x] create-profile.html — formulaire 6 étapes + guide LinkedIn ✅
+- [x] create-profile.html — formulaire 6 étapes + guide LinkedIn 8 étapes ✅
 - [x] Backend POST /api/create-profile Claude Sonnet ✅
+- [x] POST /api/generate-post — 3 posts LinkedIn (inspirant/expert/authentique) ✅
 - [x] Déploiement Railway production ✅
-- [x] LinkedIn parser mock désactivé → formulaire guidé ✅
 - [x] www.link2job.fr → Vercel ✅
-- [x] link2job.fr → redirection → www.link2job.fr ✅
-- [ ] Export rapport PDF ← SESSION 7
+- [x] UX Mobile Gen Z — stories swipe + micro-animations + retour navigateur ✅
+- [x] 15 secteurs couverts — hard skills + photo + bannière IA ✅ (dont Cybersécurité + Réseaux Sociaux ajoutés S9)
 
-### V2 — "La Présence LinkedIn" ← NOUVELLE VISION
-- [ ] **Générateur de posts LinkedIn** ← Feature prioritaire V2
-- [ ] Historique des posts générés
+### 🎯 MODE ACQUISITION — Maintenant
+- [ ] Envoyer à 10-20 personnes du réseau (famille, amis, EmLyon)
+- [ ] Collecter les feedbacks (qu'est-ce qui bloque ? qu'est-ce qu'ils adorent ?)
+- [ ] Poster sur LinkedIn (Raymond) — storytelling du projet
+- [ ] Poster sur les groupes Facebook/Discord emploi/stage
+- [ ] Objectif : 50 utilisateurs inscrits + 5 feedbacks détaillés
+
+### V2 — "La Présence LinkedIn" ← EN COURS
+- [x] **Page generate-post.html** ← Frontend générateur de posts ✅
+- [x] Navigation complète entre toutes les pages ✅
+- [x] Dashboard accès rapide 2 features ✅
+- [x] **Historique des posts générés dans le dashboard** ✅ SESSION 9
+- [x] **Secteurs Cybersécurité + Responsable Réseaux Sociaux** ✅ SESSION 9
+- [ ] Quota posts affiché dans le dashboard (posts_used / posts_remaining) ← SESSION 10
 - [ ] Analytics posts (portée estimée, score d'engagement)
-- [ ] Programmation de posts (scheduler)
 - [ ] Extension Chrome Manifest V3
 - [ ] CV uploadé → moteur ATS cv-ats-ready
 - [ ] Lettre de motivation IA contextuelle
@@ -419,26 +339,44 @@ Session 7 ou 8 — après le Générateur de Posts LinkedIn (session 6/7)
 
 ## 💰 Modèle économique & pitch
 
-### Plans
+### Plans (mis à jour V2)
 | Plan | Prix | Inclus |
 |------|------|--------|
-| Gratuit | 0€ | 3 analyses + 3 posts générés/mois |
-| Candidat | 9,99€/mois | Analyses + posts illimités |
-| Candidat Pro | 19,99€/mois | + Extension Chrome + suivi |
+| Gratuit | 0€ | 1 profil LinkedIn IA + 3 posts/mois + guide 8 étapes + score LinkedIn |
+| Candidat | 9,99€/mois | Tout Gratuit + profils & posts illimités + analyses illimitées + historique |
+| Candidat Pro | 19,99€/mois | Tout Candidat + Extension Chrome V3 + agent candidature auto + suivi + relance |
 | Grande École | 500-2000€/an | Licence B2B |
 | Employeur | 99-299€/mois | Tableau de bord V3 |
 
-### Arguments pitch 9,99€
+### Règle d'inclusion (IMPORTANT)
 ```
-Coût par abonné/mois :
-  Claude Sonnet (10 analyses + 20 posts) ≈ 0,50€
-  Hébergement Railway                    ≈ 0,05€
-  Stripe commission                      ≈ 0,35€
-  ───────────────────────────────────────────────
-  Total coût                             ≈ 0,90€
-  Marge nette                            ≈ 9,09€ (91%)
+Gratuit ⊂ Candidat ⊂ Candidat Pro
+```
+Chaque plan supérieur inclut TOUT ce que fait le plan inférieur.
+Affiché en première ligne de chaque plan : "✓ Tout le plan X inclus" en orange.
+
+### Analyse de rentabilité (Claude Sonnet 4)
+```
+Coût Claude par action :
+  create-profile  : ~800 input + ~600 output tokens  = 0,01€
+  generate-post   : ~600 input + ~1500 output tokens = 0,02€
+
+Scénario heavy user Candidat (20 profils + 50 posts/mois) :
+  Coût Claude     : 0,20€ + 1,00€ = 1,20€
+  Railway         : 0,05€
+  Stripe (3,5%)   : 0,35€
+  ─────────────────────────────────
+  Total coûts     : 1,60€
+  Revenu          : 9,99€
+  Marge brute     : 8,39€ (84%) ✅
+
+Auto-entrepreneur (charges ~22%) :
+  100 abonnés  → ~619€ net/mois
+  500 abonnés  → ~3 095€ net/mois
+  1000 abonnés → ~6 190€ net/mois
 
 Ne jamais baisser le prix affiché.
+Le vrai défi = acquisition, pas les coûts.
 ```
 
 ---
@@ -448,7 +386,8 @@ Ne jamais baisser le prix affiché.
 - **LinkedIn parser = DÉSACTIVÉ** → retourne None → redirige vers create-profile.html (formulaire guidé)
 - **Proxycurl / scraping LinkedIn = NON** → LinkedIn a gagné en justice contre les scrapers
 - **3 analyses gratuites** = inscription obligatoire (capture email + anti-abus)
-- **Générateur posts** = même logique que cv-ats-ready.fr — automatiser ce que les gens font manuellement sur ChatGPT
+- **Export PDF = ABANDONNÉ** → pas de valeur ajoutée vs boutons Copier existants
+- **Générateur posts** = même logique que cv-ats-ready.fr — backend déjà prêt en v0.3.0, frontend V2
 - **Posts LinkedIn** = pas de prompt à écrire, juste l'idée brute → 3 versions générées
 - **Dashboard = produit payant** — progression dans le temps justifie l'abo
 - **Stripe CLI** = obligatoire en dev pour les webhooks locaux
@@ -459,4 +398,14 @@ Ne jamais baisser le prix affiché.
 - **Railway projet** : link2job / ID : a1cdcce4-545c-4abc-8d48-9169272d3489
 - **Guide LinkedIn** = étape 6 dans create-profile.html — 8 étapes interactives avec checkboxes
 - **Auth avant guide** = modale register/login s'ouvre au clic "Guide moi" si non connecté
-- **Badge décoratif** = ne jamais mettre un élément visuellement cliquable sans action réelle
+- **Pricing** = Gratuit ⊂ Candidat ⊂ Candidat Pro — inclusion explicite en première ligne de chaque plan
+- **Marge brute** = 84% — le coût technique ne sera jamais un problème, le vrai défi c'est l'acquisition
+- **cv-ats-ready.fr** = à intégrer en V3 uniquement — l'agent aura besoin du CV optimisé ATS pour postuler
+- **generate-post.html** = page frontend V2 ✅ — 3 tons, expand/collapse, copier, regénérer
+- **Navigation** = toutes les pages connectées entre elles ✅
+- **Dashboard** = accès rapide 2 features en cards en haut ✅
+- **HoloTab / H Company** = concurrent généraliste — nous spécialisé emploi/LinkedIn, avantage = contexte utilisateur connu
+- **V3 agent** = prendra le contrôle du navigateur pour postuler automatiquement — spécialisé emploi
+- **ai_agent.py secteurs** = aucune modification nécessaire pour nouveaux secteurs — passés en texte libre dans le prompt
+- **Warning VS Code `-webkit-line-clamp`** = cosmétique uniquement, pas une erreur fonctionnelle
+- **Historique posts** = sauvegardé en DB à chaque génération, affiché dans dashboard (20 derniers)

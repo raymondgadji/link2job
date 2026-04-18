@@ -79,7 +79,7 @@ def init_db():
             conn.execute(text("ALTER TABLE users ADD COLUMN posts_used INTEGER DEFAULT 0"))
             conn.commit()
         if "posts_reset_date" not in columns:
-            conn.execute(text("ALTER TABLE users ADD COLUMN posts_reset_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN posts_reset_date TIMESTAMP DEFAULT NULL"))
             conn.commit()
 
 

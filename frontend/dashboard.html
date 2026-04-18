@@ -55,14 +55,19 @@
       .qc-arrow{font-size:1.5rem;opacity:0.5;flex-shrink:0;position:relative;transition:transform 0.2s,opacity 0.2s}
       .quick-card:hover .qc-arrow{transform:translateX(4px);opacity:1}
       /* STATS */
-      .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+      .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
       .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;transition:border-color 0.3s}
       .stat-card:hover{border-color:var(--border-o)}
       .stat-card-label{font-size:0.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem}
       .stat-card-value{font-family:"Syne",sans-serif;font-weight:800;font-size:2.2rem;color:var(--orange);line-height:1}
       .stat-card-value.green{color:var(--success)}
       .stat-card-value.red{color:var(--error)}
+      .stat-card-value.blue{color:#5ba4e0}
       .stat-card-sub{font-size:0.78rem;color:var(--muted);margin-top:0.35rem}
+      /* Quota bar dans la stat card posts */
+      .quota-bar-wrap{margin-top:0.6rem}
+      .quota-bar-track{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+      .quota-bar-fill{height:100%;border-radius:2px;transition:width 0.8s ease}
       /* CHART */
       .chart-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:2rem;margin-bottom:2rem}
       .chart-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.75rem}
@@ -103,7 +108,6 @@
       .upgrade-text p{font-size:0.88rem;color:var(--muted);font-weight:300}
       .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r-sm)}
       @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
       /* ── POST CARDS ── */
       .post-history-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:1.25rem 1.5rem;transition:border-color 0.2s,transform 0.2s}
       .post-history-item:hover{border-color:rgba(10,102,194,0.3);transform:translateX(4px)}
@@ -118,7 +122,7 @@
       .post-history-date{font-size:0.75rem;color:var(--dim)}
       .post-history-hooks{display:flex;flex-direction:column;gap:6px}
       .post-hook-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm);padding:8px 12px}
-      .post-hook-text{font-size:0.8rem;color:var(--muted);flex:1;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2; line-clamp:2;-webkit-box-orient:vertical}
+      .post-hook-text{font-size:0.8rem;color:var(--muted);flex:1;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical}
       .post-copy-btn{background:rgba(10,102,194,0.1);border:1px solid rgba(10,102,194,0.2);color:#5ba4e0;border-radius:var(--r-sm);padding:4px 10px;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:"DM Sans",sans-serif;transition:background 0.2s;flex-shrink:0}
       .post-copy-btn:hover{background:rgba(10,102,194,0.2)}
       .post-copy-btn.copied{background:rgba(34,197,94,0.1);color:var(--success);border-color:rgba(34,197,94,0.3)}
@@ -180,15 +184,35 @@
           <div class="stat-card"><div class="stat-card-label">Progression totale</div><div class="stat-card-value" id="statProgress">—</div><div class="stat-card-sub">depuis la 1ère analyse</div></div>
           <div class="stat-card"><div class="stat-card-label">Analyses effectuées</div><div class="stat-card-value" id="statTotal">—</div><div class="stat-card-sub" id="statQuota">— gratuites restantes</div></div>
           <div class="stat-card"><div class="stat-card-label">Meilleur score</div><div class="stat-card-value green" id="statBest">—</div><div class="stat-card-sub">record personnel</div></div>
+          <!-- ── NOUVEAU : Quota posts ── -->
+          <div class="stat-card" id="statPostsCard">
+            <div class="stat-card-label">Posts ce mois</div>
+            <div class="stat-card-value blue" id="statPostsUsed">—</div>
+            <div class="stat-card-sub" id="statPostsSub">— restants ce mois</div>
+            <div class="quota-bar-wrap" id="quotaBarWrap" style="display:none">
+              <div class="quota-bar-track">
+                <div class="quota-bar-fill" id="quotaBarFill"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- UPGRADE -->
+        <!-- UPGRADE analyses -->
         <div class="upgrade-banner" id="upgradeBanner" style="display:none">
           <div class="upgrade-text">
             <h3>🚀 Passe au plan Candidat</h3>
             <p>Analyses illimitées + textes IA optimisés + suivi de progression sans limite.</p>
           </div>
           <button class="btn-orange" onclick="upgradeToCandidat()">Passer au Candidat → 9,99€/mois</button>
+        </div>
+
+        <!-- UPGRADE posts -->
+        <div class="upgrade-banner" id="upgradePostsBanner" style="display:none">
+          <div class="upgrade-text">
+            <h3>✍️ Tu as utilisé tes 3 posts gratuits</h3>
+            <p>Passe au plan Candidat pour générer des posts LinkedIn en illimité chaque mois.</p>
+          </div>
+          <button class="btn-orange" onclick="upgradeToCandidat()">Posts illimités → 9,99€/mois</button>
         </div>
 
         <!-- GRAPHIQUE -->
@@ -231,6 +255,8 @@
       const savedUser = localStorage.getItem("l2j_user");
       let currentUser = savedUser ? JSON.parse(savedUser) : null;
 
+      const FREE_POSTS_LIMIT = 3;
+
       function logout() { localStorage.removeItem("l2j_token"); localStorage.removeItem("l2j_user"); window.location.href = "index.html"; }
 
       async function init() {
@@ -241,6 +267,16 @@
       }
 
       async function loadDashboard() {
+        // Rafraîchir le profil utilisateur depuis /api/auth/me pour avoir posts_used à jour
+        try {
+          const meRes = await fetch(`${API_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+          if (meRes.ok) {
+            const meData = await meRes.json();
+            currentUser = { ...currentUser, ...meData };
+            localStorage.setItem("l2j_user", JSON.stringify(currentUser));
+          }
+        } catch(e) { console.error("Erreur /me:", e); }
+
         try {
           const res = await fetch(`${API_URL}/api/my-analyses`, { headers: { Authorization: `Bearer ${token}` } });
           if (res.status === 401) { logout(); return; }
@@ -249,7 +285,6 @@
           renderStats(analyses); renderChart(analyses); renderHistory(analyses);
         } catch(e) { console.error("Erreur:", e); }
 
-        // Charger aussi les posts
         try {
           const res = await fetch(`${API_URL}/api/my-posts`, { headers: { Authorization: `Bearer ${token}` } });
           if (res.ok) {
@@ -265,14 +300,64 @@
         const best = scores.length ? Math.max(...scores) : null;
         const progress = (latest !== null && first !== null) ? latest - first : null;
         const remaining = currentUser.analyses_remaining ?? (3 - (currentUser.analyses_used || 0));
+
+        // Stats analyses
         document.getElementById("statScoreNow").textContent = latest ?? "—";
         document.getElementById("statScoreNow").className = "stat-card-value " + (latest >= 70 ? "green" : latest >= 40 ? "" : "red");
-        if (progress !== null) { const el = document.getElementById("statProgress"); el.textContent = (progress >= 0 ? "+" : "") + progress + " pts"; el.className = "stat-card-value " + (progress > 0 ? "green" : progress < 0 ? "red" : ""); }
+        if (progress !== null) {
+          const el = document.getElementById("statProgress");
+          el.textContent = (progress >= 0 ? "+" : "") + progress + " pts";
+          el.className = "stat-card-value " + (progress > 0 ? "green" : progress < 0 ? "red" : "");
+        }
         document.getElementById("statTotal").textContent = analyses.length;
         document.getElementById("statBest").textContent = best ?? "—";
-        document.getElementById("statQuota").textContent = currentUser.plan === "free" ? `${remaining} analyse${remaining>1?"s":""} gratuite${remaining>1?"s":""} restante${remaining>1?"s":""}` : "Plan Candidat — illimité ✅";
-        document.getElementById("pageSubText").textContent = analyses.length === 0 ? "Crée ton premier profil LinkedIn pour commencer à suivre ta progression." : `${analyses.length} analyse${analyses.length>1?"s":""} effectuée${analyses.length>1?"s":""} — continue comme ça ! 💪`;
+        document.getElementById("statQuota").textContent = currentUser.plan === "free"
+          ? `${remaining} analyse${remaining>1?"s":""} gratuite${remaining>1?"s":""} restante${remaining>1?"s":""}`
+          : "Plan Candidat — illimité ✅";
+        document.getElementById("pageSubText").textContent = analyses.length === 0
+          ? "Crée ton premier profil LinkedIn pour commencer à suivre ta progression."
+          : `${analyses.length} analyse${analyses.length>1?"s":""} effectuée${analyses.length>1?"s":""} — continue comme ça ! 💪`;
+
         if (currentUser.plan === "free" && remaining <= 1) document.getElementById("upgradeBanner").style.display = "flex";
+
+        // ── Quota posts ──
+        renderPostsQuota();
+      }
+
+      function renderPostsQuota() {
+        const isUnlimited = currentUser.plan !== "free";
+        const postsUsed = currentUser.posts_used || 0;
+        const postsRemaining = isUnlimited ? null : Math.max(0, FREE_POSTS_LIMIT - postsUsed);
+
+        const valueEl = document.getElementById("statPostsUsed");
+        const subEl = document.getElementById("statPostsSub");
+        const barWrap = document.getElementById("quotaBarWrap");
+        const barFill = document.getElementById("quotaBarFill");
+
+        if (isUnlimited) {
+          valueEl.textContent = postsUsed;
+          valueEl.className = "stat-card-value green";
+          subEl.textContent = "Plan Candidat — illimité ✅";
+          barWrap.style.display = "none";
+        } else {
+          valueEl.textContent = postsUsed;
+          valueEl.className = "stat-card-value " + (postsRemaining === 0 ? "red" : "blue");
+          subEl.textContent = postsRemaining === 0
+            ? "Quota épuisé — reset le 1er du mois"
+            : `${postsRemaining} post${postsRemaining > 1 ? "s" : ""} restant${postsRemaining > 1 ? "s" : ""} ce mois`;
+
+          // Barre de quota
+          barWrap.style.display = "block";
+          const pct = Math.min(100, Math.round((postsUsed / FREE_POSTS_LIMIT) * 100));
+          const color = pct >= 100 ? "var(--error)" : pct >= 66 ? "var(--orange)" : "var(--success)";
+          barFill.style.width = pct + "%";
+          barFill.style.background = color;
+
+          // Bannière upgrade posts si quota épuisé
+          if (postsRemaining === 0) {
+            document.getElementById("upgradePostsBanner").style.display = "flex";
+          }
+        }
       }
 
       function renderChart(analyses) {
@@ -313,45 +398,25 @@
       function renderPosts(posts) {
         const list = document.getElementById("postsList");
         if (!list) return;
-
         if (posts.length === 0) {
-          list.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--dim);font-size:.9rem;">
-            Aucun post généré pour l'instant.
-            <a href="generate-post.html" style="color:var(--orange)">✍️ Générer mon premier post →</a>
-          </div>`;
+          list.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--dim);font-size:.9rem;">Aucun post généré pour l'instant. <a href="generate-post.html" style="color:var(--orange)">✍️ Générer mon premier post →</a></div>`;
           return;
         }
-
         const tonEmoji = { tous: "✨", inspirant: "🔥", expert: "🎯", authentique: "💚" };
         const tonLabel = { tous: "3 tons", inspirant: "Inspirant", expert: "Expert", authentique: "Authentique" };
-
         list.innerHTML = posts.map(p => {
           const contenu = Array.isArray(p.contenu) ? p.contenu : [];
           const date = new Date(p.created_at);
           const dateStr = date.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
           const ideeShort = p.idee ? p.idee.substring(0, 80) + (p.idee.length > 80 ? "…" : "") : "Post généré";
           const ton = p.ton || "tous";
-
           const hooksHtml = contenu.map((post, i) => {
             const hook = post.hook || (post.contenu || "").split("\n")[0] || "";
             const hookShort = hook.substring(0, 100) + (hook.length > 100 ? "…" : "");
             const safeContent = (post.contenu || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/\n/g, "\\n");
-            return `<div class="post-hook-row">
-              <div class="post-hook-text">${hookShort}</div>
-              <button class="post-copy-btn" onclick="copyPostContent(this, '${safeContent}')">📋 Copier</button>
-            </div>`;
+            return `<div class="post-hook-row"><div class="post-hook-text">${hookShort}</div><button class="post-copy-btn" onclick="copyPostContent(this, '${safeContent}')">📋 Copier</button></div>`;
           }).join("");
-
-          return `<div class="post-history-item">
-            <div class="post-history-header">
-              <div class="post-history-idee">💡 ${ideeShort}</div>
-              <div class="post-history-meta">
-                <span class="post-ton-pill ${ton}">${tonEmoji[ton] || "✨"} ${tonLabel[ton] || ton}</span>
-                <span class="post-history-date">📅 ${dateStr}</span>
-              </div>
-            </div>
-            <div class="post-history-hooks">${hooksHtml}</div>
-          </div>`;
+          return `<div class="post-history-item"><div class="post-history-header"><div class="post-history-idee">💡 ${ideeShort}</div><div class="post-history-meta"><span class="post-ton-pill ${ton}">${tonEmoji[ton] || "✨"} ${tonLabel[ton] || ton}</span><span class="post-history-date">📅 ${dateStr}</span></div></div><div class="post-history-hooks">${hooksHtml}</div></div>`;
         }).join("");
       }
 
@@ -364,13 +429,20 @@
       }
 
       async function upgradeToCandidat() {
-        try { const res = await fetch(`${API_URL}/api/stripe/create-checkout`,{method:"POST",headers:{Authorization:`Bearer ${token}`}}); const data = await res.json(); if(data.checkout_url) window.location.href=data.checkout_url; }
-        catch(e){ alert("Erreur réseau."); }
+        try {
+          const res = await fetch(`${API_URL}/api/stripe/create-checkout`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
+          const data = await res.json();
+          if (data.checkout_url) window.location.href = data.checkout_url;
+        } catch(e) { alert("Erreur réseau."); }
       }
 
       const params = new URLSearchParams(window.location.search);
-      if (params.get("upgrade")==="success") {
-        fetch(`${API_URL}/api/auth/me`,{headers:{Authorization:`Bearer ${token}`}}).then(r=>r.json()).then(user=>{if(user&&user.email){currentUser={...currentUser,...user};localStorage.setItem("l2j_user",JSON.stringify(currentUser));}}).catch(()=>{if(currentUser){currentUser.plan="candidat";localStorage.setItem("l2j_user",JSON.stringify(currentUser));}}).finally(()=>{setTimeout(()=>alert("🎉 Abonnement activé ! Bienvenue dans le plan Candidat."),300);});
+      if (params.get("upgrade") === "success") {
+        fetch(`${API_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
+          .then(r => r.json())
+          .then(user => { if (user && user.email) { currentUser = { ...currentUser, ...user }; localStorage.setItem("l2j_user", JSON.stringify(currentUser)); } })
+          .catch(() => { if (currentUser) { currentUser.plan = "candidat"; localStorage.setItem("l2j_user", JSON.stringify(currentUser)); } })
+          .finally(() => { setTimeout(() => alert("🎉 Abonnement activé ! Bienvenue dans le plan Candidat."), 300); });
       }
 
       init();
