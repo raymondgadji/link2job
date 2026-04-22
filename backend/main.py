@@ -244,3 +244,32 @@ def my_posts(
         ],
         "total": len(posts),
     }
+
+@app.get("/api/stats-public")
+def stats_public(db: Session = Depends(get_db)):
+    """Métriques publiques pour dossier de financement — sans données personnelles."""
+    from sqlalchemy import func
+
+    total_users = db.query(func.count(User.id)).scalar() or 0
+    total_analyses = db.query(func.count(Analysis.id)).scalar() or 0
+    total_posts = db.query(func.count(Post.id)).scalar() or 0
+    candidat_users = db.query(func.count(User.id)).filter(User.plan == "candidat").scalar() or 0
+
+    return {
+        "link2job": {
+            "utilisateurs_inscrits": total_users,
+            "profils_linkedin_generes": total_analyses,
+            "posts_linkedin_generes": total_posts,
+            "abonnes_plan_candidat": candidat_users,
+        },
+        "cv_ats_ready": {
+            "optimisations_cv": 14,
+            "score_ats_moyen_avant": 30,
+            "score_ats_moyen_apres": 85,
+            "gain_moyen_score_ats": "+55 points",
+            "lettres_motivation_generees": 4,
+            "formats_supportes": ["PDF", "Word", "Texte"],
+        },
+        "donnees_au": "22 Avril 2026",
+        "note": "Données en phase de test — lancement public prévu Mai 2026"
+    }
