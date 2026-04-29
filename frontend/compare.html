@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link2Job vs la concurrence — Comparatif 2026</title>
+  <meta name="description" content="Link2Job vs WTTJ, LinkedIn, ChatGPT, Jobteaser, Kickresume — Le seul outil 100% gratuit, 100% LinkedIn, 100% pensé pour toi." />
+  <meta property="og:title" content="Link2Job vs la concurrence — Comparatif 2026" />
+  <meta property="og:description" content="Le seul outil 100% gratuit, 100% LinkedIn, 100% pensé pour toi." />
+  <meta property="og:url" content="https://www.link2job.fr/compare.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #ff6b1a;
+      --orange-dim: #cc5210;
+      --bg: #0a0a10;
+      --bg-card: #111118;
+      --bg-hero-col: #14101f;
+      --border: rgba(255,255,255,0.07);
+      --border-orange: rgba(255,107,26,0.4);
+      --text: #f0f0f0;
+      --text-muted: #777;
+      --text-dim: #444;
+      --green: #3ecf8e;
+      --amber: #e8a838;
+      --purple: #9d7dea;
+      --red-dim: #e06060;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,16,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-cta {
+      background: var(--orange);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 20px;
+      border-radius: 24px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--orange-dim); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 72px 24px 48px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,107,26,0.12);
+      border: 1px solid var(--border-orange);
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--orange); }
+    .hero p {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; min-width: 680px; border-collapse: collapse; table-layout: fixed; }
+    col.c-feat { width: 26%; }
+    col.c-l2j  { width: 12.3%; }
+    col.c-oth  { width: 12.3%; }
+
+    thead th {
+      padding: 14px 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      vertical-align: bottom;
+      line-height: 1.3;
+      background: var(--bg-card);
+    }
+    thead th.th-feat {
+      text-align: left;
+      color: var(--text-dim);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    thead th.th-l2j {
+      background: var(--bg-hero-col);
+      color: var(--orange);
+      border-bottom: 2px solid var(--orange);
+      font-size: 13px;
+    }
+
+    tbody tr { transition: background 0.15s; }
+    tbody tr:hover td { background: #111118; }
+    tbody tr:hover td.td-l2j { background: #1c1430; }
+
+    tbody td {
+      padding: 13px 10px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody td.td-feat {
+      text-align: left;
+      font-size: 14px;
+      color: #c8c8c8;
+      padding-right: 14px;
+      line-height: 1.4;
+    }
+    tbody td.td-l2j {
+      background: var(--bg-hero-col);
+    }
+
+    .ic-yes     { color: var(--green);  font-size: 18px; line-height: 1; }
+    .ic-no      { color: var(--text-dim); font-size: 18px; line-height: 1; }
+    .ic-partial { color: var(--amber);  font-size: 16px; line-height: 1; }
+    .pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .pill-soon {
+      background: rgba(157,125,234,0.12);
+      color: var(--purple);
+      border: 1px solid rgba(157,125,234,0.3);
+    }
+    .pill-paid {
+      background: rgba(224,96,96,0.10);
+      color: var(--red-dim);
+      border: 1px solid rgba(224,96,96,0.25);
+    }
+
+    /* ── SCORES ── */
+    .scores {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .score-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .score-card.hero-card {
+      background: var(--bg-hero-col);
+      border-color: var(--border-orange);
+      border-width: 1.5px;
+    }
+    .sc-label { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+    .hero-card .sc-label { color: var(--orange); }
+    .sc-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .hero-card .sc-num { color: var(--orange); }
+    .sc-denom { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .sc-bar { margin-top: 10px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+    .sc-fill { height: 100%; border-radius: 2px; background: rgba(255,255,255,0.15); }
+    .hero-card .sc-fill { background: var(--orange); }
+
+    /* ── VERDICT ── */
+    .verdict {
+      margin-top: 32px;
+      background: linear-gradient(135deg, #14101f 0%, #0e0e18 100%);
+      border: 1px solid var(--border-orange);
+      border-left: 4px solid var(--orange);
+      border-radius: 14px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .verdict-text { flex: 1; min-width: 200px; }
+    .verdict-main {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .verdict-main span { color: var(--orange); }
+    .verdict-sub { font-size: 13px; color: var(--text-muted); }
+    .verdict-badge {
+      background: var(--orange);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 12px 20px;
+      border-radius: 10px;
+      text-align: center;
+      line-height: 1.6;
+      flex-shrink: 0;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      text-align: center;
+    }
+    .cta-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px 32px;
+    }
+    .cta-box h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .cta-box h2 span { color: var(--orange); }
+    .cta-box p { font-size: 16px; color: var(--text-muted); margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 14px 32px;
+      border-radius: 32px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--orange-dim); transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 32px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      margin-left: 12px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--orange); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: fadeUp 0.5s ease both; }
+    .section { animation: fadeUp 0.5s 0.1s ease both; }
+    .cta-section { animation: fadeUp 0.5s 0.2s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .verdict { flex-direction: column; align-items: flex-start; }
+      .verdict-badge { width: 100%; text-align: center; }
+      .btn-secondary { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">Link<span>2</span>Job</a>
+    <a href="/create-profile.html" class="nav-cta">Créer mon profil →</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-badge">Comparatif objectif — 2026</div>
+    <h1>Link<span>2</span>Job vs<br>la concurrence</h1>
+    <p>Qui fait vraiment le travail quand tu cherches un emploi&nbsp;? On a comparé les outils que tu utilises déjà.</p>
+  </header>
+
+  <!-- TABLE SECTION -->
+  <section class="section">
+
+    <div class="legend">
+      <span class="legend-item"><span class="ic-yes" style="font-size:14px">✓</span> Disponible</span>
+      <span class="legend-item"><span class="ic-partial" style="font-size:14px">~</span> Partiel</span>
+      <span class="legend-item"><span class="ic-no" style="font-size:14px">✕</span> Absent</span>
+      <span class="legend-item"><span class="pill pill-soon">bientôt</span> En développement</span>
+      <span class="legend-item"><span class="pill pill-paid">payant</span> Abonnement requis</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <colgroup>
+          <col class="c-feat">
+          <col class="c-l2j">
+          <col class="c-oth">
+          <col class="c-oth">
+          <col class="c-oth">
+          <col class="c-oth">
+          <col class="c-oth">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="th-feat">Critère</th>
+            <th class="th-l2j">Link2Job</th>
+            <th>WTTJ<br>Coach</th>
+            <th>LinkedIn</th>
+            <th>ChatGPT</th>
+            <th>Jobteaser</th>
+            <th>Kickresume</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-feat">Profil LinkedIn from scratch guidé</td>
+            <td class="td-l2j"><span class="ic-yes">✓</span></td>
+            <td><span class="ic-partial">~</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-partial">~</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-partial">~</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">Génération de posts LinkedIn IA</td>
+            <td class="td-l2j"><span class="ic-yes">✓</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-partial">~</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">Guide interactif pas à pas</td>
+            <td class="td-l2j"><span class="ic-yes">✓</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-partial">~</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">UX mobile pensée Gen Z</td>
+            <td class="td-l2j"><span class="ic-yes">✓</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="ic-no">✕</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">Dashboard + historique</td>
+            <td class="td-l2j"><span class="ic-yes">✓</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="ic-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">Agent IA automatisé</td>
+            <td class="td-l2j"><span class="pill pill-soon">bientôt</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">100% gratuit sans abonnement tiers</td>
+            <td class="td-l2j"><span class="ic-yes">✓</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="pill pill-paid">20$/mois</span></td>
+            <td><span class="ic-yes">✓</span></td>
+            <td><span class="pill pill-paid">freemium</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">Spécialisé LinkedIn + marché FR</td>
+            <td class="td-l2j"><span class="ic-yes">✓</span></td>
+            <td><span class="ic-partial">~</span></td>
+            <td><span class="ic-partial">~</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-partial">~</span></td>
+            <td><span class="ic-no">✕</span></td>
+          </tr>
+          <tr>
+            <td class="td-feat">Filtre anti-détection IA</td>
+            <td class="td-l2j"><span class="pill pill-soon">bientôt</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+            <td><span class="ic-no">✕</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SCORES -->
+    <div class="scores">
+      <div class="score-card hero-card">
+        <div class="sc-label">Link2Job</div>
+        <div class="sc-num">7</div>
+        <div class="sc-denom">/ 9 critères</div>
+        <div class="sc-bar"><div class="sc-fill" style="width:78%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="sc-label">WTTJ Coach</div>
+        <div class="sc-num">3</div>
+        <div class="sc-denom">/ 9 critères</div>
+        <div class="sc-bar"><div class="sc-fill" style="width:33%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="sc-label">LinkedIn</div>
+        <div class="sc-num">3</div>
+        <div class="sc-denom">/ 9 critères</div>
+        <div class="sc-bar"><div class="sc-fill" style="width:33%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="sc-label">ChatGPT</div>
+        <div class="sc-num">1</div>
+        <div class="sc-denom">/ 9 critères</div>
+        <div class="sc-bar"><div class="sc-fill" style="width:11%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="sc-label">Jobteaser</div>
+        <div class="sc-num">3</div>
+        <div class="sc-denom">/ 9 critères</div>
+        <div class="sc-bar"><div class="sc-fill" style="width:33%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="sc-label">Kickresume</div>
+        <div class="sc-num">2</div>
+        <div class="sc-denom">/ 9 critères</div>
+        <div class="sc-bar"><div class="sc-fill" style="width:22%"></div></div>
+      </div>
+    </div>
+
+    <!-- VERDICT -->
+    <div class="verdict">
+      <div style="font-size:28px">🏆</div>
+      <div class="verdict-text">
+        <div class="verdict-main">Le seul outil <span>100% gratuit</span>, <span>100% LinkedIn</span>,<br><span>100% pensé pour toi.</span></div>
+        <div class="verdict-sub">Oui, c'est aussi simple que ça.</div>
+      </div>
+      <div class="verdict-badge">The only app<br>that does all of this.<br>Free.</div>
+    </div>
+
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2>Prêt à te <span>démarquer</span>&nbsp;?</h2>
+      <p>Crée ton profil LinkedIn optimisé en quelques minutes. Gratuit, sans abonnement requis.</p>
+      <div class="cta-buttons">
+        <a href="/create-profile.html" class="btn-primary">Créer mon profil →</a>
+        <a href="/" class="btn-secondary">Retour à l'accueil</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 <a href="/">Link2Job</a> · <a href="/compare.html">Comparatif</a> · <a href="/metrics.html">Métriques</a></p>
+  </footer>
+
+</body>
+</html>
