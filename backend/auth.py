@@ -3,8 +3,8 @@ auth.py — Authentification Link2Job
 - Inscription email + mot de passe
 - Connexion → JWT token
 - Middleware current_user
-- Compteur 3 analyses gratuites
-- Compteur 3 posts gratuits/mois
+- Compteur 5 analyses gratuites
+- Compteur 5 posts gratuits/mois
 """
 import os
 from datetime import datetime, timedelta
@@ -23,8 +23,8 @@ from database import get_db, User
 SECRET_KEY        = os.getenv("SECRET_KEY", "link2job-dev-secret-change-in-prod")
 ALGORITHM         = "HS256"
 TOKEN_EXPIRE_DAYS = 30
-FREE_ANALYSES_LIMIT = 3
-FREE_POSTS_LIMIT    = 3   # 3 posts gratuits par mois
+FREE_ANALYSES_LIMIT = 5   # ✅ 5 analyses gratuites
+FREE_POSTS_LIMIT    = 5   # ✅ 5 posts gratuits par mois
 
 pwd_context  = CryptContext(schemes=["argon2"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
@@ -80,8 +80,6 @@ def _check_and_reset_posts(user: User, db: Session) -> None:
     """Reset le compteur posts si on est dans un nouveau mois calendaire."""
     now = datetime.utcnow()
     reset_date = user.posts_reset_date or datetime.utcnow()
-
-    # Nouveau mois = reset
     if now.year > reset_date.year or now.month > reset_date.month:
         user.posts_used = 0
         user.posts_reset_date = now

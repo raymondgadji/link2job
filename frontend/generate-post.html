@@ -352,7 +352,7 @@
         <div id="upgradeQuotaBanner" style="display:none;background:rgba(255,107,0,0.06);border:1px solid rgba(255,107,0,0.2);border-radius:var(--r-lg);padding:1.25rem 1.5rem;margin-top:1rem;">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
             <div>
-              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;margin-bottom:4px;">🚀 Tu as utilisé tes 3 posts gratuits ce mois-ci</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;margin-bottom:4px;">🚀 Tu as utilisé tes 5 posts gratuits ce mois-ci</div>
               <div style="font-size:0.82rem;color:var(--text-muted);">Passe au plan Candidat pour générer des posts LinkedIn en illimité.</div>
             </div>
             <a href="index.html#pricing" style="background:var(--orange);color:white;border-radius:var(--r-md);padding:10px 20px;font-size:0.85rem;font-weight:600;text-decoration:none;white-space:nowrap;">Passer au Candidat → 9,99€/mois</a>
@@ -373,7 +373,7 @@
         <button class="modal-close" onclick="closeAuthModal()">✕</button>
         <div class="modal-logo">Link<span>2</span>Job</div>
         <div class="modal-title" id="modalTitle">Créer un compte</div>
-        <div class="modal-sub" id="modalSub">Gratuit · 3 posts générés/mois</div>
+        <div class="modal-sub" id="modalSub">Gratuit · 5 posts générés/mois</div>
         <div class="modal-tabs">
           <button class="modal-tab active" id="tabRegister" onclick="switchTab('register')">Inscription</button>
           <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Connexion</button>
@@ -776,7 +776,7 @@
         document.getElementById("tabLogin").classList.toggle("active", !isRegister);
         document.getElementById("fieldName").style.display = isRegister ? "block" : "none";
         document.getElementById("modalTitle").textContent = isRegister ? "Créer un compte" : "Se connecter";
-        document.getElementById("modalSub").textContent = isRegister ? "Gratuit · 3 posts générés/mois" : "Bon retour sur Link2Job 👋";
+        document.getElementById("modalSub").textContent = isRegister ? "Gratuit · 5 posts générés/mois" : "Bon retour sur Link2Job 👋";
         document.getElementById("modalSubmit").textContent = isRegister ? "Créer mon compte gratuit →" : "Se connecter →";
         document.getElementById("modalSwitch").innerHTML = isRegister
           ? "Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>"

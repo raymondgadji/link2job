@@ -349,7 +349,7 @@
         </div>
 
         <div class="auth-warning" id="authWarning" style="display:none">
-          ⚠️ Tu dois être <a onclick="openAuthModal(null,'register')">connecté</a> pour analyser ton profil. C'est gratuit — <strong style="color:var(--orange)">10 analyses offertes</strong> sans carte bancaire.
+          ⚠️ Tu dois être <a onclick="openAuthModal(null,'register')">connecté</a> pour analyser ton profil. C'est gratuit — <strong style="color:var(--orange)">5 analyses offertes</strong> sans carte bancaire.
         </div>
 
         <button class="analyze-btn" id="analyzeBtn" onclick="analyzeProfile()" disabled>
@@ -431,7 +431,7 @@
         <button class="modal-close" onclick="closeAuthModal()">✕</button>
         <div class="modal-logo">Link<span>2</span>Job</div>
         <div class="modal-title" id="modalTitle">Créer un compte</div>
-        <div class="modal-sub" id="modalSub">10 analyses gratuites · Sans carte bancaire</div>
+        <div class="modal-sub" id="modalSub">5 analyses gratuites · Sans carte bancaire</div>
         <div class="modal-tabs">
           <button class="modal-tab active" id="tabRegister" onclick="switchTab('register')">Inscription</button>
           <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Connexion</button>
@@ -493,7 +493,7 @@
         if (!zone) return;
         if (currentUser) {
           const isPaid = currentUser.plan && currentUser.plan !== "free";
-          const remaining = currentUser.analyses_remaining ?? 10;
+          const remaining = currentUser.analyses_remaining ?? 5;
           const warn = !isPaid && remaining <= 2;
           const badgeContent = isPaid ? "∞ Illimité" : `${remaining} analyse${remaining > 1 ? "s" : ""} restante${remaining > 1 ? "s" : ""}`;
           const badgeStyle = warn ? 'style="color:#EF4444;border-color:rgba(239,68,68,0.3)"' : isPaid ? 'style="color:#22C55E;border-color:rgba(34,197,94,0.3)"' : "";
@@ -596,7 +596,7 @@
           quotaEl.className = "quota-bar" + (warn ? " warning" : "");
           quotaEl.innerHTML = warn
             ? `⚠️ Il te reste <strong>${remaining} analyse${remaining > 1 ? "s" : ""}</strong> gratuite${remaining > 1 ? "s" : ""}. <a href="/#pricing" style="color:var(--orange)">Passer au plan Candidat →</a>`
-            : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 10.`;
+            : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 5.`;
           document.getElementById("resultsSection").prepend(quotaEl);
         }
 
@@ -708,7 +708,7 @@
         document.getElementById("tabLogin").classList.toggle("active", !isR);
         document.getElementById("fieldName").style.display = isR ? "block" : "none";
         document.getElementById("modalTitle").textContent = isR ? "Créer un compte" : "Se connecter";
-        document.getElementById("modalSub").textContent = isR ? "10 analyses gratuites · Sans carte bancaire" : "Bon retour sur Link2Job 👋";
+        document.getElementById("modalSub").textContent = isR ? "5 analyses gratuites · Sans carte bancaire" : "Bon retour sur Link2Job 👋";
         document.getElementById("modalSubmit").textContent = isR ? "Créer mon compte gratuit →" : "Se connecter →";
         document.getElementById("modalSwitch").innerHTML = isR ? "Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>" : "Pas encore de compte ? <a onclick=\"switchTab('register')\">Créer un compte</a>";
         clearModalError();

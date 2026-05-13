@@ -527,7 +527,7 @@
           </div>
           <div class="stat-item reveal" data-target="0" data-prefix="0€">
             <span class="stat-num" id="stat3">0€</span>
-            <span class="stat-label">pour commencer — 3 analyses gratuites</span>
+            <span class="stat-label">pour commencer — 5 analyses gratuites</span>
           </div>
         </div>
       </div>
@@ -630,7 +630,7 @@
             <ul class="plan-features">
               <li class="active"><span class="check">✓</span> Créer 1 profil LinkedIn par IA</li>
               <li class="active"><span class="check">✓</span> Guide LinkedIn 8 étapes</li>
-              <li class="active"><span class="check">✓</span> 3 posts LinkedIn générés par IA/mois</li>
+              <li class="active"><span class="check">✓</span> 5 posts LinkedIn générés par IA/mois</li>
               <li class="active"><span class="check">✓</span> Score LinkedIn 0–100</li>
               <li><span class="dash">–</span> Profils & posts illimités</li>
               <li><span class="dash">–</span> Extension Chrome (V3)</li>
@@ -695,7 +695,7 @@
       <div class="section-inner">
         <div class="cta-box reveal">
           <h2>Ton prochain emploi<br />commence maintenant.</h2>
-          <p>Rejoins les premiers utilisateurs de LINK TO JOB.<br />3 analyses gratuites, sans carte bancaire.</p>
+          <p>Rejoins les premiers utilisateurs de LINK TO JOB.<br />5 analyses gratuites, sans carte bancaire.</p>
           <div class="cta-group">
             <a href="create-profile.html" class="btn-primary">Optimiser mon profil LinkedIn →</a>
             <a href="#how" class="btn-ghost">Voir comment ça marche</a>
@@ -768,7 +768,7 @@
         <button class="modal-close" onclick="closeAuthModal()">✕</button>
         <div class="modal-logo">Link<span>2</span>Job</div>
         <div class="modal-title" id="modalTitle">Créer un compte</div>
-        <div class="modal-sub" id="modalSub">3 analyses gratuites · Sans carte bancaire</div>
+        <div class="modal-sub" id="modalSub">5 analyses gratuites · Sans carte bancaire</div>
         <div class="modal-tabs">
           <button class="modal-tab active" id="tabRegister" onclick="switchTab('register')">Inscription</button>
           <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Connexion</button>
@@ -855,7 +855,7 @@
         if (!zone) return;
         if (currentUser) {
           const isPaid = currentUser.plan && currentUser.plan !== "free";
-          const remaining = currentUser.analyses_remaining ?? 3;
+          const remaining = currentUser.analyses_remaining ?? 5;
           const warn = !isPaid && remaining <= 1;
           const badgeContent = isPaid ? "∞ Illimité" : `${remaining} analyse${remaining > 1 ? "s" : ""} restante${remaining > 1 ? "s" : ""}`;
           const badgeStyle = warn ? 'style="color:#EF4444;border-color:rgba(239,68,68,0.3)"' : isPaid ? 'style="color:#22C55E;border-color:rgba(34,197,94,0.3)"' : "";
@@ -898,7 +898,7 @@
           if (existingQuota) existingQuota.remove();
           const quotaEl = document.createElement("div");
           quotaEl.id = "quotaBar"; quotaEl.className = "quota-bar" + (warn ? " warning" : "");
-          quotaEl.innerHTML = warn ? `⚠️ Il te reste <strong>${remaining} analyse${remaining > 1 ? "s" : ""}</strong> gratuite${remaining > 1 ? "s" : ""}. <a href="#pricing" style="color:var(--orange)">Passer au plan Candidat →</a>` : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 3.`;
+          quotaEl.innerHTML = warn ? `⚠️ Il te reste <strong>${remaining} analyse${remaining > 1 ? "s" : ""}</strong> gratuite${remaining > 1 ? "s" : ""}. <a href="#pricing" style="color:var(--orange)">Passer au plan Candidat →</a>` : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 5.`;
           document.querySelector(".results-inner").prepend(quotaEl);
         }
         const section = document.getElementById("resultsSection");
@@ -979,7 +979,7 @@
         document.getElementById("tabLogin").classList.toggle("active", !isRegister);
         document.getElementById("fieldName").style.display = isRegister ? "block" : "none";
         document.getElementById("modalTitle").textContent = isRegister ? "Créer un compte" : "Se connecter";
-        document.getElementById("modalSub").textContent = isRegister ? "3 analyses gratuites · Sans carte bancaire" : "Bon retour sur Link2Job 👋";
+        document.getElementById("modalSub").textContent = isRegister ? "5 analyses gratuites · Sans carte bancaire" : "Bon retour sur Link2Job 👋";
         document.getElementById("modalSubmit").textContent = isRegister ? "Créer mon compte gratuit →" : "Se connecter →";
         document.getElementById("modalSwitch").innerHTML = isRegister ? "Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>" : "Pas encore de compte ? <a onclick=\"switchTab('register')\">Créer un compte</a>";
         clearModalError();
