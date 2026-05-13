@@ -1,9 +1,11 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 from sqlalchemy.orm import Session
 import json
+import io
+import pdfplumber
 
 from database import get_db, init_db, Analysis, Post, User
 from auth import router as auth_router, get_current_user, require_user, _analyses_remaining, _posts_remaining, _check_and_reset_posts, FREE_ANALYSES_LIMIT, FREE_POSTS_LIMIT
@@ -56,10 +58,10 @@ class CreateProfileRequest(BaseModel):
     infos_sup: Optional[str] = ""
 
 class GeneratePostRequest(BaseModel):
-    idee: str                          # L'idée brute de l'utilisateur
-    ton: Optional[str] = "tous"        # inspirant | expert | authentique | tous
-    secteur: Optional[str] = ""        # Auto-rempli depuis le profil
-    poste: Optional[str] = ""          # Poste visé
+    idee: str
+    ton: Optional[str] = "tous"
+    secteur: Optional[str] = ""
+    poste: Optional[str] = ""
 
 # ── ENDPOINTS ──────────────────────────────────────────────────────────
 
@@ -151,36 +153,91 @@ async def create_profile_route(
     return result
 
 
+# ── NOUVEAU ENDPOINT — Optimisation depuis PDF ──────────────────────────
+@app.post("/api/optimize-profile")
+async def optimize_profile(
+    pdf_file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_current_user),  # ✅ CORRIGÉ
+):
+    # Vérif quota (seulement si connecté et plan free)
+    if current_user:
+        is_paid = current_user.plan and current_user.plan != "free"
+        if not is_paid and (current_user.analyses_used or 0) >= 10:
+            raise HTTPException(
+                status_code=429,
+                detail="Tu as atteint ta limite de 10 analyses gratuites. Passe au plan Candidat pour continuer."
+            )
+
+    # Vérif format fichier
+    if not pdf_file.filename.endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Fichier invalide — upload un PDF LinkedIn.")
+
+    # Lecture et extraction du texte PDF
+    try:
+        contents = await pdf_file.read()
+        with pdfplumber.open(io.BytesIO(contents)) as pdf:
+            pdf_text = "\n".join(
+                page.extract_text() or ""
+                for page in pdf.pages
+            ).strip()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Impossible de lire le PDF : {str(e)}")
+
+    if not pdf_text or len(pdf_text) < 100:
+        raise HTTPException(
+            status_code=400,
+            detail="Le PDF semble vide ou illisible. Assure-toi d'exporter depuis LinkedIn → Profil → Plus → Enregistrer en PDF."
+        )
+
+    # Analyse IA
+    try:
+        from utils.ai_agent import analyze_profile_from_pdf
+        result = analyze_profile_from_pdf(pdf_text)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur IA : {str(e)}")
+
+    # Mise à jour quota + historique DB
+    analyses_remaining = None
+    if current_user:
+        current_user.analyses_used = (current_user.analyses_used or 0) + 1
+        db.add(current_user)
+        db.commit()
+        is_paid = current_user.plan and current_user.plan != "free"
+        if not is_paid:
+            analyses_remaining = max(0, 10 - current_user.analyses_used)
+        analysis_record = Analysis(
+            user_id=current_user.id,
+            linkedin_url="pdf_upload",
+            score_before=result.get("score_before", 0),
+            score_details=json.dumps(result.get("score_details", {})),
+        )
+        db.add(analysis_record)
+        db.commit()
+
+    return {**result, "analyses_remaining": analyses_remaining}
+
+
 @app.post("/api/generate-post")
 async def generate_post_route(
     body: GeneratePostRequest,
     db: Session = Depends(get_db),
     current_user: Optional[User] = Depends(get_current_user),
 ):
-    """
-    Génère 3 versions d'un post LinkedIn optimisé depuis une idée brute.
-    - Non connecté : bloqué → doit créer un compte
-    - Gratuit       : 3 posts/mois — reset le 1er du mois
-    - Candidat/Pro  : illimité
-    """
-    # Validation idée
     if not body.idee or len(body.idee.strip()) < 5:
         raise HTTPException(
             status_code=422,
             detail="L'idée est trop courte. Décris ton idée en 2-3 phrases minimum."
         )
 
-    # Auth obligatoire
     if not current_user:
         raise HTTPException(
             status_code=401,
             detail="Connecte-toi pour générer des posts LinkedIn. C'est gratuit ! 🚀"
         )
 
-    # Reset mensuel si nécessaire
     _check_and_reset_posts(current_user, db)
 
-    # Vérification quota (plan free uniquement)
     if current_user.plan == "free":
         remaining = _posts_remaining(current_user)
         if remaining <= 0:
@@ -189,16 +246,13 @@ async def generate_post_route(
                 detail=f"Tu as utilisé tes {FREE_POSTS_LIMIT} posts gratuits ce mois-ci. Passe au plan Candidat pour des posts illimités. 🚀"
             )
 
-    # Génération IA
     result = await generate_linkedin_post(body.dict())
 
-    # Incrémenter le compteur (plan free uniquement)
     if current_user.plan == "free":
         current_user.posts_used = (current_user.posts_used or 0) + 1
         db.commit()
         db.refresh(current_user)
 
-    # Sauvegarder en DB pour l'historique
     post_record = Post(
         user_id=current_user.id,
         idee=body.idee[:200] if body.idee else "",
@@ -209,7 +263,6 @@ async def generate_post_route(
     db.add(post_record)
     db.commit()
 
-    # Quota restant dans la réponse
     result["posts_remaining"] = _posts_remaining(current_user)
     result["posts_used"] = current_user.posts_used or 0
     result["is_unlimited"] = current_user.plan != "free"
@@ -222,7 +275,6 @@ def my_posts(
     current_user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """Retourne l'historique des posts générés par l'utilisateur."""
     posts = (
         db.query(Post)
         .filter(Post.user_id == current_user.id)
@@ -245,9 +297,9 @@ def my_posts(
         "total": len(posts),
     }
 
+
 @app.get("/api/stats-public")
 def stats_public(db: Session = Depends(get_db)):
-    """Métriques publiques pour dossier de financement — sans données personnelles."""
     from sqlalchemy import func
 
     total_users = db.query(func.count(User.id)).scalar() or 0
