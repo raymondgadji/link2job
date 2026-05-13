@@ -328,3 +328,63 @@ def _fallback_generate_post(data: dict) -> dict:
             }
         ]
     }
+
+def analyze_profile_from_pdf(pdf_text: str) -> dict:
+    """
+    Analyse un profil LinkedIn extrait d'un PDF
+    et retourne le même format que analyze_profile()
+    """
+    prompt = f"""Tu es un expert LinkedIn et recruteur senior avec 15 ans d'expérience.
+Voici le contenu extrait d'un profil LinkedIn exporté en PDF :
+
+---
+{pdf_text[:6000]}
+---
+
+Analyse ce profil et retourne UNIQUEMENT un JSON valide avec cette structure exacte :
+{{
+  "score_before": <entier 0-100>,
+  "score_details": {{
+    "headline": <0-20>,
+    "about": <0-20>,
+    "photo": <0-15>,
+    "experience": <0-15>,
+    "skills": <0-10>,
+    "education": <0-10>,
+    "recommendations": <0-5>,
+    "activity": <0-5>
+  }},
+  "recommendations": {{
+    "headline": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
+    "about": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
+    "photo": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
+    "experience": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
+    "skills": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
+    "education": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
+    "recommendations": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
+    "activity": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}}
+  }},
+  "optimized_texts": {{
+    "headline_suggestions": ["<titre 1>", "<titre 2>", "<titre 3>"],
+    "about_optimized": "<résumé LinkedIn optimisé 3-5 lignes, accrocheur, avec mots-clés>"
+  }}
+}}
+
+Règles :
+- Base-toi uniquement sur le contenu extrait du PDF
+- Si une section est absente du PDF, donne un score bas et un conseil pour la remplir
+- Les titres et le résumé doivent être rédigés en français
+- Pas de markdown, pas d'explication, juste le JSON"""
+
+    import anthropic, json, re
+    client = anthropic.Anthropic()
+    message = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=2000,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    raw = message.content[0].text.strip()
+    match = re.search(r'\{.*\}', raw, re.DOTALL)
+    if match:
+        raw = match.group()
+    return json.loads(raw)
