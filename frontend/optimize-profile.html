@@ -70,9 +70,24 @@
       .page h1 span { color: var(--orange); }
       .page .hero-sub {
         font-size: 1rem; color: var(--text-muted); font-weight: 300;
-        line-height: 1.7; margin-bottom: 48px; max-width: 560px;
+        line-height: 1.7; margin-bottom: 24px; max-width: 560px;
         animation: fadeUp 0.5s 0.1s ease both;
       }
+
+      /* ── BANDEAU POURQUOI PDF ── */
+      .why-pdf-banner {
+        display: flex; align-items: flex-start; gap: 14px;
+        background: rgba(255,107,0,0.07);
+        border: 1px solid rgba(255,107,0,0.25);
+        border-left: 3px solid var(--orange);
+        border-radius: var(--r-md);
+        padding: 14px 18px;
+        margin-bottom: 28px;
+        animation: fadeUp 0.5s 0.12s ease both;
+      }
+      .why-pdf-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+      .why-pdf-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.6; }
+      .why-pdf-text strong { color: var(--text); font-weight: 500; }
 
       /* ── GUIDE EXPORT ── */
       .guide-box {
@@ -86,8 +101,9 @@
       .guide-box-header:hover .guide-toggle { background: rgba(10,102,194,0.25); }
       .guide-chevron { transition: transform 0.3s; display: inline-block; font-size: 0.8rem; color: #5ba4e0; }
       .guide-box.open .guide-chevron { transform: rotate(180deg); }
-      .guide-steps-wrap { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-      .guide-box.open .guide-steps-wrap { max-height: 400px; }
+      /* ✅ CHANGEMENT 3 : guide ouvert par défaut — max-height élevé d'emblée */
+      .guide-steps-wrap { overflow: hidden; transition: max-height 0.4s ease; max-height: 600px; }
+      .guide-box:not(.open) .guide-steps-wrap { max-height: 0; }
       .guide-steps { display: flex; flex-direction: column; gap: 0; padding-top: 4px; }
       .guide-step { display: flex; gap: 16px; padding-bottom: 20px; position: relative; }
       .guide-step:last-child { padding-bottom: 0; }
@@ -98,7 +114,7 @@
       .g-content { flex: 1; padding-top: 4px; }
       .g-title { font-weight: 500; font-size: 0.9rem; margin-bottom: 4px; }
       .g-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
-      .g-sim { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 6px; padding: 5px 10px; font-size: 0.78rem; color: var(--text-dim); margin-top: 6px; }
+      .g-sim { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 6px; padding: 5px 10px; font-size: 0.78rem; color: var(--text-dim); margin-top: 6px; flex-wrap: wrap; }
       .g-sim .g-highlight { background: rgba(10,102,194,0.15); color: #5ba4e0; padding: 1px 7px; border-radius: 4px; font-weight: 500; }
 
       /* ── UPLOAD ZONE ── */
@@ -159,7 +175,6 @@
       /* ── RESULTS ── */
       #resultsSection { display: none; margin-top: 48px; }
       #resultsSection.visible { display: block; animation: fadeUp 0.6s ease both; }
-
       .score-header-results { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 3rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--r-xl); padding: 2.5rem; }
       .score-ring-wrap { position: relative; width: 130px; height: 130px; flex-shrink: 0; }
       .score-ring-wrap svg { transform: rotate(-90deg); }
@@ -177,7 +192,6 @@
       .mini-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
       .mini-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(to right, var(--orange), var(--orange-dark)); transform: scaleX(0); transform-origin: left; transition: transform 1.2s ease; }
       .mini-bar-score { font-size: 0.75rem; font-weight: 600; width: 30px; text-align: right; }
-
       .reco-section-title { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.2rem; margin-bottom: 1rem; }
       .reco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; margin-bottom: 2.5rem; }
       .reco-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-lg); padding: 1.5rem; transition: border-color 0.3s, transform 0.2s; }
@@ -190,7 +204,6 @@
       .reco-priority { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
       .reco-priority.haute { color: #ef4444; } .reco-priority.moyenne { color: #f59e0b; } .reco-priority.basse { color: #22c55e; }
       .reco-conseil { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
-
       .optimized-section { margin-top: 2rem; }
       .optimized-section h3 { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.2rem; margin-bottom: 1.25rem; }
       .headline-options { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
@@ -204,12 +217,10 @@
       .about-box-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
       .about-box-label { font-family: "Syne", sans-serif; font-weight: 700; font-size: 0.9rem; }
       .about-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; font-weight: 300; white-space: pre-line; }
-
       .quota-bar { display: flex; align-items: center; gap: 10px; background: rgba(255,107,0,0.06); border: 1px solid rgba(255,107,0,0.15); border-radius: var(--r-md); padding: 10px 16px; margin-bottom: 1.5rem; font-size: 0.83rem; color: var(--text-muted); }
       .quota-bar strong { color: var(--orange); }
       .quota-bar.warning { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.2); }
       .quota-bar.warning strong { color: #ef4444; }
-
       .results-new-btn { margin-top: 2.5rem; text-align: center; }
       .results-new-btn button { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); border-radius: var(--r-md); padding: 0.75rem 2rem; font-family: "DM Sans", sans-serif; font-size: 0.9rem; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
       .results-new-btn button:hover { border-color: rgba(255,107,0,0.3); color: var(--text); }
@@ -240,23 +251,15 @@
       .modal-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
       .modal-switch { text-align: center; margin-top: 1.25rem; font-size: 0.83rem; color: var(--text-dim); }
       .modal-switch a { color: var(--orange); cursor: pointer; text-decoration: none; }
-
-      /* ── NAV USER ── */
       .nav-user { display: flex; align-items: center; gap: 10px; }
       .nav-user-badge { background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2); border-radius: 100px; padding: 5px 12px; font-size: 0.78rem; color: var(--orange); font-weight: 500; }
       .nav-user-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); border-radius: var(--r-sm); padding: 6px 14px; font-size: 0.82rem; cursor: pointer; font-family: "DM Sans", sans-serif; transition: background 0.2s; text-decoration: none; display: inline-flex; align-items: center; }
       .nav-user-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
-
-      /* ── ANIMATIONS ── */
       @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-
-      /* ── FOOTER ── */
       footer { position: relative; z-index: 1; padding: 40px 0; border-top: 1px solid var(--glass-border); text-align: center; }
       footer .footer-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
       footer .footer-logo span { color: var(--orange); }
       footer p { font-size: 0.8rem; color: var(--text-dim); }
-
-      /* ── MOBILE ── */
       @media (max-width: 768px) {
         nav { padding: 0 20px; }
         .page { padding: 100px 16px 60px; }
@@ -270,7 +273,6 @@
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <!-- NAV -->
     <nav>
       <a href="/" class="nav-logo">Link<span>2</span>Job</a>
       <div class="nav-right">
@@ -281,22 +283,30 @@
       </div>
     </nav>
 
-    <!-- PAGE -->
     <main class="page">
 
       <div class="hero-badge"><span class="dot"></span> Analyse IA de ton profil existant</div>
 
-      <h1>Tu as déjà un profil<br /><span>LinkedIn ?</span><br />On l'optimise.</h1>
+      <!-- ✅ CHANGEMENT 1 : Titre et sous-titre clarifiés -->
+      <h1>Optimise ton profil<br /><span>LinkedIn</span> existant</h1>
       <p class="hero-sub">
-        Upload ton profil LinkedIn en PDF — l'IA analyse chaque section, te donne un score détaillé et réécrit tes textes pour attirer les recruteurs.
+        LinkedIn ne partage pas tes données avec nous — mais en 30 secondes tu peux exporter ton profil en PDF, et on fait tout le reste. Gratuit.
       </p>
 
-      <!-- GUIDE EXPORT -->
-      <div class="guide-box" id="guideBox">
+      <!-- ✅ CHANGEMENT 2 : Bandeau "Pourquoi un PDF ?" -->
+      <div class="why-pdf-banner">
+        <span class="why-pdf-icon">⚡</span>
+        <div class="why-pdf-text">
+          <strong>Pourquoi un PDF ?</strong> LinkedIn ne nous autorise pas à accéder directement à ton profil. L'export PDF est la seule façon légale et sécurisée — tes données restent chez toi, on analyse juste le document.
+        </div>
+      </div>
+
+      <!-- ✅ CHANGEMENT 3 : Guide ouvert par défaut (classe "open" dès le HTML) -->
+      <div class="guide-box open" id="guideBox">
         <div class="guide-box-header" onclick="toggleGuide()">
           <span style="font-size:1.3rem">📥</span>
           <h3>Comment exporter ton profil LinkedIn en PDF ?</h3>
-          <span class="guide-toggle">Voir le guide <span class="guide-chevron">▾</span></span>
+          <span class="guide-toggle">Masquer <span class="guide-chevron">▾</span></span>
         </div>
         <div class="guide-steps-wrap">
           <div class="guide-steps">
@@ -333,7 +343,6 @@
         </div>
       </div>
 
-      <!-- UPLOAD -->
       <div class="upload-section">
         <span class="upload-label">Ton profil LinkedIn en PDF</span>
         <div class="upload-zone" id="uploadZone">
@@ -352,16 +361,16 @@
           ⚠️ Tu dois être <a onclick="openAuthModal(null,'register')">connecté</a> pour analyser ton profil. C'est gratuit — <strong style="color:var(--orange)">5 analyses offertes</strong> sans carte bancaire.
         </div>
 
+        <!-- ✅ CHANGEMENT 4 : Libellé bouton mis à jour -->
         <button class="analyze-btn" id="analyzeBtn" onclick="analyzeProfile()" disabled>
           <div>
-            <div>Analyser mon profil LinkedIn →</div>
+            <div>Analyser et optimiser mon profil →</div>
             <div class="btn-sub">Score détaillé · Recommandations IA · Textes optimisés</div>
           </div>
           <span style="font-size:1.4rem">🚀</span>
         </button>
       </div>
 
-      <!-- LOADING -->
       <div class="loading-wrap" id="loadingWrap">
         <div class="loading-box">
           <div class="loading-orb"></div>
@@ -376,7 +385,6 @@
         </div>
       </div>
 
-      <!-- RESULTS -->
       <section id="resultsSection">
         <div class="score-header-results">
           <div class="score-ring-wrap">
@@ -395,10 +403,8 @@
             <div class="score-bars-mini" id="scoreBars"></div>
           </div>
         </div>
-
         <div class="reco-section-title">Recommandations par section</div>
         <div class="reco-grid" id="recoGrid"></div>
-
         <div class="optimized-section">
           <h3>✍️ Textes optimisés — copie-colle directement</h3>
           <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem;">3 propositions de titres professionnels :</p>
@@ -412,7 +418,6 @@
             <div class="about-text" id="aboutText"></div>
           </div>
         </div>
-
         <div class="results-new-btn">
           <button onclick="resetAnalysis()">← Analyser un autre profil</button>
         </div>
@@ -425,7 +430,6 @@
       <p>© 2026 link2job.fr — Fait avec ❤️ pour tous ceux qui méritent mieux</p>
     </footer>
 
-    <!-- MODAL AUTH -->
     <div class="modal-overlay" id="authModal">
       <div class="modal-box">
         <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -456,7 +460,6 @@
 
     <script>
       const API_URL = "https://link2job-production.up.railway.app";
-
       const SECTION_META = {
         headline:        { icon: "✍️",  label: "Titre professionnel", max: 20 },
         about:           { icon: "📝",  label: "Résumé (About)",      max: 20 },
@@ -473,7 +476,6 @@
       let pendingAnalysis = false;
       let selectedFile = null;
 
-      // ── INIT AUTH ──
       function initAuth() {
         const saved = localStorage.getItem("l2j_user");
         const token = localStorage.getItem("l2j_token");
@@ -483,9 +485,7 @@
             .then(r => r.json())
             .then(user => { if (user && user.email) { currentUser = { ...currentUser, ...user }; localStorage.setItem("l2j_user", JSON.stringify(currentUser)); } updateNavUser(); })
             .catch(() => updateNavUser());
-        } else {
-          updateNavUser();
-        }
+        } else { updateNavUser(); }
       }
 
       function updateNavUser() {
@@ -505,7 +505,6 @@
         }
       }
 
-      // ── FILE HANDLING ──
       function handleFile(input) {
         const file = input.files[0];
         if (!file) return;
@@ -527,7 +526,6 @@
         document.getElementById("analyzeBtn").disabled = true;
       }
 
-      // Drag & drop
       const zone = document.getElementById("uploadZone");
       zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("drag-over"); });
       zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
@@ -537,35 +535,31 @@
         if (file) { document.getElementById("pdfInput").files = e.dataTransfer.files; handleFile(document.getElementById("pdfInput")); }
       });
 
-      // ── GUIDE TOGGLE ──
       function toggleGuide() {
-        document.getElementById("guideBox").classList.toggle("open");
+        const box = document.getElementById("guideBox");
+        const toggle = box.querySelector(".guide-toggle");
+        box.classList.toggle("open");
+        toggle.innerHTML = box.classList.contains("open")
+          ? 'Masquer <span class="guide-chevron">▾</span>'
+          : 'Voir le guide <span class="guide-chevron">▾</span>';
       }
 
-      // ── ANALYSE ──
       async function analyzeProfile() {
         if (!selectedFile) { showToast("❌ Upload d'abord ton profil LinkedIn en PDF."); return; }
         if (!currentUser) { pendingAnalysis = true; openAuthModal(null, "register"); return; }
-
         document.querySelector(".upload-section").style.display = "none";
         document.getElementById("loadingWrap").style.display = "block";
         animateLoadingSteps();
-
         try {
           const token = localStorage.getItem("l2j_token");
           const formData = new FormData();
           formData.append("pdf_file", selectedFile);
-
           const res = await fetch(`${API_URL}/api/optimize-profile`, {
             method: "POST",
             headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
             body: formData,
           });
-
-          if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.detail || "Erreur serveur");
-          }
+          if (!res.ok) { const err = await res.json(); throw new Error(err.detail || "Erreur serveur"); }
           const data = await res.json();
           showResults(data);
         } catch (e) {
@@ -575,21 +569,15 @@
         }
       }
 
-      // ── SHOW RESULTS ──
       function showResults(data) {
         document.getElementById("loadingWrap").style.display = "none";
-        const score   = data.score_before;
+        const score = data.score_before;
         const details = data.score_details;
-        const recos   = data.recommendations;
-        const texts   = data.optimized_texts;
-
+        const recos = data.recommendations;
+        const texts = data.optimized_texts;
         const isPaidUser = currentUser && currentUser.plan && currentUser.plan !== "free";
         if (!isPaidUser && data.analyses_remaining != null) {
-          if (currentUser) {
-            currentUser.analyses_remaining = data.analyses_remaining;
-            localStorage.setItem("l2j_user", JSON.stringify(currentUser));
-            updateNavUser();
-          }
+          if (currentUser) { currentUser.analyses_remaining = data.analyses_remaining; localStorage.setItem("l2j_user", JSON.stringify(currentUser)); updateNavUser(); }
           const remaining = data.analyses_remaining;
           const warn = remaining <= 2;
           const quotaEl = document.createElement("div");
@@ -599,21 +587,17 @@
             : `✅ Il te reste <strong>${remaining} analyses</strong> gratuites sur 5.`;
           document.getElementById("resultsSection").prepend(quotaEl);
         }
-
         const section = document.getElementById("resultsSection");
         section.classList.add("visible");
         setTimeout(() => section.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
-
         const circumference = 345;
         const offset = circumference - (score / 100) * circumference;
         const ring = document.getElementById("scoreRingFill");
         setTimeout(() => { ring.style.strokeDashoffset = offset; }, 200);
         animateCounter("scoreNum", 0, score, 1400);
         ring.style.stroke = score >= 70 ? "#22C55E" : score >= 40 ? "var(--orange)" : "#EF4444";
-
         document.getElementById("scoreTitle").textContent = score >= 70 ? "Profil solide 💪" : score >= 40 ? "Profil à optimiser 🚀" : "Profil à reconstruire 🛠️";
         document.getElementById("scoreDesc").textContent = `Score : ${score}/100 — Voici les actions prioritaires pour faire décoller ton profil.`;
-
         const barsEl = document.getElementById("scoreBars");
         barsEl.innerHTML = "";
         Object.entries(SECTION_META).forEach(([key, meta]) => {
@@ -623,7 +607,6 @@
           barsEl.innerHTML += `<div class="mini-bar-row"><div class="mini-bar-label">${meta.icon} ${meta.label}</div><div class="mini-bar-track"><div class="mini-bar-fill" style="background:${color};" data-pct="${pct/100}"></div></div><div class="mini-bar-score" style="color:${color}">${val}/${meta.max}</div></div>`;
         });
         setTimeout(() => { document.querySelectorAll(".mini-bar-fill").forEach(el => { el.style.transform = `scaleX(${el.dataset.pct})`; }); }, 300);
-
         const grid = document.getElementById("recoGrid");
         grid.innerHTML = "";
         Object.entries(SECTION_META).forEach(([key, meta]) => {
@@ -633,7 +616,6 @@
           const isOk = score_val === meta.max;
           grid.innerHTML += `<div class="reco-card"><div class="reco-card-top"><span class="reco-icon">${meta.icon}</span><span class="reco-title">${meta.label}</span><span class="reco-score-badge ${isOk ? "ok" : ""}">${score_val}/${meta.max}</span></div><div class="reco-priority ${reco.priority || ""}">${reco.priority ? "Priorité " + reco.priority : ""}</div><div class="reco-conseil">${reco.conseil || ""}</div></div>`;
         });
-
         const headlineEl = document.getElementById("headlineOptions");
         headlineEl.innerHTML = "";
         (texts.headline_suggestions || []).forEach(h => {
@@ -649,7 +631,6 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
-      // ── HELPERS ──
       function animateCounter(id, from, to, duration) {
         const el = document.getElementById(id);
         const start = performance.now();
@@ -690,7 +671,6 @@
         setTimeout(() => t.remove(), 4000);
       }
 
-      // ── AUTH MODAL ──
       function openAuthModal(e, mode) {
         if (e) e.preventDefault();
         if (currentUser) return;
