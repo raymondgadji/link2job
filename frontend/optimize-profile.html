@@ -100,6 +100,12 @@
       .activity-toggle input:checked + .activity-toggle-slider { background: rgba(10,102,194,0.7); }
       .activity-toggle input:checked + .activity-toggle-slider::before { transform: translateX(18px); }
 
+      /* ── TOOLTIP INFO ── */
+      .info-bubble { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: rgba(10,102,194,0.2); border: 1px solid rgba(10,102,194,0.4); color: #5ba4e0; font-size: 10px; font-weight: 700; cursor: pointer; position: relative; flex-shrink: 0; margin-left: 6px; vertical-align: middle; }
+      .info-bubble::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1a1a2e; border: 1px solid rgba(10,102,194,0.3); border-radius: 10px; padding: 10px 14px; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; white-space: normal; width: 260px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 50; font-family: "DM Sans", sans-serif; font-weight: 400; }
+      .info-bubble::before { content: ""; position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: rgba(10,102,194,0.3); opacity: 0; transition: opacity 0.2s; }
+      .info-bubble:hover::after, .info-bubble:hover::before { opacity: 1; }
+
       .analyze-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 24px; background: var(--orange); color: white; border: none; border-radius: var(--r-xl); padding: 20px 32px; font-family: "Syne", sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; transition: background 0.2s, transform 0.15s; box-shadow: 0 0 32px rgba(255,107,0,0.3); }
       .analyze-btn:hover { background: var(--orange-dark); transform: translateY(-2px); }
       .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -304,7 +310,7 @@
 
           <div class="activity-question">
             <div class="activity-toggle-row">
-              <span class="activity-toggle-label">🎯 Le mode créateur LinkedIn est activé sur ton profil ?</span>
+              <span class="activity-toggle-label">🎯 Le mode créateur LinkedIn est activé sur ton profil ?<span class="info-bubble" data-tip="Le mode créateur est une option gratuite LinkedIn. Il rend ton profil plus visible, fait remonter ta section About, et te donne accès aux analytics de tes posts. Pour l'activer : ton profil → scroll bas → Ressources → Mode créateur.">?</span></span>
               <label class="activity-toggle">
                 <input type="checkbox" id="creatorMode" />
                 <span class="activity-toggle-slider"></span>
