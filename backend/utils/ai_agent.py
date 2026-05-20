@@ -13,12 +13,23 @@ Tu réponds TOUJOURS en JSON valide, sans aucun texte avant ou après.
 Tu es direct, bienveillant, et tu parles en français.
 Tu ne mens jamais sur les données — tu travailles avec ce que tu as."""
 
+# ── FILTRE ANTI-IA ── ajouté session 14
+FILTRE_ANTI_IA = """
+MOTS ET EXPRESSIONS STRICTEMENT INTERDITS — ne jamais utiliser, même partiellement :
+- plonger, naviguer, façonner, démêler, orchestrer, appréhender
+- "il est crucial de", "dans le paysage actuel", "en conclusion"
+- "il convient de noter", "à l'ère du numérique", "paradigme"
+- "synergies", "holistique", "proactif", "levier stratégique"
+- "dans cet article", "n'hésitez pas à", "je suis ravi(e) de partager"
+- "force est de constater", "à l'heure où", "incontournable"
+- "résilience", "agilité", "écosystème", "disruption", "game-changer"
+- "il va sans dire", "au final", "en tant que tel", "dans ce sens"
+Ces expressions trahissent immédiatement un texte généré par IA.
+Écris comme un humain qui parle vrai — des phrases courtes, directes, personnelles.
+"""
+
 
 async def analyze_profile(profile: dict, score_details: dict) -> dict:
-    """
-    Envoie le profil + les scores à Claude Sonnet.
-    Retourne des recommandations et des textes optimisés.
-    """
     user_prompt = f"""
 Voici le profil LinkedIn d'un candidat à analyser :
 
@@ -68,7 +79,6 @@ Réponds UNIQUEMENT avec ce JSON (aucun texte avant/après) :
   }}
 }}
 """
-
     try:
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
@@ -81,9 +91,7 @@ Réponds UNIQUEMENT avec ce JSON (aucun texte avant/après) :
             raw = raw.split("```")[1]
             if raw.startswith("json"):
                 raw = raw[4:]
-        raw = raw.strip()
-        return json.loads(raw)
-
+        return json.loads(raw.strip())
     except json.JSONDecodeError as e:
         print(f"[ai_agent] JSON invalide : {e}")
         return _fallback_response(score_details)
@@ -93,7 +101,6 @@ Réponds UNIQUEMENT avec ce JSON (aucun texte avant/après) :
 
 
 def _fallback_response(score_details: dict) -> dict:
-    """Réponse de secours si l'API échoue."""
     return {
         "recommendations": {
             "headline": {"score": score_details.get("headline", 0), "max": 20, "priority": "haute", "conseil": "Optimise ton titre avec ton rôle, ta spécialité et un mot-clé sectoriel."},
@@ -112,10 +119,6 @@ def _fallback_response(score_details: dict) -> dict:
 
 
 async def create_profile_from_scratch(data: dict) -> dict:
-    """
-    Génère un profil LinkedIn complet depuis les données saisies par l'utilisateur.
-    Retourne titre(s) + résumé optimisé + compétences suggérées.
-    """
     exp_str = ""
     if data.get("experiences"):
         for e in data["experiences"]:
@@ -167,7 +170,6 @@ RÈGLES :
   "skills_suggested": ["Compétence 1", "Compétence 2"]
 }}
 """
-
     try:
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
@@ -180,9 +182,7 @@ RÈGLES :
             raw = raw.split("```")[1]
             if raw.startswith("json"):
                 raw = raw[4:]
-        raw = raw.strip()
-        return json.loads(raw)
-
+        return json.loads(raw.strip())
     except json.JSONDecodeError as e:
         print(f"[ai_agent] create_profile JSON invalide : {e}")
         return _fallback_create_profile(data)
@@ -192,7 +192,6 @@ RÈGLES :
 
 
 def _fallback_create_profile(data: dict) -> dict:
-    """Réponse de secours si l'API échoue."""
     prenom = data.get("prenom", "")
     contrat = data.get("contrat", "poste")
     poste = data.get("poste_vise", data.get("secteur", ""))
@@ -221,7 +220,7 @@ async def generate_linkedin_post(data: dict) -> dict:
     idee = data.get("idee", "")
     secteur = data.get("secteur", "")
     poste = data.get("poste", "")
-    ton_demande = data.get("ton", "tous")  # inspirant | expert | authentique | tous
+    ton_demande = data.get("ton", "tous")
 
     user_prompt = f"""
 Tu dois générer 3 posts LinkedIn optimisés pour l'algorithme à partir d'une idée brute.
@@ -234,6 +233,8 @@ CONTEXTE :
 - Poste visé : {poste or "Non précisé"}
 - Ton demandé : {ton_demande}
 
+{FILTRE_ANTI_IA}
+
 RÈGLES ABSOLUES pour chaque post :
 1. Hook percutant en PREMIÈRE LIGNE (max 2 lignes) — c'est ce qui s'affiche avant "voir plus"
 2. Structure narrative : situation → action → résultat ou enseignement
@@ -245,9 +246,9 @@ RÈGLES ABSOLUES pour chaque post :
 8. Ton adapté Gen Z : humain, sans jargon corporate inutile
 
 DÉFINITIONS DES TONS :
-- "inspirant" : storytelling émotionnel, parcours, leçon de vie, accroche forte qui donne envie de lire
-- "expert" : ton crédible, données chiffrées, analyse, valeur ajoutée concrète, positionne comme référence
-- "authentique" : ton humain, vulnérable si nécessaire, accessible, Gen Z friendly, parle vrai
+- "inspirant" : storytelling émotionnel, parcours, leçon de vie, accroche forte
+- "expert" : ton crédible, données chiffrées, analyse, valeur ajoutée concrète
+- "authentique" : ton humain, accessible, Gen Z friendly, parle vrai
 
 Réponds UNIQUEMENT en JSON valide, aucun texte avant/après :
 {{
@@ -276,7 +277,6 @@ Réponds UNIQUEMENT en JSON valide, aucun texte avant/après :
   ]
 }}
 """
-
     try:
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
@@ -289,9 +289,7 @@ Réponds UNIQUEMENT en JSON valide, aucun texte avant/après :
             raw = raw.split("```")[1]
             if raw.startswith("json"):
                 raw = raw[4:]
-        raw = raw.strip()
-        return json.loads(raw)
-
+        return json.loads(raw.strip())
     except json.JSONDecodeError as e:
         print(f"[ai_agent] generate_post JSON invalide : {e}")
         return _fallback_generate_post(data)
@@ -301,7 +299,6 @@ Réponds UNIQUEMENT en JSON valide, aucun texte avant/après :
 
 
 def _fallback_generate_post(data: dict) -> dict:
-    """Réponse de secours si l'API échoue."""
     idee = data.get("idee", "mon expérience")
     return {
         "posts": [
@@ -329,11 +326,8 @@ def _fallback_generate_post(data: dict) -> dict:
         ]
     }
 
+
 def analyze_profile_from_pdf(pdf_text: str) -> dict:
-    """
-    Analyse un profil LinkedIn extrait d'un PDF
-    et retourne le même format que analyze_profile()
-    """
     prompt = f"""Tu es un expert LinkedIn et recruteur senior avec 15 ans d'expérience.
 Voici le contenu extrait d'un profil LinkedIn exporté en PDF :
 
@@ -376,9 +370,9 @@ Règles :
 - Les titres et le résumé doivent être rédigés en français
 - Pas de markdown, pas d'explication, juste le JSON"""
 
-    import anthropic, json, re
-    client = anthropic.Anthropic()
-    message = client.messages.create(
+    import re
+    client_local = anthropic.Anthropic()
+    message = client_local.messages.create(
         model="claude-sonnet-4-20250514",
         max_tokens=2000,
         messages=[{"role": "user", "content": prompt}]
