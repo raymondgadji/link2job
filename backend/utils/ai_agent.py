@@ -1,6 +1,7 @@
 import anthropic
 import json
 import os
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,7 +14,7 @@ Tu réponds TOUJOURS en JSON valide, sans aucun texte avant ou après.
 Tu es direct, bienveillant, et tu parles en français.
 Tu ne mens jamais sur les données — tu travailles avec ce que tu as."""
 
-# ── FILTRE ANTI-IA ── ajouté session 14
+# ── FILTRE ANTI-IA ── session 14
 FILTRE_ANTI_IA = """
 MOTS ET EXPRESSIONS STRICTEMENT INTERDITS — ne jamais utiliser, même partiellement :
 - plonger, naviguer, façonner, démêler, orchestrer, appréhender
@@ -25,7 +26,7 @@ MOTS ET EXPRESSIONS STRICTEMENT INTERDITS — ne jamais utiliser, même partiell
 - "résilience", "agilité", "écosystème", "disruption", "game-changer"
 - "il va sans dire", "au final", "en tant que tel", "dans ce sens"
 Ces expressions trahissent immédiatement un texte généré par IA.
-Écris comme un humain qui parle vrai — des phrases courtes, directes, personnelles.
+Écris comme un humain qui parle vrai — phrases courtes, directes, personnelles.
 """
 
 
@@ -213,10 +214,6 @@ def _fallback_create_profile(data: dict) -> dict:
 
 
 async def generate_linkedin_post(data: dict) -> dict:
-    """
-    Génère 3 versions d'un post LinkedIn optimisé depuis une idée brute.
-    Retourne 3 posts : inspirant, expert, authentique.
-    """
     idee = data.get("idee", "")
     secteur = data.get("secteur", "")
     poste = data.get("poste", "")
@@ -302,32 +299,56 @@ def _fallback_generate_post(data: dict) -> dict:
     idee = data.get("idee", "mon expérience")
     return {
         "posts": [
-            {
-                "ton": "inspirant",
-                "contenu": f"💡 {idee}\n\nCette expérience m'a appris quelque chose d'essentiel...\n\nEt vous, qu'est-ce qui vous a le plus surpris dans votre parcours ?\n\n#LinkedIn #Carrière #Expérience",
-                "hashtags": ["#LinkedIn", "#Carrière", "#Expérience"],
-                "chars": 180,
-                "hook": f"💡 {idee}"
-            },
-            {
-                "ton": "expert",
-                "contenu": f"📊 {idee}\n\nVoici ce que les données nous apprennent...\n\nQuelle est votre expérience sur ce sujet ?\n\n#LinkedIn #Expertise #Insights",
-                "hashtags": ["#LinkedIn", "#Expertise", "#Insights"],
-                "chars": 170,
-                "hook": f"📊 {idee}"
-            },
-            {
-                "ton": "authentique",
-                "contenu": f"Soyons honnêtes : {idee}\n\nC'est pas toujours facile, mais c'est ce qui nous fait grandir.\n\nTu vis la même chose ? Dis-moi en commentaire 👇\n\n#LinkedIn #Authenticité #Croissance",
-                "hashtags": ["#LinkedIn", "#Authenticité", "#Croissance"],
-                "chars": 200,
-                "hook": f"Soyons honnêtes : {idee}"
-            }
+            {"ton": "inspirant", "contenu": f"💡 {idee}\n\n#LinkedIn #Carrière", "hashtags": ["#LinkedIn"], "chars": 50, "hook": f"💡 {idee}"},
+            {"ton": "expert", "contenu": f"📊 {idee}\n\n#Expertise", "hashtags": ["#Expertise"], "chars": 40, "hook": f"📊 {idee}"},
+            {"ton": "authentique", "contenu": f"Soyons honnêtes : {idee}\n\n#Authenticité", "hashtags": ["#Authenticité"], "chars": 50, "hook": f"Soyons honnêtes : {idee}"}
         ]
     }
 
 
-def analyze_profile_from_pdf(pdf_text: str) -> dict:
+# ── ✅ NOUVEAU : analyze_profile_from_pdf avec données activité ──
+def analyze_profile_from_pdf(pdf_text: str, activity_data: dict = None) -> dict:
+    """
+    Analyse un profil LinkedIn extrait d'un PDF.
+    activity_data (optionnel) :
+      - posts_count : int   → posts publiés ce mois
+      - comments_regularly : bool → commente régulièrement
+      - creator_mode : bool → mode créateur activé
+    """
+
+    # ── Contexte activité ──
+    if activity_data:
+        posts = activity_data.get("posts_count", 0)
+        comments = activity_data.get("comments_regularly", False)
+        creator = activity_data.get("creator_mode", False)
+
+        # Score logique
+        if posts >= 4 and comments:
+            activity_score_hint = "score élevé (4-5/5)"
+        elif posts >= 2 or comments:
+            activity_score_hint = "score moyen (2-3/5)"
+        else:
+            activity_score_hint = "score bas (0-1/5)"
+
+        activity_context = f"""
+DONNÉES D'ACTIVITÉ RENSEIGNÉES PAR L'UTILISATEUR :
+- Posts publiés ce mois : {posts}
+- Commente régulièrement dans son secteur : {"Oui" if comments else "Non"}
+- Mode créateur LinkedIn activé : {"Oui" if creator else "Non"}
+→ Sur cette base, donne un {activity_score_hint} pour la section "activity".
+→ Dans le conseil activité, sois précis : dis exactement quoi faire pour progresser
+   (ex: publier X posts/semaine, commenter Y posts/jour, activer le mode créateur, etc.)
+"""
+    else:
+        activity_context = """
+ATTENTION : L'utilisateur n'a pas renseigné son activité LinkedIn.
+Le PDF LinkedIn n'exporte pas les posts ni les interactions — ne pas pénaliser injustement.
+→ Donne 2/5 par défaut avec ce conseil précis :
+  "Le PDF ne capture pas ton activité réelle. Pour améliorer ce score :
+   publie au moins 2 posts/semaine dans ton secteur, commente 3 posts/jour,
+   et active le mode créateur LinkedIn dans les paramètres de ton profil."
+"""
+
     prompt = f"""Tu es un expert LinkedIn et recruteur senior avec 15 ans d'expérience.
 Voici le contenu extrait d'un profil LinkedIn exporté en PDF :
 
@@ -335,7 +356,12 @@ Voici le contenu extrait d'un profil LinkedIn exporté en PDF :
 {pdf_text[:6000]}
 ---
 
-Analyse ce profil et retourne UNIQUEMENT un JSON valide avec cette structure exacte :
+{activity_context}
+
+Analyse ce profil et retourne UNIQUEMENT un JSON valide avec cette structure exacte.
+Pour CHAQUE section, le conseil doit être ACTIONNABLE et PRÉCIS — pas générique.
+Dis exactement QUOI faire, COMMENT, et si possible en COMBIEN DE TEMPS.
+
 {{
   "score_before": <entier 0-100>,
   "score_details": {{
@@ -349,14 +375,14 @@ Analyse ce profil et retourne UNIQUEMENT un JSON valide avec cette structure exa
     "activity": <0-5>
   }},
   "recommendations": {{
-    "headline": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
-    "about": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
-    "photo": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
-    "experience": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
-    "skills": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
-    "education": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
-    "recommendations": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}},
-    "activity": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis>"}}
+    "headline": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}},
+    "about": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}},
+    "photo": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}},
+    "experience": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}},
+    "skills": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}},
+    "education": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}},
+    "recommendations": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}},
+    "activity": {{"score": <int>, "priority": "haute|moyenne|basse", "conseil": "<conseil précis et actionnable>"}}
   }},
   "optimized_texts": {{
     "headline_suggestions": ["<titre 1>", "<titre 2>", "<titre 3>"],
@@ -365,12 +391,11 @@ Analyse ce profil et retourne UNIQUEMENT un JSON valide avec cette structure exa
 }}
 
 Règles :
-- Base-toi uniquement sur le contenu extrait du PDF
-- Si une section est absente du PDF, donne un score bas et un conseil pour la remplir
-- Les titres et le résumé doivent être rédigés en français
-- Pas de markdown, pas d'explication, juste le JSON"""
+- Base-toi sur le contenu du PDF + les données d'activité fournies
+- Si une section est absente, score bas + conseil pour la remplir
+- Titres et résumé en français
+- Aucun markdown, aucune explication, juste le JSON"""
 
-    import re
     client_local = anthropic.Anthropic()
     message = client_local.messages.create(
         model="claude-sonnet-4-20250514",

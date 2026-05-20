@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
       :root {
         --orange: #ff6b00; --orange-dark: #d95a00; --orange-glow: rgba(255,107,0,0.18);
         --bg: #0c0c18; --bg2: #111124; --bg3: #1a1a2e;
@@ -18,29 +17,14 @@
         --glass: rgba(255,255,255,0.04); --glass-border: rgba(255,255,255,0.08);
         --r-sm: 8px; --r-md: 14px; --r-lg: 22px; --r-xl: 32px;
       }
-
       html { scroll-behavior: smooth; }
       body { background: var(--bg); color: var(--text); font-family: "DM Sans", sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
-
-      body::before {
-        content: ""; position: fixed; inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-        pointer-events: none; z-index: 0; opacity: 0.6;
-      }
-
+      body::before { content: ""; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.6; }
       .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; animation: orbFloat 12s ease-in-out infinite alternate; }
       .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,107,0,0.10) 0%, transparent 70%); top: -150px; left: -100px; animation-duration: 14s; }
       .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(10,102,194,0.08) 0%, transparent 70%); bottom: 100px; right: -100px; animation-duration: 18s; animation-delay: -5s; }
       @keyframes orbFloat { from { transform: translate(0,0) scale(1); } to { transform: translate(20px,-30px) scale(1.05); } }
-
-      /* ── NAV ── */
-      nav {
-        position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-        padding: 0 40px; height: 72px;
-        display: flex; align-items: center; justify-content: space-between;
-        background: rgba(12,12,24,0.85); backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--glass-border);
-      }
+      nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 40px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(12,12,24,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); }
       .nav-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
       .nav-logo span { color: var(--orange); }
       .nav-back { display: flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
@@ -48,60 +32,23 @@
       .nav-cta { background: var(--orange); color: white; padding: 8px 18px; border-radius: var(--r-md); font-weight: 500; font-size: 0.85rem; text-decoration: none; transition: background 0.2s; }
       .nav-cta:hover { background: var(--orange-dark); }
       .nav-right { display: flex; align-items: center; gap: 16px; }
-
-      /* ── PAGE ── */
       .page { position: relative; z-index: 1; min-height: 100vh; padding: 120px 24px 80px; max-width: 760px; margin: 0 auto; }
-
-      /* ── HERO ── */
-      .hero-badge {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: var(--glass); border: 1px solid var(--glass-border);
-        border-radius: 100px; padding: 6px 16px; font-size: 0.8rem;
-        color: var(--text-muted); margin-bottom: 28px;
-        animation: fadeUp 0.5s ease both;
-      }
+      .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 100px; padding: 6px 16px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 28px; animation: fadeUp 0.5s ease both; }
       .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 8px var(--orange); }
-      .page h1 {
-        font-family: "Syne", sans-serif; font-weight: 800;
-        font-size: clamp(1.8rem, 4vw, 3rem);
-        line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 16px;
-        animation: fadeUp 0.5s 0.05s ease both;
-      }
+      .page h1 { font-family: "Syne", sans-serif; font-weight: 800; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 16px; animation: fadeUp 0.5s 0.05s ease both; }
       .page h1 span { color: var(--orange); }
-      .page .hero-sub {
-        font-size: 1rem; color: var(--text-muted); font-weight: 300;
-        line-height: 1.7; margin-bottom: 24px; max-width: 560px;
-        animation: fadeUp 0.5s 0.1s ease both;
-      }
-
-      /* ── BANDEAU POURQUOI PDF ── */
-      .why-pdf-banner {
-        display: flex; align-items: flex-start; gap: 14px;
-        background: rgba(255,107,0,0.07);
-        border: 1px solid rgba(255,107,0,0.25);
-        border-left: 3px solid var(--orange);
-        border-radius: var(--r-md);
-        padding: 14px 18px;
-        margin-bottom: 28px;
-        animation: fadeUp 0.5s 0.12s ease both;
-      }
+      .page .hero-sub { font-size: 1rem; color: var(--text-muted); font-weight: 300; line-height: 1.7; margin-bottom: 24px; max-width: 560px; animation: fadeUp 0.5s 0.1s ease both; }
+      .why-pdf-banner { display: flex; align-items: flex-start; gap: 14px; background: rgba(255,107,0,0.07); border: 1px solid rgba(255,107,0,0.25); border-left: 3px solid var(--orange); border-radius: var(--r-md); padding: 14px 18px; margin-bottom: 28px; animation: fadeUp 0.5s 0.12s ease both; }
       .why-pdf-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
       .why-pdf-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.6; }
       .why-pdf-text strong { color: var(--text); font-weight: 500; }
-
-      /* ── GUIDE EXPORT ── */
-      .guide-box {
-        background: rgba(10,102,194,0.06); border: 1px solid rgba(10,102,194,0.2);
-        border-radius: var(--r-lg); padding: 28px 32px; margin-bottom: 32px;
-        animation: fadeUp 0.5s 0.15s ease both;
-      }
+      .guide-box { background: rgba(10,102,194,0.06); border: 1px solid rgba(10,102,194,0.2); border-radius: var(--r-lg); padding: 28px 32px; margin-bottom: 32px; animation: fadeUp 0.5s 0.15s ease both; }
       .guide-box-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; cursor: pointer; }
       .guide-box-header h3 { font-family: "Syne", sans-serif; font-weight: 700; font-size: 0.95rem; }
       .guide-box-header .guide-toggle { margin-left: auto; font-size: 0.75rem; color: #5ba4e0; background: rgba(10,102,194,0.15); border: 1px solid rgba(10,102,194,0.3); border-radius: 100px; padding: 4px 12px; transition: background 0.2s; white-space: nowrap; }
       .guide-box-header:hover .guide-toggle { background: rgba(10,102,194,0.25); }
       .guide-chevron { transition: transform 0.3s; display: inline-block; font-size: 0.8rem; color: #5ba4e0; }
       .guide-box.open .guide-chevron { transform: rotate(180deg); }
-      /* ✅ CHANGEMENT 3 : guide ouvert par défaut — max-height élevé d'emblée */
       .guide-steps-wrap { overflow: hidden; transition: max-height 0.4s ease; max-height: 600px; }
       .guide-box:not(.open) .guide-steps-wrap { max-height: 0; }
       .guide-steps { display: flex; flex-direction: column; gap: 0; padding-top: 4px; }
@@ -116,16 +63,9 @@
       .g-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
       .g-sim { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 6px; padding: 5px 10px; font-size: 0.78rem; color: var(--text-dim); margin-top: 6px; flex-wrap: wrap; }
       .g-sim .g-highlight { background: rgba(10,102,194,0.15); color: #5ba4e0; padding: 1px 7px; border-radius: 4px; font-weight: 500; }
-
-      /* ── UPLOAD ZONE ── */
       .upload-section { animation: fadeUp 0.5s 0.2s ease both; }
       .upload-label { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; display: block; }
-      .upload-zone {
-        border: 2px dashed rgba(255,107,0,0.3); border-radius: var(--r-xl);
-        padding: 48px 32px; text-align: center; cursor: pointer;
-        transition: border-color 0.2s, background 0.2s;
-        background: rgba(255,107,0,0.03); position: relative;
-      }
+      .upload-zone { border: 2px dashed rgba(255,107,0,0.3); border-radius: var(--r-xl); padding: 48px 32px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: rgba(255,107,0,0.03); position: relative; }
       .upload-zone:hover, .upload-zone.drag-over { border-color: rgba(255,107,0,0.7); background: rgba(255,107,0,0.07); }
       .upload-zone.has-file { border-color: var(--success); border-style: solid; background: rgba(34,197,94,0.04); }
       .upload-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
@@ -138,31 +78,32 @@
       .upload-file-name .fremove { color: var(--text-dim); cursor: pointer; font-size: 1rem; transition: color 0.2s; margin-left: auto; }
       .upload-file-name .fremove:hover { color: var(--error); }
       input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-
-      /* ── AUTH WARNING ── */
-      .auth-warning {
-        display: flex; align-items: flex-start; gap: 12px;
-        background: rgba(255,107,0,0.06); border: 1px solid rgba(255,107,0,0.2);
-        border-radius: var(--r-md); padding: 14px 18px; margin-top: 20px;
-        font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;
-      }
+      .auth-warning { display: flex; align-items: flex-start; gap: 12px; background: rgba(255,107,0,0.06); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--r-md); padding: 14px 18px; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
       .auth-warning a { color: var(--orange); cursor: pointer; }
 
-      /* ── CTA BUTTON ── */
-      .analyze-btn {
-        display: flex; align-items: center; justify-content: space-between;
-        width: 100%; margin-top: 24px;
-        background: var(--orange); color: white;
-        border: none; border-radius: var(--r-xl); padding: 20px 32px;
-        font-family: "Syne", sans-serif; font-weight: 800; font-size: 1rem;
-        cursor: pointer; transition: background 0.2s, transform 0.15s;
-        box-shadow: 0 0 32px rgba(255,107,0,0.3);
-      }
+      /* ── SECTION ACTIVITÉ ── */
+      .activity-section { background: rgba(10,102,194,0.05); border: 1px solid rgba(10,102,194,0.2); border-radius: var(--r-lg); padding: 20px 24px; margin-top: 20px; animation: fadeUp 0.4s 0.25s ease both; }
+      .activity-section-title { font-family: "Syne", sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+      .activity-badge { font-size: 0.72rem; background: rgba(10,102,194,0.12); color: #5ba4e0; border: 1px solid rgba(10,102,194,0.25); border-radius: 100px; padding: 2px 8px; font-weight: 500; }
+      .activity-section-sub { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px; font-weight: 300; line-height: 1.5; }
+      .activity-question { margin-bottom: 14px; }
+      .activity-question:last-child { margin-bottom: 0; }
+      .activity-question label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
+      .activity-number-input { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-sm); padding: 10px 14px; color: var(--text); font-family: "DM Sans", sans-serif; font-size: 0.95rem; width: 130px; outline: none; transition: border-color 0.2s; }
+      .activity-number-input:focus { border-color: rgba(10,102,194,0.5); }
+      .activity-toggle-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--r-sm); padding: 11px 14px; }
+      .activity-toggle-label { font-size: 0.87rem; color: var(--text-muted); }
+      .activity-toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+      .activity-toggle input { opacity: 0; width: 0; height: 0; }
+      .activity-toggle-slider { position: absolute; inset: 0; background: rgba(255,255,255,0.1); border-radius: 22px; cursor: pointer; transition: background 0.2s; }
+      .activity-toggle-slider::before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: transform 0.2s; }
+      .activity-toggle input:checked + .activity-toggle-slider { background: rgba(10,102,194,0.7); }
+      .activity-toggle input:checked + .activity-toggle-slider::before { transform: translateX(18px); }
+
+      .analyze-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 24px; background: var(--orange); color: white; border: none; border-radius: var(--r-xl); padding: 20px 32px; font-family: "Syne", sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; transition: background 0.2s, transform 0.15s; box-shadow: 0 0 32px rgba(255,107,0,0.3); }
       .analyze-btn:hover { background: var(--orange-dark); transform: translateY(-2px); }
       .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
       .analyze-btn .btn-sub { font-size: 0.78rem; font-weight: 400; opacity: 0.8; margin-top: 2px; }
-
-      /* ── LOADING ── */
       .loading-wrap { display: none; margin-top: 32px; animation: fadeUp 0.4s ease both; }
       .loading-box { display: flex; align-items: flex-start; gap: 20px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--r-xl); padding: 28px; }
       .loading-orb { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; background: conic-gradient(var(--orange), transparent); animation: spin 1s linear infinite; }
@@ -171,8 +112,6 @@
       .lstep { font-size: 0.82rem; color: var(--text-dim); padding: 4px 0; transition: color 0.3s; }
       .lstep.active { color: var(--orange); font-weight: 500; }
       .lstep.done { color: var(--success); }
-
-      /* ── RESULTS ── */
       #resultsSection { display: none; margin-top: 48px; }
       #resultsSection.visible { display: block; animation: fadeUp 0.6s ease both; }
       .score-header-results { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 3rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--r-xl); padding: 2.5rem; }
@@ -224,8 +163,6 @@
       .results-new-btn { margin-top: 2.5rem; text-align: center; }
       .results-new-btn button { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); border-radius: var(--r-md); padding: 0.75rem 2rem; font-family: "DM Sans", sans-serif; font-size: 0.9rem; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
       .results-new-btn button:hover { border-color: rgba(255,107,0,0.3); color: var(--text); }
-
-      /* ── MODAL AUTH ── */
       .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
       .modal-overlay.open { opacity: 1; pointer-events: all; }
       .modal-box { background: var(--bg2); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--r-xl); padding: 2.5rem 2rem; width: 100%; max-width: 420px; position: relative; transform: translateY(20px); transition: transform 0.3s; }
@@ -260,19 +197,12 @@
       footer .footer-logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
       footer .footer-logo span { color: var(--orange); }
       footer p { font-size: 0.8rem; color: var(--text-dim); }
-      @media (max-width: 768px) {
-        nav { padding: 0 20px; }
-        .page { padding: 100px 16px 60px; }
-        .score-header-results { flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; }
-        .guide-box { padding: 20px; }
-        .upload-zone { padding: 32px 16px; }
-      }
+      @media (max-width: 768px) { nav { padding: 0 20px; } .page { padding: 100px 16px 60px; } .score-header-results { flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; } .guide-box { padding: 20px; } .upload-zone { padding: 32px 16px; } }
     </style>
   </head>
   <body>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
-
     <nav>
       <a href="/" class="nav-logo">Link<span>2</span>Job</a>
       <div class="nav-right">
@@ -282,26 +212,14 @@
         </div>
       </div>
     </nav>
-
     <main class="page">
-
       <div class="hero-badge"><span class="dot"></span> Analyse IA de ton profil existant</div>
-
-      <!-- ✅ CHANGEMENT 1 : Titre et sous-titre clarifiés -->
       <h1>Optimise ton profil<br /><span>LinkedIn</span> existant</h1>
-      <p class="hero-sub">
-        LinkedIn ne partage pas tes données avec nous — mais en 30 secondes tu peux exporter ton profil en PDF, et on fait tout le reste. Gratuit.
-      </p>
-
-      <!-- ✅ CHANGEMENT 2 : Bandeau "Pourquoi un PDF ?" -->
+      <p class="hero-sub">LinkedIn ne partage pas tes données avec nous — mais en 30 secondes tu peux exporter ton profil en PDF, et on fait tout le reste. Gratuit.</p>
       <div class="why-pdf-banner">
         <span class="why-pdf-icon">⚡</span>
-        <div class="why-pdf-text">
-          <strong>Pourquoi un PDF ?</strong> LinkedIn ne nous autorise pas à accéder directement à ton profil. L'export PDF est la seule façon légale et sécurisée — tes données restent chez toi, on analyse juste le document.
-        </div>
+        <div class="why-pdf-text"><strong>Pourquoi un PDF ?</strong> LinkedIn ne nous autorise pas à accéder directement à ton profil. L'export PDF est la seule façon légale et sécurisée — tes données restent chez toi, on analyse juste le document.</div>
       </div>
-
-      <!-- ✅ CHANGEMENT 3 : Guide ouvert par défaut (classe "open" dès le HTML) -->
       <div class="guide-box open" id="guideBox">
         <div class="guide-box-header" onclick="toggleGuide()">
           <span style="font-size:1.3rem">📥</span>
@@ -321,7 +239,7 @@
               <div class="g-left"><div class="g-num">2</div><div class="g-line"></div></div>
               <div class="g-content">
                 <div class="g-title">Clique sur le bouton "Plus" ou "Ressources"</div>
-                <div class="g-desc">Sur ta page profil, sous ton nom et ton titre, clique sur le bouton <strong style="color:var(--text)">"Plus"</strong> ou <strong style="color:var(--text)">"Ressources"</strong> (le libellé varie selon ton interface LinkedIn).</div>
+                <div class="g-desc">Sur ta page profil, sous ton nom et ton titre, clique sur <strong style="color:var(--text)">"Plus"</strong> ou <strong style="color:var(--text)">"Ressources"</strong> (varie selon l'interface LinkedIn).</div>
                 <div class="g-sim"><span>Ta page profil</span><span>→</span><span class="g-highlight">Plus</span> <span style="color:var(--text-dim)">ou</span> <span class="g-highlight">Ressources</span><span>→</span><span class="g-highlight">Enregistrer en PDF</span></div>
               </div>
             </div>
@@ -361,7 +279,40 @@
           ⚠️ Tu dois être <a onclick="openAuthModal(null,'register')">connecté</a> pour analyser ton profil. C'est gratuit — <strong style="color:var(--orange)">5 analyses offertes</strong> sans carte bancaire.
         </div>
 
-        <!-- ✅ CHANGEMENT 4 : Libellé bouton mis à jour -->
+        <!-- ✅ NOUVEAU : Section activité LinkedIn — 3 questions -->
+        <div class="activity-section" id="activitySection">
+          <div class="activity-section-title">
+            📡 Ton activité LinkedIn
+            <span class="activity-badge">Optionnel</span>
+          </div>
+          <p class="activity-section-sub">Le PDF n'exporte pas ton activité — renseigne ces infos pour un score juste et des conseils précis.</p>
+
+          <div class="activity-question">
+            <label for="postsCount">📝 Combien de posts as-tu publiés ce mois ?</label>
+            <input type="number" id="postsCount" class="activity-number-input" min="0" max="100" placeholder="ex: 4" />
+          </div>
+
+          <div class="activity-question">
+            <div class="activity-toggle-row">
+              <span class="activity-toggle-label">💬 Tu commentes régulièrement des posts dans ton secteur ?</span>
+              <label class="activity-toggle">
+                <input type="checkbox" id="commentsRegularly" />
+                <span class="activity-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="activity-question">
+            <div class="activity-toggle-row">
+              <span class="activity-toggle-label">🎯 Le mode créateur LinkedIn est activé sur ton profil ?</span>
+              <label class="activity-toggle">
+                <input type="checkbox" id="creatorMode" />
+                <span class="activity-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
         <button class="analyze-btn" id="analyzeBtn" onclick="analyzeProfile()" disabled>
           <div>
             <div>Analyser et optimiser mon profil →</div>
@@ -422,7 +373,6 @@
           <button onclick="resetAnalysis()">← Analyser un autre profil</button>
         </div>
       </section>
-
     </main>
 
     <footer>
@@ -470,11 +420,7 @@
         recommendations: { icon: "⭐",  label: "Recommandations",     max:  5 },
         activity:        { icon: "📡",  label: "Activité",            max:  5 },
       };
-
-      let currentUser = null;
-      let authMode = "register";
-      let pendingAnalysis = false;
-      let selectedFile = null;
+      let currentUser = null, authMode = "register", pendingAnalysis = false, selectedFile = null;
 
       function initAuth() {
         const saved = localStorage.getItem("l2j_user");
@@ -518,8 +464,7 @@
       }
 
       function removeFile(e) {
-        e.stopPropagation();
-        selectedFile = null;
+        e.stopPropagation(); selectedFile = null;
         document.getElementById("pdfInput").value = "";
         document.getElementById("fileNameDisplay").classList.remove("show");
         document.getElementById("uploadZone").classList.remove("has-file");
@@ -539,9 +484,7 @@
         const box = document.getElementById("guideBox");
         const toggle = box.querySelector(".guide-toggle");
         box.classList.toggle("open");
-        toggle.innerHTML = box.classList.contains("open")
-          ? 'Masquer <span class="guide-chevron">▾</span>'
-          : 'Voir le guide <span class="guide-chevron">▾</span>';
+        toggle.innerHTML = box.classList.contains("open") ? 'Masquer <span class="guide-chevron">▾</span>' : 'Voir le guide <span class="guide-chevron">▾</span>';
       }
 
       async function analyzeProfile() {
@@ -554,14 +497,18 @@
           const token = localStorage.getItem("l2j_token");
           const formData = new FormData();
           formData.append("pdf_file", selectedFile);
+          // ✅ Données activité
+          formData.append("posts_count", parseInt(document.getElementById("postsCount").value) || 0);
+          formData.append("comments_regularly", document.getElementById("commentsRegularly").checked);
+          formData.append("creator_mode", document.getElementById("creatorMode").checked);
+
           const res = await fetch(`${API_URL}/api/optimize-profile`, {
             method: "POST",
             headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
             body: formData,
           });
           if (!res.ok) { const err = await res.json(); throw new Error(err.detail || "Erreur serveur"); }
-          const data = await res.json();
-          showResults(data);
+          showResults(await res.json());
         } catch (e) {
           document.getElementById("loadingWrap").style.display = "none";
           document.querySelector(".upload-section").style.display = "block";
@@ -571,10 +518,7 @@
 
       function showResults(data) {
         document.getElementById("loadingWrap").style.display = "none";
-        const score = data.score_before;
-        const details = data.score_details;
-        const recos = data.recommendations;
-        const texts = data.optimized_texts;
+        const { score_before: score, score_details: details, recommendations: recos, optimized_texts: texts } = data;
         const isPaidUser = currentUser && currentUser.plan && currentUser.plan !== "free";
         if (!isPaidUser && data.analyses_remaining != null) {
           if (currentUser) { currentUser.analyses_remaining = data.analyses_remaining; localStorage.setItem("l2j_user", JSON.stringify(currentUser)); updateNavUser(); }
@@ -590,10 +534,8 @@
         const section = document.getElementById("resultsSection");
         section.classList.add("visible");
         setTimeout(() => section.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
-        const circumference = 345;
-        const offset = circumference - (score / 100) * circumference;
         const ring = document.getElementById("scoreRingFill");
-        setTimeout(() => { ring.style.strokeDashoffset = offset; }, 200);
+        setTimeout(() => { ring.style.strokeDashoffset = 345 - (score / 100) * 345; }, 200);
         animateCounter("scoreNum", 0, score, 1400);
         ring.style.stroke = score >= 70 ? "#22C55E" : score >= 40 ? "var(--orange)" : "#EF4444";
         document.getElementById("scoreTitle").textContent = score >= 70 ? "Profil solide 💪" : score >= 40 ? "Profil à optimiser 🚀" : "Profil à reconstruire 🛠️";
@@ -610,11 +552,9 @@
         const grid = document.getElementById("recoGrid");
         grid.innerHTML = "";
         Object.entries(SECTION_META).forEach(([key, meta]) => {
-          const reco = recos[key];
-          if (!reco) return;
-          const score_val = reco.score ?? details[key] ?? 0;
-          const isOk = score_val === meta.max;
-          grid.innerHTML += `<div class="reco-card"><div class="reco-card-top"><span class="reco-icon">${meta.icon}</span><span class="reco-title">${meta.label}</span><span class="reco-score-badge ${isOk ? "ok" : ""}">${score_val}/${meta.max}</span></div><div class="reco-priority ${reco.priority || ""}">${reco.priority ? "Priorité " + reco.priority : ""}</div><div class="reco-conseil">${reco.conseil || ""}</div></div>`;
+          const reco = recos[key]; if (!reco) return;
+          const sv = reco.score ?? details[key] ?? 0;
+          grid.innerHTML += `<div class="reco-card"><div class="reco-card-top"><span class="reco-icon">${meta.icon}</span><span class="reco-title">${meta.label}</span><span class="reco-score-badge ${sv === meta.max ? "ok" : ""}">${sv}/${meta.max}</span></div><div class="reco-priority ${reco.priority || ""}">${reco.priority ? "Priorité " + reco.priority : ""}</div><div class="reco-conseil">${reco.conseil || ""}</div></div>`;
         });
         const headlineEl = document.getElementById("headlineOptions");
         headlineEl.innerHTML = "";
@@ -632,103 +572,55 @@
       }
 
       function animateCounter(id, from, to, duration) {
-        const el = document.getElementById(id);
-        const start = performance.now();
-        function tick(now) {
-          const p = Math.min((now - start) / duration, 1);
-          el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)));
-          if (p < 1) requestAnimationFrame(tick);
-        }
+        const el = document.getElementById(id); const start = performance.now();
+        function tick(now) { const p = Math.min((now-start)/duration,1); el.textContent = Math.round(from+(to-from)*(1-Math.pow(1-p,3))); if(p<1) requestAnimationFrame(tick); }
         requestAnimationFrame(tick);
       }
-
       function animateLoadingSteps() {
-        const steps = ["ls1","ls2","ls3","ls4","ls5"];
-        let i = 0;
-        steps.forEach(id => document.getElementById(id).className = "lstep");
-        const iv = setInterval(() => {
-          if (i > 0) document.getElementById(steps[i-1]).className = "lstep done";
-          if (i < steps.length) { document.getElementById(steps[i]).className = "lstep active"; i++; }
-          else clearInterval(iv);
-        }, 700);
+        const steps=["ls1","ls2","ls3","ls4","ls5"]; let i=0;
+        steps.forEach(id=>document.getElementById(id).className="lstep");
+        const iv=setInterval(()=>{ if(i>0)document.getElementById(steps[i-1]).className="lstep done"; if(i<steps.length){document.getElementById(steps[i]).className="lstep active";i++;}else clearInterval(iv); },700);
       }
-
-      function copyText(btn, text) {
-        navigator.clipboard.writeText(text).then(() => {
-          btn.textContent = "✓ Copié !"; btn.classList.add("copied");
-          setTimeout(() => { btn.textContent = "Copier"; btn.classList.remove("copied"); }, 2000);
-        });
-      }
-
-      function copyAbout() {
-        copyText(document.getElementById("copyAboutBtn"), document.getElementById("aboutText").textContent);
-      }
-
-      function showToast(msg) {
-        const t = document.createElement("div");
-        t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(239,68,68,0.3);color:#ef4444;padding:12px 20px;border-radius:12px;font-size:0.85rem;z-index:9999;animation:fadeUp 0.3s ease";
-        t.textContent = msg; document.body.appendChild(t);
-        setTimeout(() => t.remove(), 4000);
-      }
-
-      function openAuthModal(e, mode) {
-        if (e) e.preventDefault();
-        if (currentUser) return;
-        switchTab(mode || "register");
-        document.getElementById("authModal").classList.add("open");
-      }
-      function closeAuthModal() {
-        document.getElementById("authModal").classList.remove("open");
-        clearModalError(); pendingAnalysis = false;
-      }
+      function copyText(btn,text) { navigator.clipboard.writeText(text).then(()=>{ btn.textContent="✓ Copié !";btn.classList.add("copied");setTimeout(()=>{btn.textContent="Copier";btn.classList.remove("copied");},2000); }); }
+      function copyAbout() { copyText(document.getElementById("copyAboutBtn"),document.getElementById("aboutText").textContent); }
+      function showToast(msg) { const t=document.createElement("div");t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(239,68,68,0.3);color:#ef4444;padding:12px 20px;border-radius:12px;font-size:0.85rem;z-index:9999;animation:fadeUp 0.3s ease";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),4000); }
+      function openAuthModal(e,mode) { if(e)e.preventDefault();if(currentUser)return;switchTab(mode||"register");document.getElementById("authModal").classList.add("open"); }
+      function closeAuthModal() { document.getElementById("authModal").classList.remove("open");clearModalError();pendingAnalysis=false; }
       function switchTab(mode) {
-        authMode = mode;
-        const isR = mode === "register";
-        document.getElementById("tabRegister").classList.toggle("active", isR);
-        document.getElementById("tabLogin").classList.toggle("active", !isR);
-        document.getElementById("fieldName").style.display = isR ? "block" : "none";
-        document.getElementById("modalTitle").textContent = isR ? "Créer un compte" : "Se connecter";
-        document.getElementById("modalSub").textContent = isR ? "5 analyses gratuites · Sans carte bancaire" : "Bon retour sur Link2Job 👋";
-        document.getElementById("modalSubmit").textContent = isR ? "Créer mon compte gratuit →" : "Se connecter →";
-        document.getElementById("modalSwitch").innerHTML = isR ? "Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>" : "Pas encore de compte ? <a onclick=\"switchTab('register')\">Créer un compte</a>";
+        authMode=mode;const isR=mode==="register";
+        document.getElementById("tabRegister").classList.toggle("active",isR);
+        document.getElementById("tabLogin").classList.toggle("active",!isR);
+        document.getElementById("fieldName").style.display=isR?"block":"none";
+        document.getElementById("modalTitle").textContent=isR?"Créer un compte":"Se connecter";
+        document.getElementById("modalSub").textContent=isR?"5 analyses gratuites · Sans carte bancaire":"Bon retour sur Link2Job 👋";
+        document.getElementById("modalSubmit").textContent=isR?"Créer mon compte gratuit →":"Se connecter →";
+        document.getElementById("modalSwitch").innerHTML=isR?"Déjà un compte ? <a onclick=\"switchTab('login')\">Se connecter</a>":"Pas encore de compte ? <a onclick=\"switchTab('register')\">Créer un compte</a>";
         clearModalError();
       }
-      function showModalError(msg) { const el = document.getElementById("modalError"); el.textContent = msg; el.classList.add("show"); }
-      function clearModalError() { const el = document.getElementById("modalError"); el.textContent = ""; el.classList.remove("show"); }
-
+      function showModalError(msg){const el=document.getElementById("modalError");el.textContent=msg;el.classList.add("show");}
+      function clearModalError(){const el=document.getElementById("modalError");el.textContent="";el.classList.remove("show");}
       async function submitAuth() {
-        const email = document.getElementById("inputEmail").value.trim();
-        const password = document.getElementById("inputPassword").value;
-        const name = document.getElementById("inputName").value.trim();
-        const btn = document.getElementById("modalSubmit");
-        if (!email || !password) { showModalError("Email et mot de passe requis."); return; }
-        if (authMode === "register" && password.length < 8) { showModalError("Le mot de passe doit faire au moins 8 caractères."); return; }
-        btn.disabled = true; btn.textContent = "Chargement…"; clearModalError();
+        const email=document.getElementById("inputEmail").value.trim();
+        const password=document.getElementById("inputPassword").value;
+        const name=document.getElementById("inputName").value.trim();
+        const btn=document.getElementById("modalSubmit");
+        if(!email||!password){showModalError("Email et mot de passe requis.");return;}
+        if(authMode==="register"&&password.length<8){showModalError("Le mot de passe doit faire au moins 8 caractères.");return;}
+        btn.disabled=true;btn.textContent="Chargement…";clearModalError();
         try {
-          let res, data;
-          if (authMode === "register") {
-            res = await fetch(`${API_URL}/api/auth/register`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password, full_name: name || null }) });
-          } else {
-            const form = new FormData(); form.append("username", email); form.append("password", password);
-            res = await fetch(`${API_URL}/api/auth/login`, { method: "POST", body: form });
-          }
-          data = await res.json();
-          if (!res.ok) { showModalError(data.detail || "Une erreur est survenue."); btn.disabled = false; btn.textContent = authMode === "register" ? "Créer mon compte gratuit →" : "Se connecter →"; return; }
-          localStorage.setItem("l2j_token", data.access_token);
-          localStorage.setItem("l2j_user", JSON.stringify(data.user));
-          currentUser = data.user;
-          updateNavUser(); closeAuthModal();
-          showToast(`Bienvenue ${data.user.full_name || data.user.email} ! 🎉`);
-          if (pendingAnalysis) { pendingAnalysis = false; analyzeProfile(); }
-        } catch (err) {
-          showModalError("Erreur réseau — vérifie ta connexion.");
-          btn.disabled = false; btn.textContent = authMode === "register" ? "Créer mon compte gratuit →" : "Se connecter →";
-        }
+          let res,data;
+          if(authMode==="register"){res=await fetch(`${API_URL}/api/auth/register`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,password,full_name:name||null})});}
+          else{const form=new FormData();form.append("username",email);form.append("password",password);res=await fetch(`${API_URL}/api/auth/login`,{method:"POST",body:form});}
+          data=await res.json();
+          if(!res.ok){showModalError(data.detail||"Une erreur est survenue.");btn.disabled=false;btn.textContent=authMode==="register"?"Créer mon compte gratuit →":"Se connecter →";return;}
+          localStorage.setItem("l2j_token",data.access_token);localStorage.setItem("l2j_user",JSON.stringify(data.user));currentUser=data.user;
+          updateNavUser();closeAuthModal();showToast(`Bienvenue ${data.user.full_name||data.user.email} ! 🎉`);
+          if(pendingAnalysis){pendingAnalysis=false;analyzeProfile();}
+        } catch(err){showModalError("Erreur réseau — vérifie ta connexion.");btn.disabled=false;btn.textContent=authMode==="register"?"Créer mon compte gratuit →":"Se connecter →";}
       }
-
-      document.getElementById("authModal")?.addEventListener("click", function(e) { if (e.target === this) closeAuthModal(); });
-      document.addEventListener("keydown", e => { if (e.key === "Escape") closeAuthModal(); });
-      document.addEventListener("DOMContentLoaded", initAuth);
+      document.getElementById("authModal")?.addEventListener("click",function(e){if(e.target===this)closeAuthModal();});
+      document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAuthModal();});
+      document.addEventListener("DOMContentLoaded",initAuth);
     </script>
   </body>
 </html>

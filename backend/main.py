@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, UploadFile, File
+from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
@@ -14,7 +14,7 @@ from utils.linkedin_parser import parse_linkedin_profile
 from utils.ai_agent import analyze_profile, create_profile_from_scratch, generate_linkedin_post
 from utils.scorer import compute_score
 
-app = FastAPI(title="Link2Job API", version="0.4.0")
+app = FastAPI(title="Link2Job API", version="0.5.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,7 +30,7 @@ def startup():
 app.include_router(auth_router)
 app.include_router(stripe_router)
 
-# ── MODÈLES ────────────────────────────────────────────────────────────
+# ── MODÈLES ──────────────────────────────────────────────
 
 class AnalyzeRequest(BaseModel):
     linkedin_url: str
@@ -63,11 +63,11 @@ class GeneratePostRequest(BaseModel):
     secteur: Optional[str] = ""
     poste: Optional[str] = ""
 
-# ── ENDPOINTS ──────────────────────────────────────────────────────────
+# ── ENDPOINTS ────────────────────────────────────────────
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "version": "0.4.0"}
+    return {"status": "ok", "version": "0.5.0"}
 
 
 @app.post("/api/analyze-profile", response_model=AnalyzeResponse)
@@ -77,251 +77,141 @@ async def analyze_profile_route(
     current_user: Optional[User] = Depends(get_current_user),
 ):
     is_demo = current_user is None
-
     if not is_demo:
         remaining = _analyses_remaining(current_user)
         if remaining <= 0:
-            raise HTTPException(
-                status_code=403,
-                detail="Tu as utilisé tes 3 analyses gratuites. Passe au plan Candidat pour continuer. 🚀"
-            )
+            raise HTTPException(status_code=403, detail="Tu as utilisé tes analyses gratuites. Passe au plan Candidat pour continuer. 🚀")
 
     profile_data = await parse_linkedin_profile(body.linkedin_url)
     if not profile_data:
-        raise HTTPException(
-            status_code=422,
-            detail="L'analyse directe depuis URL est temporairement désactivée. Utilise le formulaire guidé pour créer ton profil LinkedIn optimisé. 👉 create-profile.html"
-        )
+        raise HTTPException(status_code=422, detail="L'analyse directe depuis URL est temporairement désactivée. Utilise le formulaire guidé. 👉 create-profile.html")
 
     score_details = compute_score(profile_data)
     ai_result = await analyze_profile(profile_data, score_details)
 
     if not is_demo:
         current_user.analyses_used += 1
-        analysis = Analysis(
-            user_id=current_user.id,
-            linkedin_url=body.linkedin_url,
-            score_before=score_details["total"],
-            score_details=json.dumps(score_details),
-        )
-        db.add(analysis)
-        db.commit()
-        db.refresh(current_user)
+        analysis = Analysis(user_id=current_user.id, linkedin_url=body.linkedin_url, score_before=score_details["total"], score_details=json.dumps(score_details))
+        db.add(analysis); db.commit(); db.refresh(current_user)
 
     return AnalyzeResponse(
-        score_before=score_details["total"],
-        score_details=score_details,
-        recommendations=ai_result["recommendations"],
-        optimized_texts=ai_result["optimized_texts"],
+        score_before=score_details["total"], score_details=score_details,
+        recommendations=ai_result["recommendations"], optimized_texts=ai_result["optimized_texts"],
         analyses_remaining=_analyses_remaining(current_user) if not is_demo else None,
         analyses_used=current_user.analyses_used if not is_demo else None,
     )
 
 
 @app.get("/api/my-analyses")
-def my_analyses(
-    current_user: User = Depends(require_user),
-    db: Session = Depends(get_db),
-):
-    analyses = (
-        db.query(Analysis)
-        .filter(Analysis.user_id == current_user.id)
-        .order_by(Analysis.created_at.desc())
-        .all()
-    )
-    return {
-        "analyses": [
-            {
-                "id": a.id,
-                "linkedin_url": a.linkedin_url,
-                "score_before": a.score_before,
-                "created_at": a.created_at.isoformat(),
-            }
-            for a in analyses
-        ],
-        "total": len(analyses),
-    }
+def my_analyses(current_user: User = Depends(require_user), db: Session = Depends(get_db)):
+    analyses = db.query(Analysis).filter(Analysis.user_id == current_user.id).order_by(Analysis.created_at.desc()).all()
+    return {"analyses": [{"id": a.id, "linkedin_url": a.linkedin_url, "score_before": a.score_before, "created_at": a.created_at.isoformat()} for a in analyses], "total": len(analyses)}
 
 
 @app.post("/api/create-profile")
-async def create_profile_route(
-    body: CreateProfileRequest,
-    db: Session = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user),
-):
-    result = await create_profile_from_scratch(body.dict())
-    return result
+async def create_profile_route(body: CreateProfileRequest, db: Session = Depends(get_db), current_user: Optional[User] = Depends(get_current_user)):
+    return await create_profile_from_scratch(body.dict())
 
 
-# ── NOUVEAU ENDPOINT — Optimisation depuis PDF ──────────────────────────
+# ── ✅ ENDPOINT OPTIMIZE-PROFILE — avec données activité ──
 @app.post("/api/optimize-profile")
 async def optimize_profile(
     pdf_file: UploadFile = File(...),
+    posts_count: str = Form("0"),
+    comments_regularly: str = Form("false"),
+    creator_mode: str = Form("false"),
     db: Session = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user),  # ✅ CORRIGÉ
+    current_user: Optional[User] = Depends(get_current_user),
 ):
-    # Vérif quota (seulement si connecté et plan free)
+    # Vérif quota
     if current_user:
         is_paid = current_user.plan and current_user.plan != "free"
-        if not is_paid and (current_user.analyses_used or 0) >= 10:
-            raise HTTPException(
-                status_code=429,
-                detail="Tu as atteint ta limite de 10 analyses gratuites. Passe au plan Candidat pour continuer."
-            )
+        if not is_paid and (current_user.analyses_used or 0) >= FREE_ANALYSES_LIMIT:
+            raise HTTPException(status_code=429, detail=f"Tu as atteint ta limite de {FREE_ANALYSES_LIMIT} analyses gratuites. Passe au plan Candidat pour continuer.")
 
-    # Vérif format fichier
     if not pdf_file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Fichier invalide — upload un PDF LinkedIn.")
 
-    # Lecture et extraction du texte PDF
     try:
         contents = await pdf_file.read()
         with pdfplumber.open(io.BytesIO(contents)) as pdf:
-            pdf_text = "\n".join(
-                page.extract_text() or ""
-                for page in pdf.pages
-            ).strip()
+            pdf_text = "\n".join(page.extract_text() or "" for page in pdf.pages).strip()
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Impossible de lire le PDF : {str(e)}")
 
     if not pdf_text or len(pdf_text) < 100:
-        raise HTTPException(
-            status_code=400,
-            detail="Le PDF semble vide ou illisible. Assure-toi d'exporter depuis LinkedIn → Profil → Plus → Enregistrer en PDF."
-        )
+        raise HTTPException(status_code=400, detail="Le PDF semble vide ou illisible. Assure-toi d'exporter depuis LinkedIn → Profil → Plus → Enregistrer en PDF.")
 
-    # Analyse IA
+    # ✅ Données activité transmises par le frontend
+    activity_data = {
+        "posts_count": int(posts_count) if posts_count.isdigit() else 0,
+        "comments_regularly": comments_regularly.lower() == "true",
+        "creator_mode": creator_mode.lower() == "true",
+    }
+
     try:
         from utils.ai_agent import analyze_profile_from_pdf
-        result = analyze_profile_from_pdf(pdf_text)
+        result = analyze_profile_from_pdf(pdf_text, activity_data=activity_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur IA : {str(e)}")
 
-    # Mise à jour quota + historique DB
     analyses_remaining = None
     if current_user:
         current_user.analyses_used = (current_user.analyses_used or 0) + 1
-        db.add(current_user)
-        db.commit()
+        db.add(current_user); db.commit()
         is_paid = current_user.plan and current_user.plan != "free"
         if not is_paid:
-            analyses_remaining = max(0, 10 - current_user.analyses_used)
-        analysis_record = Analysis(
-            user_id=current_user.id,
-            linkedin_url="pdf_upload",
-            score_before=result.get("score_before", 0),
-            score_details=json.dumps(result.get("score_details", {})),
-        )
-        db.add(analysis_record)
+            analyses_remaining = max(0, FREE_ANALYSES_LIMIT - current_user.analyses_used)
+        db.add(Analysis(user_id=current_user.id, linkedin_url="pdf_upload", score_before=result.get("score_before", 0), score_details=json.dumps(result.get("score_details", {}))))
         db.commit()
 
     return {**result, "analyses_remaining": analyses_remaining}
 
 
 @app.post("/api/generate-post")
-async def generate_post_route(
-    body: GeneratePostRequest,
-    db: Session = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user),
-):
+async def generate_post_route(body: GeneratePostRequest, db: Session = Depends(get_db), current_user: Optional[User] = Depends(get_current_user)):
     if not body.idee or len(body.idee.strip()) < 5:
-        raise HTTPException(
-            status_code=422,
-            detail="L'idée est trop courte. Décris ton idée en 2-3 phrases minimum."
-        )
-
+        raise HTTPException(status_code=422, detail="L'idée est trop courte. Décris ton idée en 2-3 phrases minimum.")
     if not current_user:
-        raise HTTPException(
-            status_code=401,
-            detail="Connecte-toi pour générer des posts LinkedIn. C'est gratuit ! 🚀"
-        )
+        raise HTTPException(status_code=401, detail="Connecte-toi pour générer des posts LinkedIn. C'est gratuit ! 🚀")
 
     _check_and_reset_posts(current_user, db)
-
     if current_user.plan == "free":
         remaining = _posts_remaining(current_user)
         if remaining <= 0:
-            raise HTTPException(
-                status_code=403,
-                detail=f"Tu as utilisé tes {FREE_POSTS_LIMIT} posts gratuits ce mois-ci. Passe au plan Candidat pour des posts illimités. 🚀"
-            )
+            raise HTTPException(status_code=403, detail=f"Tu as utilisé tes {FREE_POSTS_LIMIT} posts gratuits ce mois-ci. Passe au plan Candidat pour des posts illimités. 🚀")
 
     result = await generate_linkedin_post(body.dict())
 
     if current_user.plan == "free":
         current_user.posts_used = (current_user.posts_used or 0) + 1
-        db.commit()
-        db.refresh(current_user)
+        db.commit(); db.refresh(current_user)
 
-    post_record = Post(
-        user_id=current_user.id,
-        idee=body.idee[:200] if body.idee else "",
-        ton=body.ton or "tous",
-        secteur=body.secteur or "",
-        contenu=json.dumps(result.get("posts", [])),
-    )
-    db.add(post_record)
+    db.add(Post(user_id=current_user.id, idee=body.idee[:200] if body.idee else "", ton=body.ton or "tous", secteur=body.secteur or "", contenu=json.dumps(result.get("posts", []))))
     db.commit()
 
     result["posts_remaining"] = _posts_remaining(current_user)
     result["posts_used"] = current_user.posts_used or 0
     result["is_unlimited"] = current_user.plan != "free"
-
     return result
 
 
 @app.get("/api/my-posts")
-def my_posts(
-    current_user: User = Depends(require_user),
-    db: Session = Depends(get_db),
-):
-    posts = (
-        db.query(Post)
-        .filter(Post.user_id == current_user.id)
-        .order_by(Post.created_at.desc())
-        .limit(20)
-        .all()
-    )
-    return {
-        "posts": [
-            {
-                "id": p.id,
-                "idee": p.idee,
-                "ton": p.ton,
-                "secteur": p.secteur,
-                "contenu": json.loads(p.contenu) if p.contenu else [],
-                "created_at": p.created_at.isoformat(),
-            }
-            for p in posts
-        ],
-        "total": len(posts),
-    }
+def my_posts(current_user: User = Depends(require_user), db: Session = Depends(get_db)):
+    posts = db.query(Post).filter(Post.user_id == current_user.id).order_by(Post.created_at.desc()).limit(20).all()
+    return {"posts": [{"id": p.id, "idee": p.idee, "ton": p.ton, "secteur": p.secteur, "contenu": json.loads(p.contenu) if p.contenu else [], "created_at": p.created_at.isoformat()} for p in posts], "total": len(posts)}
 
 
 @app.get("/api/stats-public")
 def stats_public(db: Session = Depends(get_db)):
     from sqlalchemy import func
-
     total_users = db.query(func.count(User.id)).scalar() or 0
     total_analyses = db.query(func.count(Analysis.id)).scalar() or 0
     total_posts = db.query(func.count(Post.id)).scalar() or 0
     candidat_users = db.query(func.count(User.id)).filter(User.plan == "candidat").scalar() or 0
-
     return {
-        "link2job": {
-            "utilisateurs_inscrits": total_users,
-            "profils_linkedin_generes": total_analyses,
-            "posts_linkedin_generes": total_posts,
-            "abonnes_plan_candidat": candidat_users,
-        },
-        "cv_ats_ready": {
-            "optimisations_cv": 14,
-            "score_ats_moyen_avant": 30,
-            "score_ats_moyen_apres": 85,
-            "gain_moyen_score_ats": "+55 points",
-            "lettres_motivation_generees": 4,
-            "formats_supportes": ["PDF", "Word", "Texte"],
-        },
-        "donnees_au": "22 Avril 2026",
+        "link2job": {"utilisateurs_inscrits": total_users, "profils_linkedin_generes": total_analyses, "posts_linkedin_generes": total_posts, "abonnes_plan_candidat": candidat_users},
+        "cv_ats_ready": {"optimisations_cv": 14, "score_ats_moyen_avant": 30, "score_ats_moyen_apres": 85, "gain_moyen_score_ats": "+55 points", "lettres_motivation_generees": 4, "formats_supportes": ["PDF", "Word", "Texte"]},
+        "donnees_au": "20 Mai 2026",
         "note": "Données en phase de test — lancement public prévu Mai 2026"
     }
