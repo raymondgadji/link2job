@@ -1,0 +1,13 @@
+# Link2Job
+
+> Link2Job automatise la recherche d'emploi et de stage sur LinkedIn grâce à l'IA : candidatures ciblées, relances automatiques, optimisation de profil.
+
+Mission : démocratiser l'accès à l'emploi pour tous, du lycéen cherchant son premier stage au cadre en reconversion, grâce à l'automatisation intelligente et éthique de la recherche d'emploi sur LinkedIn.
+
+## Modèle économique
+
+Gratuit jusqu'à l'embauche — prélèvement automatique Stripe SEPA après embauche (modèle ISA, type Lambda School).
+
+## Créateur
+
+Raymond Gadji — https://www.linkedin.com/in/raymond-gadji/
